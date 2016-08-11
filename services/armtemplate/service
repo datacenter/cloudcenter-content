@@ -23,10 +23,10 @@ sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/sit
 
 wget -N http://cliqrdemo-repo.s3.amazonaws.com/services/armtemplate/armtemplate.py
 #wget -N http://cliqrdemo-repo.s3.amazonaws.com/services/armtemplate/deployer.py
-mkdir -p ~/.ssh
+#mkdir -p ~/.ssh
 #wget -N http://cliqrdemo-repo.s3.amazonaws.com/services/armtemplate/mdavis.pub -O ~/.ssh/id_rsa.pub
-echo $sshPublicKey > ~/.ssh/id_rsa.pub
-chmod 400 ~/.ssh/id_rsa.pub
+echo $sshPublicKey > sshKey
+#chmod 400 ~/.ssh/id_rsa.pub
 
 #git clone https://github.com/Azure-Samples/resource-manager-python-template-deployment.git
 #cd resource-manager-python-template-deployment

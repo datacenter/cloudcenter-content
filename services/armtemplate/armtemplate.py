@@ -13,28 +13,30 @@ cmd = sys.argv[1]
 
 my_subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID')   # your Azure Subscription Id
 my_resource_group = os.environ['resourceGroupName']            # the resource group for deployment
-my_pub_ssh_key_path = '~/.ssh/id_rsa.pub'   # the path to your rsa public key file
+#my_pub_ssh_key_path = '~/.ssh/id_rsa.pub'   # the path to your rsa public key file
 
 #deployer = Deployer(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
 
+credentials = ServicePrincipalCredentials(
+    client_id=os.environ['CliqrCloud_ClientId'],
+    secret=os.environ['CliqrCloud_ClientKey'],
+    tenant=os.environ['CliqrCloud_TenantId']
+)
+
+
+msg = "\nInitializing the Deployer class with subscription id: {}, resource group: {}" \
+    "\nand public key located at: {}...\n\n"
+msg = msg.format(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
+print(msg)
+
+client = ResourceManagementClient(credentials, os.environ['CliqrCloudAccountId'])
+
 if cmd == "start" :
-    credentials = ServicePrincipalCredentials(
-        client_id=os.environ['CliqrCloud_ClientId'],
-        secret=os.environ['CliqrCloud_ClientKey'],
-        tenant=os.environ['CliqrCloud_TenantId']
-    )
 
-
-    msg = "\nInitializing the Deployer class with subscription id: {}, resource group: {}" \
-        "\nand public key located at: {}...\n\n"
-    msg = msg.format(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
-    print(msg)
-
-    client = ResourceManagementClient(credentials, os.environ['CliqrCloudAccountId'])
 
     print("Beginning the deployment... \n\n")
     
-    # Dict that maps keys of CloudCenter's region names to values of Azures region names.
+    # Dict that maps keys of CloudCenter's region names to values of Azure's region names.
     # Used below to control where something is deployed
     regionmap = {
         "us-west" : "westus",
@@ -47,13 +49,23 @@ if cmd == "start" :
         }
     )
 
-    template_path = os.environ['armTemplate']
+    with open(os.environ['armTemplate'], 'r') as template_file_fd:
+        template = json.load(template_file_fd)
 
-    parameters = {
-        'AppSettingClientID': os.environ['CliqrCloud_ClientId'],
-        'AppSettingClientSecret': os.environ['CliqrCloud_ClientKey']
-    }
-    parameters = {k: {'value': v} for k, v in parameters.items()}
+    with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
+        parameters = json.load(armparams_file_fd)
+
+    with open('sshKey', 'r') as pub_ssh_file_fd:
+        pub_ssh_key = pub_ssh_file_fd.read()
+
+    name_generator = Haikunator()
+
+    # parameters = {
+    #     'sshKeyData': os.environ['sshPublicKey'],
+    #     'vmName': 'azure-deployment-sample-vm',
+    #     'dnsLabelPrefix': name_generator.haikunate()
+    # }
+    # parameters = {k: {'value': v} for k, v in parameters.items()}
 
     deployment_properties = {
         'mode': DeploymentMode.incremental,
@@ -68,10 +80,10 @@ if cmd == "start" :
     )
     deployment_async_operation.wait()
 
-    print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
+    #print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
 elif cmd == "stop" :
     # pass
     # Destroy the resource group which contains the deployment
-    deployer.destroy()
+    client.resource_groups.delete(my_resource_group)
 elif cmd == "reload" :
     pass
