@@ -15,7 +15,7 @@ my_subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID')   # your Azure Subs
 my_resource_group = os.environ['resourceGroupName']            # the resource group for deployment
 my_pub_ssh_key_path = '~/.ssh/id_rsa.pub'   # the path to your rsa public key file
 
-deployer = Deployer(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
+#deployer = Deployer(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
 
 if cmd == "start" :
     credentials = ServicePrincipalCredentials(
