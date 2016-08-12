@@ -4,7 +4,7 @@ import sys
 import pdb
 import os.path
 import json
-from haikunator import Haikunator
+#from haikunator import Haikunator
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
@@ -24,10 +24,10 @@ credentials = ServicePrincipalCredentials(
 )
 
 
-msg = "\nInitializing the Deployer class with subscription id: {}, resource group: {}" \
-    "\nand public key located at: {}...\n\n"
-msg = msg.format(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
-print(msg)
+# msg = "\nInitializing the Deployer class with subscription id: {}, resource group: {}" \
+#     "\nand public key located at: {}...\n\n"
+# msg = msg.format(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
+# print(msg)
 
 client = ResourceManagementClient(credentials, os.environ['CliqrCloudAccountId'])
 
@@ -55,10 +55,10 @@ if cmd == "start" :
     with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
         parameters = json.load(armparams_file_fd)
 
-    with open('sshKey', 'r') as pub_ssh_file_fd:
-        pub_ssh_key = pub_ssh_file_fd.read()
+    # with open('sshKey', 'r') as pub_ssh_file_fd:
+    #     pub_ssh_key = pub_ssh_file_fd.read()
 
-    name_generator = Haikunator()
+    #name_generator = Haikunator()
 
     # parameters = {
     #     'sshKeyData': os.environ['sshPublicKey'],
@@ -70,7 +70,7 @@ if cmd == "start" :
     deployment_properties = {
         'mode': DeploymentMode.incremental,
         'template': template,
-        'parameters': parameters
+        'parameters': parameters['parameters']
     }
 
     deployment_async_operation = client.deployments.create_or_update(
