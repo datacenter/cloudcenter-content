@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sshKeyData": {
+      "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKlTYCjNrZcq5uSl96+xc3X5Iq4cBtFzVLYopOxKerYgpdc3QQmp70VTXvewnAm7ylI5cq6+lZaJil/FXbtH5/s5vS5q+N6x+2rjW3+Yc+SA61SfbaDJROkTyIw2wo9bV3zFfk21AsFeF6y9xjpNWPz6aEz8WaoHX6tPwJi2LFtC+YP0hprFlcI3EyBBSi6cP9GoeQWCR+t1zy7xqSndeUF1VVUuscWpfz1/bGHyBD7kA34ZEhdpG84ttUM9cj4kLTrAkQ+2fY7PHxoHIC5l4B6XZtCa9/FA753Ml/TEvC21AIFQrLJodbbUBgpdiJYzopOuie1hQMrjhRgeBYzW8/"
+    },
+    "dnsLabelPrefix": {
+      "value": "host123"
+    },
+    "vmName": {
+      "value": "host123"
+    }
+  }
+}
