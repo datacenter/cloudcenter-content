@@ -7,7 +7,6 @@
   "bundleLocation": "",
   "systemService": false,
   "serviceType": "EXTERNAL",
-  "logoPath": "/assets/img/appTiers/armtemplate/logo.png",
   "serviceActions": [],
   "externalBundleLocation": "",
   "externalActions": [
@@ -42,25 +41,10 @@
       "systemParam": true
     },
     {
-      "paramName": "armParams",
-      "displayName": "ARM Template Parameters",
-      "helpText": "JSON Formatted text containing the parameter information that you want to pass into the template ",
-      "type": "textarea",
-      "valueConstraint": {},
-      "valueList": null,
-      "collectionList": null,
-      "defaultValue": "\"parameters\": {\n    \"param1\": {\n      \"value\": \"value1\"\n    },\n    \"param2\": {\n      \"value\": \"value2\"\n    }\n}",
-      "userVisible": true,
-      "userEditable": true,
-      "optional": true,
-      "webserviceListParams": null,
-      "systemParam": true
-    },
-    {
-      "paramName": "resourceGroupName",
-      "displayName": "Resource Group Name",
-      "helpText": "The Name of the resource group that you want to deploy the template to.",
-      "type": "string",
+      "paramName": "armParamsFile",
+      "displayName": "armParamsFile",
+      "helpText": "armParamsFile",
+      "type": "path",
       "valueConstraint": {
         "maxLength": 255,
         "allowSpaces": true
@@ -70,7 +54,7 @@
       "defaultValue": "",
       "userVisible": true,
       "userEditable": true,
-      "optional": false,
+      "optional": true,
       "webserviceListParams": null,
       "systemParam": true
     }
@@ -78,6 +62,5 @@
   "servicePorts": [],
   "images": [],
   "defaultImageId": "",
-  "repositories": [],
-  "id": 64
+  "repositories": []
 }
