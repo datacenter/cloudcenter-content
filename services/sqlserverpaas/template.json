@@ -1,0 +1,112 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "server_name": {
+            "defaultValue": "cliqrdbserver",
+            "type": "String"
+        },
+        "databases_master_name": {
+            "defaultValue": "master",
+            "type": "String"
+        },
+        "databases_name": {
+            "defaultValue": "cliqrdb",
+            "type": "String"
+        },
+        "firewallRules_AllowAllWindowsAzureIps_name": {
+            "defaultValue": "AllowAllWindowsAzureIps",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/09802e14-54b4-4b43-a56c-554ba30d9230/resourceGroups/Group/providers/Microsoft.Sql/servers/mdavistemp1'.",
+            "type": "Microsoft.Sql/servers",
+            "kind": "v12.0",
+            "name": "[parameters('server_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "South Central US",
+            "properties": {
+                "administratorLogin": "mdavis",
+                "administratorLoginPassword": null,
+                "version": "12.0"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/09802e14-54b4-4b43-a56c-554ba30d9230/resourceGroups/Group/providers/Microsoft.Sql/servers/mdavistemp1/databases/master'.",
+            "type": "Microsoft.Sql/servers/databases",
+            "kind": "v12.0,system",
+            "name": "[parameters('server_name')]/[parameters('databases_master_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "South Central US",
+            "properties": {
+                "databaseId": "7c45221f-ddc1-46d6-8cab-9dd38d80c98c",
+                "edition": "System",
+                "status": "Online",
+                "serviceLevelObjective": "System1",
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": "32212254720",
+                "creationDate": "2016-08-16T20:59:06.76Z",
+                "currentServiceObjectiveId": "c99ac918-dbea-463f-a475-16ec020fdc12",
+                "requestedServiceObjectiveId": "c99ac918-dbea-463f-a475-16ec020fdc12",
+                "requestedServiceObjectiveName": "System1",
+                "defaultSecondaryLocation": "North Central US",
+                "earliestRestoreDate": null,
+                "elasticPoolName": null,
+                "containmentState": 2
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('server_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/09802e14-54b4-4b43-a56c-554ba30d9230/resourceGroups/Group/providers/Microsoft.Sql/servers/mdavistemp1/databases/mdavistemp'.",
+            "type": "Microsoft.Sql/servers/databases",
+            "kind": "v12.0,user",
+            "name": "[parameters('server_name')]/[parameters('databases_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "South Central US",
+            "properties": {
+                "databaseId": "874c4c45-cdbd-4c36-b212-739444157cee",
+                "edition": "Standard",
+                "status": "Online",
+                "serviceLevelObjective": "S2",
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": "268435456000",
+                "creationDate": "2016-08-16T20:59:33.413Z",
+                "currentServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
+                "requestedServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
+                "requestedServiceObjectiveName": "S2",
+                "defaultSecondaryLocation": "North Central US",
+                "earliestRestoreDate": "2016-08-16T21:10:05.3Z",
+                "elasticPoolName": null,
+                "containmentState": 2
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('server_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/09802e14-54b4-4b43-a56c-554ba30d9230/resourceGroups/Group/providers/Microsoft.Sql/servers/mdavistemp1/firewallRules/AllowAllWindowsAzureIps'.",
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "kind": "v12.0",
+            "name": "[parameters('server_name')]/[parameters('firewallRules_AllowAllWindowsAzureIps_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "South Central US",
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('server_name'))]"
+            ]
+        }
+    ]
+}

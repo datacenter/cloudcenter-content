@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "servers_mdavistemp1_name": {
+            "value": null
+        },
+        "databases_master_name": {
+            "value": null
+        },
+        "databases_mdavistemp_name": {
+            "value": null
+        },
+        "firewallRules_AllowAllWindowsAzureIps_name": {
+            "value": null
+        }
+    }
+}
