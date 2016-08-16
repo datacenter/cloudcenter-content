@@ -1,6 +1,8 @@
 #!/bin/bash
 . /utils.sh
 
+env
+
 cmd=$1
 serviceStatus=""
 
