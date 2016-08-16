@@ -1,14 +1,10 @@
 #!/bin/bash
 . /utils.sh
 
-
-
-env
-
 cmd=$1
 serviceStatus=""
 
-
+# Setup a bunch of prerequisits
 yum install gcc git python-pip python-devel -y
 pip install --upgrade pip
 pip install msrest msrestazure
@@ -17,33 +13,16 @@ pip install --pre azure
 #Random sed thing to fix tiny error in msrest library.
 sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
 
-#mkdir templates
-
-#cp $armTemplate templates/template.json
 
 wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/armtemplate/armtemplate.py
-#wget -N http://cliqrdemo-repo.s3.amazonaws.com/services/armtemplate/deployer.py
-#mkdir -p ~/.ssh
-#wget -N http://cliqrdemo-repo.s3.amazonaws.com/services/armtemplate/mdavis.pub -O ~/.ssh/id_rsa.pub
-#echo $sshPublicKey > sshKey
-#chmod 400 ~/.ssh/id_rsa.pub
-
-#git clone https://github.com/Azure-Samples/resource-manager-python-template-deployment.git
-#cd resource-manager-python-template-deployment
-#export AZURE_TENANT_ID=$CliqrCloud_TenantId
-#export AZURE_CLIENT_ID=$CliqrCloud_ClientId
-#export AZURE_CLIENT_SECRET=$CliqrCloud_ClientKey
-#export AZURE_SUBSCRIPTION_ID=$CliqrCloudAccountId
-#ssh-keygen
-#python azure_deployment.py
 
 case $cmd in
 	start)
-		python armtemplate.py start
+		print_log $(python armtemplate.py start)
 		serviceStatus="Started"
 		;;
 	stop)
-		python armtemplate.py stop
+		print_log $(python armtemplate.py stop)
 		serviceStatus="Stopped"
 		;;
 	*)

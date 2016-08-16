@@ -55,17 +55,6 @@ if cmd == "start" :
     with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
         parameters = json.load(armparams_file_fd)
 
-    # with open('sshKey', 'r') as pub_ssh_file_fd:
-    #     pub_ssh_key = pub_ssh_file_fd.read()
-
-    #name_generator = Haikunator()
-
-    # parameters = {
-    #     'sshKeyData': os.environ['sshPublicKey'],
-    #     'vmName': 'azure-deployment-sample-vm',
-    #     'dnsLabelPrefix': name_generator.haikunate()
-    # }
-    # parameters = {k: {'value': v} for k, v in parameters.items()}
 
     deployment_properties = {
         'mode': DeploymentMode.incremental,
@@ -81,9 +70,11 @@ if cmd == "start" :
     deployment_async_operation.wait()
 
     #print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
+    print("Done deploying!")
 elif cmd == "stop" :
     # pass
     # Destroy the resource group which contains the deployment
     client.resource_groups.delete(my_resource_group)
+    print("Resource Group {} deleted".format(my_resource_group))
 elif cmd == "reload" :
     pass
