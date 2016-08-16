@@ -20,11 +20,11 @@ wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/
 
 case $cmd in
 	start)
-		print_log $(python armtemplate.py start)
+		print_log "$(python armtemplate.py start)"
 		serviceStatus="Started"
 		;;
 	stop)
-		print_log $(python armtemplate.py stop)
+		print_log "$(python armtemplate.py stop)"
 		serviceStatus="Stopped"
 		;;
 	*)
