@@ -10,6 +10,7 @@ case $cmd in
     update)
         ;;
     start)
+        print_log("log1")
         ;;
     stop)
         ;;
