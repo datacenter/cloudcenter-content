@@ -1,0 +1,24 @@
+#!/bin/bash
+. /utils.sh
+
+env
+
+cmd=$1
+serviceStatus=""
+
+case $cmd in
+    update)
+        ;;
+    start)
+        ;;
+    stop)
+        ;;
+    suspend)
+        ;;
+    resume)
+        ;;
+    *)
+        serviceStatus="No Valid Script Argument"
+        exit 127
+        ;;
+esac
