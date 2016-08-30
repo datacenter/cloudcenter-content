@@ -6,11 +6,14 @@ env
 cmd=$1
 serviceStatus=""
 
+print_log "Begining Service Script"
+
 case $cmd in
     update)
         ;;
     start)
-        print_log("log1")
+        print_log "Begining Start"
+        print_log "Start Complete"
         ;;
     stop)
         ;;
@@ -23,3 +26,4 @@ case $cmd in
         exit 127
         ;;
 esac
+print_log "Ending Service Script"
