@@ -75,6 +75,9 @@ if cmd == "start" :
     )
     deployment_async_operation.wait()
     
+    for item in client.resource_groups.list_resources(my_resource_group):
+        print_log(item)
+
     for item in network_client.public_ip_addresses.list(my_resource_group):
         print_log(item.ip_address)
 
