@@ -12,8 +12,8 @@ pip install --upgrade pip
 pip install msrest msrestazure
 pip install --pre azure 
 
-#Random sed thing to fix tiny error in msrest library.
-sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
+#Random sed thing to fix tiny error in msrest library. I don't think it's needed anymore.
+#sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
 
 
 wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/armtemplate/services/armtemplate/armtemplate.py
