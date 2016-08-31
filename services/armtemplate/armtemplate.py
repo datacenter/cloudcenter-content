@@ -9,6 +9,12 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
 
+def print_log(msg):
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
+
+
 cmd = sys.argv[1]
 
 my_subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID')   # your Azure Subscription Id
@@ -42,7 +48,7 @@ if cmd == "start" :
         "us-west" : "westus",
         "us-southcentral" : "southcentralus"
     }
-    client.resource_groups.create_or_update(
+    rg = client.resource_groups.create_or_update(
         my_resource_group,
         {
             'location': regionmap[os.environ['region']]
@@ -68,6 +74,9 @@ if cmd == "start" :
         deployment_properties
     )
     deployment_async_operation.wait()
+    
+    for item in network_client.public_ip_addresses.list(my_resource_group):
+        print_log(item.ip_address)
 
     #print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
     print("Done deploying!")
