@@ -40,7 +40,7 @@ client = ResourceManagementClient(credentials, os.environ['CliqrCloudAccountId']
 if cmd == "start" :
 
 
-    print("Beginning the deployment... \n\n")
+    print_log("Beginning the deployment... \n\n")
     
     # Dict that maps keys of CloudCenter's region names to values of Azure's region names.
     # Used below to control where something is deployed
