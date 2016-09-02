@@ -18,10 +18,10 @@ def print_ext_service_result(msg):
 
 
 result = {
-    hostName: "hostname",
-    ipAddress: "ipAddr",
-    environment: {
-        myEnv: "testEnv"
+    'hostName': "hostname",
+    'ipAddress': "ipAddr",
+    'environment': {
+        'myEnv': "testEnv"
     }
 }
 
