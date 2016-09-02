@@ -16,7 +16,7 @@ pip install --pre azure
 #sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
 
 
-wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/armtemplate/services/armtemplate/armtemplate.py
+wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/armtemplate/armtemplate.py
 
 case $cmd in
 	start)
