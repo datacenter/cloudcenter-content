@@ -107,7 +107,7 @@ if cmd == "start" :
     ipAddr = ""
     for item in network_client.public_ip_addresses.list(my_resource_group):
         ipAddr = item.ip_address
-        print_log("IP Address: {}".format(item.ip_address)
+        print_log("IP Address: {}".format(item.ip_address))
 
     result = {
         'hostName': "hostname",

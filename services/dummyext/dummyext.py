@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json
 
 
 def print_log(msg):
@@ -28,4 +29,4 @@ result = {
 
 print_log("log from python")
 print_error("error from python")
-print_ext_service_result(result)
+print_ext_service_result(json.dumps(result))
