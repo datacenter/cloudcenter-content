@@ -107,15 +107,16 @@ if cmd == "start" :
     ipAddr = ""
     for item in network_client.public_ip_addresses.list(my_resource_group):
         ipAddr = item.ip_address
-        print_log(item.ip_address)
+        print_log("IP Address: {}".format(item.ip_address)
 
     result = {
-        hostName: "hostname",
-        ipAddress: ipAddr,
-        environment: {
-            myEnv: "testEnv"
+        'hostName': "hostname",
+        'ipAddress': ipAddr,
+        'environment': {
+            'myEnv': "testEnv"
         }
     }
+
     print_ext_service_result(json.dumps(result))
     #print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
     print("Done deploying!")
