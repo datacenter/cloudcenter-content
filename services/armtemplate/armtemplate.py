@@ -7,12 +7,24 @@ import json
 #from haikunator import Haikunator
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
+from azure.mgmt.network import NetworkManagementClient
+from msrestazure.azure_exceptions import CloudError
 from azure.mgmt.resource.resources.models import DeploymentMode
 
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
+
+def print_error(msg):
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
+
+def print_ext_service_result(msg):
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
 
 cmd = sys.argv[1]
@@ -36,11 +48,12 @@ credentials = ServicePrincipalCredentials(
 # print(msg)
 
 client = ResourceManagementClient(credentials, os.environ['CliqrCloudAccountId'])
+network_client = NetworkManagementClient(credentials, os.environ['CliqrCloudAccountId'])
 
 if cmd == "start" :
 
 
-    print_log("Beginning the deployment... \n\n")
+    print_log("Beginning the deployment...")
     
     # Dict that maps keys of CloudCenter's region names to values of Azure's region names.
     # Used below to control where something is deployed
@@ -54,12 +67,19 @@ if cmd == "start" :
             'location': regionmap[os.environ['region']]
         }
     )
+    try:
+        with open(os.environ['armTemplate'], 'r') as template_file_fd:
+            template = json.load(template_file_fd)
+    except Exception as err:
+        print_log("Error loading the ARM Template: {0}. Check your syntax".format(err))
+        exit(1)
 
-    with open(os.environ['armTemplate'], 'r') as template_file_fd:
-        template = json.load(template_file_fd)
-
-    with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
-        parameters = json.load(armparams_file_fd)
+    try:
+        with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
+            parameters = json.load(armparams_file_fd)
+    except Exception as err:
+        print_log("Error loading the ARM Parameters File: {0}. Check your syntax".format(err))
+        exit(1)
 
 
     deployment_properties = {
@@ -67,13 +87,19 @@ if cmd == "start" :
         'template': template,
         'parameters': parameters['parameters']
     }
-
-    deployment_async_operation = client.deployments.create_or_update(
-        my_resource_group,
-        'azure-sample',
-        deployment_properties
-    )
-    deployment_async_operation.wait()
+    try:
+        deployment_async_operation = client.deployments.create_or_update(
+            my_resource_group,
+            'azure-sample',
+            deployment_properties
+        )
+        deployment_async_operation.wait()
+    except CloudError as err:
+        print_log("CloudError: {0}".format(err))
+        exit(1)
+    except Exception as err:
+        print_log("Exception: {0}".format(err))
+        exit(1)
     
     for item in client.resource_groups.list_resources(my_resource_group):
         print_log(item)
