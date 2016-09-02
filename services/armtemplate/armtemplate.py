@@ -72,14 +72,14 @@ if cmd == "start" :
             template = json.load(template_file_fd)
     except Exception as err:
         print_log("Error loading the ARM Template: {0}. Check your syntax".format(err))
-        exit(1)
+        sys.exit(1)
 
     try:
         with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
             parameters = json.load(armparams_file_fd)
     except Exception as err:
         print_log("Error loading the ARM Parameters File: {0}. Check your syntax".format(err))
-        exit(1)
+        sys.exit(1)
 
 
     deployment_properties = {
@@ -96,17 +96,27 @@ if cmd == "start" :
         deployment_async_operation.wait()
     except CloudError as err:
         print_log("CloudError: {0}".format(err))
-        exit(1)
+        sys.exit(1)
     except Exception as err:
         print_log("Exception: {0}".format(err))
-        exit(1)
+        sys.exit(1)
     
     for item in client.resource_groups.list_resources(my_resource_group):
         print_log(item)
-
+    
+    ipAddr = ""
     for item in network_client.public_ip_addresses.list(my_resource_group):
+        ipAddr = item.ip_address
         print_log(item.ip_address)
 
+    result = {
+        hostName: "hostname",
+        ipAddress: ipAddr,
+        environment: {
+            myEnv: "testEnv"
+        }
+    }
+    print_ext_service_result(json.dumps(result))
     #print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
     print("Done deploying!")
 elif cmd == "stop" :
