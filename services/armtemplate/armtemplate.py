@@ -59,7 +59,8 @@ if cmd == "start" :
     # Used below to control where something is deployed
     regionmap = {
         "us-west" : "westus",
-        "us-southcentral" : "southcentralus"
+        "us-southcentral" : "southcentralus",
+        "us-east" : "eastus"
     }
     rg = client.resource_groups.create_or_update(
         my_resource_group,
