@@ -25,8 +25,8 @@
     {
       "paramName": "armTemplate",
       "displayName": "ARM Template",
-      "helpText": "Reference your ARM template that you want to use.",
-      "type": "path",
+      "helpText": "URL of your ARM template that you want to use.",
+      "type": "string",
       "valueConstraint": {
         "maxLength": 255,
         "allowSpaces": true
@@ -43,8 +43,8 @@
     {
       "paramName": "armParamsFile",
       "displayName": "armParamsFile",
-      "helpText": "armParamsFile",
-      "type": "path",
+      "helpText": "URL of your parameters file that you want to use.",
+      "type": "string",
       "valueConstraint": {
         "maxLength": 255,
         "allowSpaces": true
