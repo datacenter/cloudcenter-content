@@ -5,8 +5,8 @@
 . /usr/local/osmosix/service/utils/cfgutil.sh
 
 #Install S3
-wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-unzip -o awscli-bundle.zip
+sudo wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+sudo unzip -o awscli-bundle.zip
 ./awscli-bundle/install -b ~/bin/aws
 
 #Configure S3
@@ -19,7 +19,7 @@ echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
 echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 
-mysqldump --all-databases -u root -pwelcome2cliqr > dbbak.sql
+sudo su -c "mysqldump --all-databases -u root -pwelcome2cliqr > dbbak.sql"
 
 ~/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql
 

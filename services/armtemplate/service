@@ -7,7 +7,7 @@ cmd=$1
 serviceStatus=""
 
 # Setup a bunch of prerequisits
-yum install gcc git python-pip python-devel openssl-devel -y
+yum install gcc git python-pip python-devel openssl-devel libffi-devel -y
 pip install --upgrade pip
 pip install msrest msrestazure
 pip install --pre azure 
