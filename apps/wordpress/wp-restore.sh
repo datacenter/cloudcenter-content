@@ -5,8 +5,8 @@
 . /usr/local/osmosix/service/utils/cfgutil.sh
 
 #Install S3
-wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-unzip -o awscli-bundle.zip
+sudo wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+sudo unzip -o awscli-bundle.zip
 ./awscli-bundle/install -b ~/bin/aws
 
 #Configure S3
@@ -22,10 +22,10 @@ echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 #apt-get install mysql-client -y
 
 #cd /var/www
-\cp /var/www/wp-config.php /tmp
+sudo cp /var/www/wp-config.php /tmp
 sudo rm -rf /var/www/*
 
-~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/wordpressbkup.zip ~/wordpressbkup.zip
+sudo ~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/wordpressbkup.zip ~/wordpressbkup.zip
 sudo unzip -o ~/wordpressbkup.zip -d /var/www
 sudo cp /tmp/wp-config.php /var/www
 sudo chown -R apache:apache /var/www
@@ -33,4 +33,4 @@ sudo chown -R apache:apache /var/www
 rm ~/wordpressbkup.zip
 aws s3 rm --recursive s3://$s3path/$migrateFromDepId
 
-) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/wp-restore_$$.log
+) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/wp-restore.log

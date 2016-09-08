@@ -1,8 +1,13 @@
 #!/bin/bash -x
 (
+echo "Username: $(whoami)"
+echo "Working Directory: $(pwd)"
+
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+
+env
 
 #Install S3
 wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
