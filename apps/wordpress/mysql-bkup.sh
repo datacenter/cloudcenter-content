@@ -1,8 +1,13 @@
 #!/bin/bash -x
 (
+echo "Username: $(whoami)"
+echo "Working Directory: $(pwd)"
+
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+
+env
 
 #Install S3
 sudo wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
@@ -12,7 +17,7 @@ sudo unzip -o awscli-bundle.zip
 #Configure S3
 mkdir -p ~/.aws
 echo "[default]" > ~/.aws/config
-echo "region=us-west-2" >> ~/.aws/config
+echo "region=us-west-1" >> ~/.aws/config
 echo "output=json" >> ~/.aws/config
 echo "[default]" > ~/.aws/credentials
 echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
