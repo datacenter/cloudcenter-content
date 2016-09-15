@@ -1,0 +1,7 @@
+{
+"client": {
+    "name": "%TIER_NAME%",
+    "address": "%TIER_IP%",
+    "subscriptions": [ "%SUBS%" ]
+  }
+}
