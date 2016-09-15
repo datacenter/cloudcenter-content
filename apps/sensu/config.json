@@ -1,15 +1,15 @@
 {
   "rabbitmq": {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "vhost": "/sensu",
     "user": "sensu",
     "password": "secret"
   },
   "redis": {
-    "host": "localhost"
+    "host": "127.0.0.1"
   },
   "api": {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "port": 4567
   }
 }

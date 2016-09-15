@@ -41,24 +41,24 @@ enabled=1' | sudo tee /etc/yum.repos.d/sensu.repo
 sudo yum install sensu -y
 
 # Configure Sensu
-sudo wget -O /etc/sensu/config.json http://env.cliqrtech.com/sensu/config.json
+sudo wget -O /etc/sensu/config.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/config.json
 
 # Install Checks
-sudo wget -O /etc/sensu/conf.d/check_process_haproxy.json http://env.cliqrtech.com/sensu/conf/check_process_haproxy.json
-sudo wget -O /etc/sensu/conf.d/check_process_tomcat.json http://env.cliqrtech.com/sensu/conf/check_process_tomcat.json
-sudo wget -O /etc/sensu/conf.d/check_disk.json http://env.cliqrtech.com/sensu/conf/check_disk.json
-sudo wget -O /etc/sensu/conf.d/check_process_win.json http://env.cliqrtech.com/sensu/conf/check_process_win.json
-sudo wget -O /etc/sensu/conf.d/check_disk_win.json http://env.cliqrtech.com/sensu/conf/check_disk_win.json
+sudo wget -O /etc/sensu/conf.d/check_process_haproxy.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/check_process_haproxy.json
+sudo wget -O /etc/sensu/conf.d/check_process_tomcat.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/check_process_tomcat.json
+sudo wget -O /etc/sensu/conf.d/check_disk.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/check_disk.json
+sudo wget -O /etc/sensu/conf.d/check_process_win.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/check_process_win.json
+sudo wget -O /etc/sensu/conf.d/check_disk_win.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/check_disk_win.json
 
 # Install SMTP Server
 sudo yum install postfix -y
 
 # Configure Sensu Mailer
 sudo /opt/sensu/embedded/bin/gem install mail --no-ri --no-RDoc
-sudo wget -O /etc/sensu/handlers/mailer.rb http://env.cliqrtech.com/sensu/mailer/mailer.rb
+sudo wget -O /etc/sensu/handlers/mailer.rb https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/mailer.rb
 sudo chmod 755 /etc/sensu/handlers/mailer.rb
-sudo wget -O /etc/sensu/conf.d/mailer.json http://env.cliqrtech.com/sensu/mailer/mailer.json
-sudo wget -O /etc/sensu/conf.d/handler_mailer.json http://env.cliqrtech.com/sensu/mailer/handler_mailer.json
+sudo wget -O /etc/sensu/conf.d/mailer.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/mailer.json
+sudo wget -O /etc/sensu/conf.d/handler_mailer.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/handler_mailer.json
 sudo sed -i "s/%MAIL_TO%/$MAIL_TO/g" /etc/sensu/conf.d/mailer.json
 sudo sed -i "s/%PUBLIC_IP%/$OSMOSIX_PUBLIC_IP/g" /etc/sensu/conf.d/mailer.json
 
@@ -68,7 +68,7 @@ sudo /etc/init.d/sensu-api start
 
 # Install Uichwa
 sudo yum install uchiwa -y
-sudo wget -O /etc/sensu/uchiwa.json http://env.cliqrtech.com/sensu/uchiwa.json
+sudo wget -O /etc/sensu/uchiwa.json https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/sensu/uchiwa.json
 
 # Enable start uichwa
 sudo /etc/init.d/uchiwa start
