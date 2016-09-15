@@ -7,7 +7,7 @@
       "refresh": 120,
       "handlers": ["mailer"],
       "subscribers": [
-        "tomcat", "haproxy", "centos"
+        "tomcat", "haproxy", "centos", "linux"
       ]
     }
   }
