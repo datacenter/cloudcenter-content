@@ -1,0 +1,10 @@
+{
+  "mailer": {
+    "admin_gui": "http://%PUBLIC_IP%:3000/",
+    "mail_from": "sensu@cliqrtech.com",
+    "mail_to": "%MAIL_TO%",
+    "smtp_address": "127.0.0.1",
+    "smtp_port": "25",
+    "smtp_domain": "cliqrtech.com"
+  }
+}

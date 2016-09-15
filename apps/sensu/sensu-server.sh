@@ -1,10 +1,11 @@
 #!/bin/bash
 
-sudo mv /etc/yum.repos.d/cliqr.repo ~/
-
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
 
 # Install Erlang & RabbitMQ
-sudo rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+sudo rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
 sudo yum install erlang -y
 
 sudo rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
@@ -43,8 +44,11 @@ sudo yum install sensu -y
 sudo wget -O /etc/sensu/config.json http://env.cliqrtech.com/sensu/config.json
 
 # Install Checks
-sudo wget -O /etc/sensu/conf.d/check_process.json http://env.cliqrtech.com/sensu/conf/check_process.json
+sudo wget -O /etc/sensu/conf.d/check_process_haproxy.json http://env.cliqrtech.com/sensu/conf/check_process_haproxy.json
+sudo wget -O /etc/sensu/conf.d/check_process_tomcat.json http://env.cliqrtech.com/sensu/conf/check_process_tomcat.json
 sudo wget -O /etc/sensu/conf.d/check_disk.json http://env.cliqrtech.com/sensu/conf/check_disk.json
+sudo wget -O /etc/sensu/conf.d/check_process_win.json http://env.cliqrtech.com/sensu/conf/check_process_win.json
+sudo wget -O /etc/sensu/conf.d/check_disk_win.json http://env.cliqrtech.com/sensu/conf/check_disk_win.json
 
 # Install SMTP Server
 sudo yum install postfix -y
@@ -55,6 +59,8 @@ sudo wget -O /etc/sensu/handlers/mailer.rb http://env.cliqrtech.com/sensu/mailer
 sudo chmod 755 /etc/sensu/handlers/mailer.rb
 sudo wget -O /etc/sensu/conf.d/mailer.json http://env.cliqrtech.com/sensu/mailer/mailer.json
 sudo wget -O /etc/sensu/conf.d/handler_mailer.json http://env.cliqrtech.com/sensu/mailer/handler_mailer.json
+sudo sed -i "s/%MAIL_TO%/$MAIL_TO/g" /etc/sensu/conf.d/mailer.json
+sudo sed -i "s/%PUBLIC_IP%/$OSMOSIX_PUBLIC_IP/g" /etc/sensu/conf.d/mailer.json
 
 # Start sensu
 sudo /etc/init.d/sensu-server start

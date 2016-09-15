@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "disks": {
+      "command": "check-disk-usage.rb -w 25 -c 50",
+      "interval": 10,
+      "occurrences": 10,
+      "refresh": 120,
+      "handlers": ["mailer"],
+      "subscribers": [
+        "tomcat", "haproxy"
+      ]
+    }
+  }
+}

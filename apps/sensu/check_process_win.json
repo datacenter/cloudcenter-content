@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "process-win": {
+      "command": "C:\\opt\\sensu\\embedded\\bin\\ruby.exe C:\\opt\\sensu\\embedded\\bin\\check-windows-service.rb -s MSSQLSERVER",
+      "interval": 10,
+      "occurrences": 10,
+      "refresh": 120,
+      "handlers": ["mailer"],
+      "subscribers": [
+        "windows"
+      ]
+    }
+  }
+}

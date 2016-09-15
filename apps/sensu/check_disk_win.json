@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "disks-win": {
+      "command": "C:\\opt\\sensu\\embedded\\bin\\ruby.exe  C:\\opt\\sensu\\embedded\\bin\\check-windows-disk.rb -w 25 -c 50",
+      "interval": 10,
+      "occurrences": 10,
+      "refresh": 120,
+      "handlers": ["mailer"],
+      "subscribers": [
+        "windows"
+      ]
+    }
+  }
+}

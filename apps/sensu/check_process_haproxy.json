@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "proc-haproxy": {
+      "command": "check-process.rb -p haproxy -C 1",
+      "interval": 10,
+      "occurrences": 10,
+      "refresh": 120,
+      "handlers": ["mailer"],
+      "subscribers": [
+        "haproxy"
+      ]
+    }
+  }
+}

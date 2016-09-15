@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "proc-tomcat": {
+      "command": "check-process.rb -p tomcat -C 1",
+      "interval": 10,
+      "occurrences": 10,
+      "refresh": 120,
+      "handlers": ["mailer"],
+      "subscribers": [
+        "tomcat"
+      ]
+    }
+  }
+}
