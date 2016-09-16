@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -x
+(
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
@@ -72,3 +73,4 @@ sudo wget -O /etc/sensu/uchiwa.json https://raw.githubusercontent.com/datacenter
 
 # Enable start uichwa
 sudo /etc/init.d/uchiwa start
+) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/sensu-server_$$.log

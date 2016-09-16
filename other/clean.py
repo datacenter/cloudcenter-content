@@ -4,7 +4,7 @@ import requests, pdb, sys
 from requests.auth import HTTPBasicAuth
 requests.packages.urllib3.disable_warnings()
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 4:
     print("Requires 3 arguments. Usage python clean.py <api username> <api key> <ccm address/hostname>")
     sys.exit(1)
 
