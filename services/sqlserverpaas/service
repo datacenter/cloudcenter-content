@@ -1,44 +1,52 @@
 #!/bin/bash
 . /utils.sh
 
-env
+# Required Service Parameters:
+# gitTag - The tag or branch of code that you want to pull from github
 
-cmd=$1
-serviceStatus=""
+if [ -n $gitTag ]; then
+    tag = $gitTag
+else
+    tag = "master"
+fi
+
+cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
 
 
 case $CloudFamily in
-	AzureRM)
-		# Setup a bunch of prerequisits
-		yum install gcc git python-pip python-devel -y
-		pip install --upgrade pip
-		pip install msrest msrestazure
-		pip install --pre azure 
+    AzureRM)
+        # Setup a bunch of prerequisits
+        yum install gcc git python-pip python-devel openssl-devel libffi-devel -y
+        pip install --upgrade pip
+        pip install msrest msrestazure
+        pip install --pre azure
 
-		#Random sed thing to fix tiny error in msrest library.
-		sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
+        #Random sed thing to fix tiny error in msrest library.
+        #sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
 
 
-		wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/sqlserverpaas-arm.py
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/sqlserverpaas-arm.py
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/template.json
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/parameters.json
 
-		case $cmd in
-			start)
-				print_log "$(python sqlserverpaas-arm.py start)"
-				serviceStatus="Started"
-				;;
-			stop)
-				print_log "$(python sqlserverpaas-arm.py stop)"
-				serviceStatus="Stopped"
-				;;
-			*)
-				serviceStatus="No Valid Script Argument"
-				exit 127
-				;;
-		esac
-		;;
-	*)
-		exit 127
-		print_error "Not deployed to supported cloud. Currently only Azure Resource Manager supported."
-		;;
+        case $cmd in
+            start)
+                print_log "Executing sqlserverpaas-arm.py start"
+                python sqlserverpaas-arm.py start
+                ;;
+            stop)
+                print_log "Executing sqlserverpaas-arm.py stop"
+                python sqlserverpaas-arm.py stop
+                ;;
+            *)
+                print_log "No Valid Script Argument. Ex start, stop"
+                exit 127
+                ;;
+        esac
+        ;;
+    *)
+        exit 127
+        print_error "Not deployed to supported cloud. Currently only Azure Resource Manager supported."
+        ;;
 esac
 

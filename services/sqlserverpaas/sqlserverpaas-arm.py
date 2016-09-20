@@ -9,6 +9,21 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.resource.resources.models import DeploymentMode
 
+def print_log(msg):
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
+
+def print_error(msg):
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
+
+def print_ext_service_result(msg):
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
+
 cmd = sys.argv[1]
 
 my_subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID')   # your Azure Subscription Id
@@ -40,7 +55,8 @@ if cmd == "start" :
     # Used below to control where something is deployed
     regionmap = {
         "us-west" : "westus",
-        "us-southcentral" : "southcentralus"
+        "us-southcentral" : "southcentralus",
+        "us-east" : "eastus"
     }
     client.resource_groups.create_or_update(
         my_resource_group,
@@ -49,24 +65,18 @@ if cmd == "start" :
         }
     )
 
-    with open(os.environ['armTemplate'], 'r') as template_file_fd:
+    with open('template.json', 'r') as template_file_fd:
         template = json.load(template_file_fd)
 
-    # with open(os.environ['armParamsFile'], 'r') as armparams_file_fd:
+    # with open('parameters.json', 'r') as armparams_file_fd:
     #     parameters = json.load(armparams_file_fd)
     parameters = {
         "parameters": {
-            "servers_mdavistemp1_name": {
-                "value": null
+            "serverAdminPassword": {
+                "value": "yiebrUp2"
             },
-            "databases_master_name": {
-                "value": null
-            },
-            "databases_mdavistemp_name": {
-                "value": null
-            },
-            "firewallRules_AllowAllWindowsAzureIps_name": {
-                "value": null
+            "serverAdminUsername": {
+                "value": "mdavis"
             }
         }
     }
