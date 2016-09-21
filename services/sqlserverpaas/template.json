@@ -3,7 +3,6 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "server_name": {
-            "defaultValue": "cliqrdbserver",
             "type": "String"
         },
         "databases_master_name": {
@@ -50,20 +49,8 @@
             "apiVersion": "2014-04-01-preview",
             "location": "South Central US",
             "properties": {
-                "databaseId": "7c45221f-ddc1-46d6-8cab-9dd38d80c98c",
                 "edition": "System",
-                "status": "Online",
-                "serviceLevelObjective": "System1",
-                "collation": "SQL_Latin1_General_CP1_CI_AS",
-                "maxSizeBytes": "32212254720",
-                "creationDate": "2016-08-16T20:59:06.76Z",
-                "currentServiceObjectiveId": "c99ac918-dbea-463f-a475-16ec020fdc12",
-                "requestedServiceObjectiveId": "c99ac918-dbea-463f-a475-16ec020fdc12",
-                "requestedServiceObjectiveName": "System1",
-                "defaultSecondaryLocation": "North Central US",
-                "earliestRestoreDate": null,
-                "elasticPoolName": null,
-                "containmentState": 2
+                "status": "Online"
             },
             "resources": [],
             "dependsOn": [
@@ -78,20 +65,8 @@
             "apiVersion": "2014-04-01-preview",
             "location": "South Central US",
             "properties": {
-                "databaseId": "874c4c45-cdbd-4c36-b212-739444157cee",
                 "edition": "Standard",
-                "status": "Online",
-                "serviceLevelObjective": "S2",
-                "collation": "SQL_Latin1_General_CP1_CI_AS",
-                "maxSizeBytes": "268435456000",
-                "creationDate": "2016-08-16T20:59:33.413Z",
-                "currentServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
-                "requestedServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
-                "requestedServiceObjectiveName": "S2",
-                "defaultSecondaryLocation": "North Central US",
-                "earliestRestoreDate": "2016-08-16T21:10:05.3Z",
-                "elasticPoolName": null,
-                "containmentState": 2
+                "status": "Online"
             },
             "resources": [],
             "dependsOn": [

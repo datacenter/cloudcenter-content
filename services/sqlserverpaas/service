@@ -3,11 +3,15 @@
 
 # Required Service Parameters:
 # gitTag - The tag or branch of code that you want to pull from github
+# cliqrDatabaseRootUserName
+# dbSAPassword
+# dbName
+
 
 if [ -n $gitTag ]; then
-    tag = $gitTag
+    tag=$gitTag
 else
-    tag = "master"
+    tag="master"
 fi
 
 cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
@@ -25,9 +29,9 @@ case $CloudFamily in
         #sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
 
 
-        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/sqlserverpaas-arm.py
-        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/template.json
-        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/parameters.json
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/sqlserverpaas-arm.py
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/template.json
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/parameters.json
 
         case $cmd in
             start)
