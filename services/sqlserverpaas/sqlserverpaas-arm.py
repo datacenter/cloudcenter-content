@@ -5,6 +5,7 @@ import pdb
 import os.path
 import json
 import random
+import pyodbc
 #from haikunator import Haikunator
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
@@ -102,6 +103,24 @@ if cmd == "start" :
     )
     deployment_async_operation.wait()
 
+    if 'cliqrDBSetupScript' in os.environ and len(os.environ['cliqrDBSetupScript']) > 0:
+        print_log("Found DB Setup Script {}. Running it...".format(os.environ['cliqrDBSetupScript']))
+        try :
+            cnxn = pyodbc.connect(
+                "Driver={ODBC Driver 13 for SQL Server};Server=tcp:{serverName}.database.windows.net,1433;Database={masterDB};Uid={rootUser}@{serverName};Pwd={rootPass};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;".format(
+                    serverName=serverName,
+                    masterDB="master",
+                    rootUser=os.environ['cliqrDatabaseRootUserName'],
+                    rootPass=os.environ['cliqrDatabaseRootPass']
+                ),
+            autocommit=True)
+            cursor = cnxn.cursor()
+            with open(os.environ['cliqrDBSetupScript'], 'r') as dbScript:
+                cursor.execute(dbScript)
+        except Exception as err:
+            print_log("Error running DB Setup Scrip: {0}.".format(err))
+            sys.exit(1)
+
     result = {
         'hostName': serverName+"database.windows.net",
         'ipAddress': serverName+"database.windows.net",
@@ -117,7 +136,6 @@ if cmd == "start" :
     }
 
     print_ext_service_result(json.dumps(result))
-
 
     #print("Done deploying!!\n\nYou can connect via: `ssh azureSample@{}.westus.cloudapp.azure.com`".format(deployer.dns_label_prefix))
     print("Done deploying!")

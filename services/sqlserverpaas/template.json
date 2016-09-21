@@ -58,22 +58,6 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/09802e14-54b4-4b43-a56c-554ba30d9230/resourceGroups/Group/providers/Microsoft.Sql/servers/mdavistemp1/databases/mdavistemp'.",
-            "type": "Microsoft.Sql/servers/databases",
-            "kind": "v12.0,user",
-            "name": "[concat(parameters('server_name'), '/', parameters('databases_name'))]",
-            "apiVersion": "2014-04-01-preview",
-            "location": "South Central US",
-            "properties": {
-                "edition": "Standard",
-                "status": "Online"
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('server_name'))]"
-            ]
-        },
-        {
             "comments": "Generalized from resource: '/subscriptions/09802e14-54b4-4b43-a56c-554ba30d9230/resourceGroups/Group/providers/Microsoft.Sql/servers/mdavistemp1/firewallRules/AllowAllWindowsAzureIps'.",
             "type": "Microsoft.Sql/servers/firewallRules",
             "kind": "v12.0",
