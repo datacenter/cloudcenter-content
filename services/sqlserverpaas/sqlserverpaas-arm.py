@@ -78,16 +78,13 @@ if cmd == "start" :
     parameters = {
         "parameters": {
             "serverAdminPassword": {
-                "value": os.environ['dbSAPassword']
+                "value": os.environ['cliqrDatabaseRootPass']
             },
             "serverAdminUsername": {
                 "value": os.environ['cliqrDatabaseRootUserName']
             },
             "server_name": {
                 "value": serverName
-            },
-            "databases_name": {
-                "value": os.environ['dbName']
             }
         }
     }
