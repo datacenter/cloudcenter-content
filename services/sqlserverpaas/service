@@ -10,7 +10,6 @@
 # Print the env to the CCM UI for debugging. Remove this line for production.
 print_log "$(env)"
 
-
 if [ -n $gitTag ]; then
     tag=$gitTag
 else
@@ -23,15 +22,16 @@ cmd=$1 # Controls which part of this script is executed based on command line ar
 case $CloudFamily in
     AzureRM)
         # Setup a bunch of prerequisits
-        yum install gcc git python-pip python-devel unixODBC-devel openssl-devel libffi-devel glibc e2fsprogs krb5-libs openssl -y
+        yum install gcc git python-pip python-devel unixODBC-devel openssl-devel libffi-devel glibc e2fsprogs krb5-libs openssl gcc-c++ -y
         pip install --upgrade pip
-        pip install msrest msrestazure pymssql pyodbc
+        pip install msrest msrestazure pyodbc
         pip install --pre azure
 
         wget https://download.microsoft.com/download/B/C/D/BCDD264C-7517-4B7D-8159-C99FC5535680/msodbcsql-13.0.0.0.tar.gz
         tar xvzf msodbcsql-13.0.0.0.tar.gz
         cd msodbcsql-13.0.0.0
         ./install.sh install --accept-license
+        cd ..
 
         #Random sed thing to fix tiny error in msrest library.
         #sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py

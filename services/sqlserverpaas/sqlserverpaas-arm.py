@@ -96,12 +96,16 @@ if cmd == "start" :
         'parameters': parameters['parameters']
     }
 
-    deployment_async_operation = client.deployments.create_or_update(
-        my_resource_group,
-        'azure-sample',
-        deployment_properties
-    )
-    deployment_async_operation.wait()
+    try :
+        deployment_async_operation = client.deployments.create_or_update(
+            my_resource_group,
+            'azure-sample',
+            deployment_properties
+        )
+        deployment_async_operation.wait()
+    except Exception as err:
+        print_log("Error deploying database: {0}.".format(err))
+        sys.exit(1)
 
     if 'cliqrDBSetupScript' in os.environ and len(os.environ['cliqrDBSetupScript']) > 0:
         print_log("Found DB Setup Script {}. Running it...".format(os.environ['cliqrDBSetupScript']))
