@@ -32,7 +32,6 @@ my_subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID') # your Azure Subscr
 my_resource_group = os.environ['parentJobName']+os.environ['parentJobId'] # the resource group for deployment
 print("Resource Group: {}".format(my_resource_group))
 #my_pub_ssh_key_path = '~/.ssh/id_rsa.pub'   # the path to your rsa public key file
-network_client = NetworkManagementClient(credentials, os.environ['CliqrCloudAccountId'])
 
 #deployer = Deployer(my_subscription_id, my_resource_group, my_pub_ssh_key_path)
 
@@ -49,6 +48,7 @@ credentials = ServicePrincipalCredentials(
 # print(msg)
 
 client = ResourceManagementClient(credentials, os.environ['CliqrCloudAccountId'])
+network_client = NetworkManagementClient(credentials, os.environ['CliqrCloudAccountId'])
 
 if cmd == "start" :
 
