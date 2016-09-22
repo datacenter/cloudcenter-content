@@ -97,9 +97,6 @@ if cmd == "start" :
             },
             "server_name": {
                 "value": serverName
-            },
-            "location": {
-                "value": serverName
             }
         }
     }
