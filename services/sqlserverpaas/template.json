@@ -22,9 +22,6 @@
         },
         "serverAdminUsername": {
             "type": "String"
-        },
-        "location": {
-            "type": "String"
         }
     },
     "variables": {},
@@ -35,7 +32,7 @@
             "kind": "v12.0",
             "name": "[parameters('server_name')]",
             "apiVersion": "2014-04-01-preview",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "administratorLogin": "[parameters('serverAdminUsername')]",
                 "administratorLoginPassword": "[parameters('serverAdminPassword')]",
@@ -50,7 +47,7 @@
             "kind": "v12.0,system",
             "name": "[concat(parameters('server_name'), '/', parameters('databases_master_name'))]",
             "apiVersion": "2014-04-01-preview",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "edition": "System",
                 "status": "Online"
@@ -66,7 +63,7 @@
             "kind": "v12.0",
             "name": "[concat(parameters('server_name'), '/', parameters('firewallRules_AllowAllWindowsAzureIps_name'))]",
             "apiVersion": "2014-04-01-preview",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "startIpAddress": "0.0.0.0",
                 "endIpAddress": "255.255.255.255"

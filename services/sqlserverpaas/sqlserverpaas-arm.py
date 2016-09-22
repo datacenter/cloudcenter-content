@@ -109,7 +109,6 @@ if cmd == "start" :
         'template': template,
         'parameters': parameters['parameters']
     }
-    print_log("Deployment properties set: {}.".format(json.dumps(deployment_properties)))
 
     try :
         print_log("Trying to deploy database server to resource group {}.".format(my_resource_group))
