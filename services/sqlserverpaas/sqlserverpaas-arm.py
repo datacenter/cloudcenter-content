@@ -6,6 +6,7 @@ import os.path
 import json
 import random
 import pyodbc
+import dns.resolver
 #from haikunator import Haikunator
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
@@ -48,7 +49,7 @@ rootUser = os.environ['cliqrDatabaseRootUserName']
 masterDB = "master"
 serverName = "server-"+os.environ['currentTierJobId'].replace('_', '-') # Replase _ with - because _ not allowed in server name. Use current tier to ensure uniqueness when multiple are present in app profile.
 my_resource_group = os.environ['parentJobName']+os.environ['parentJobId'] # the resource group for deployment. Set from job name/id to make it identifiable and unique per deployment.
-
+port = "1433"
 #my_subscription_id = os.environ.get('AZURE_SUBSCRIPTION_ID') # your Azure Subscription Id
 
 
@@ -123,12 +124,13 @@ if cmd == "start" :
         print_log("Specified DB Setup Script downloaded to: {}. Running it...".format(os.environ['cliqrDBSetupScript']))
         try :
             cnxn = pyodbc.connect(
-                "Driver={driver};Server=tcp:{serverName}.database.windows.net,1433;Database={masterDB};Uid={rootUser}@{serverName};Pwd={rootPass};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;".format(
+                "Driver={driver};Server=tcp:{serverName}.database.windows.net,{port};Database={masterDB};Uid={rootUser}@{serverName};Pwd={rootPass};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;".format(
                     serverName=serverName,
                     masterDB=masterDB,
                     rootUser=rootUser,
                     rootPass=rootPass,
-                    driver="ODBC Driver 13 for SQL Server"
+                    driver="ODBC Driver 13 for SQL Server",
+                    port=port
                 ),
             autocommit=True)
             cursor = cnxn.cursor()
@@ -137,17 +139,19 @@ if cmd == "start" :
         except Exception as err:
             print_log("Error running DB Setup Scrip: {0}.".format(err))
             sys.exit(1)
-
+    domainName = serverName+".database.windows.net"
+    answer = dns.resolver.query(domainName)
+    ipAddr = str(answer[0].to_text())
     result = {
-        'hostName': serverName+"database.windows.net",
-        'ipAddress': serverName+"database.windows.net",
+        'hostName': domainName,
+        'ipAddress': ipAddr,
         'environment': {
             'instanceName': "instanceName",
             'instanceType': "instanceType",
             'serviceType': "serviceType",
             'productType': "productType",
             'status': "status",
-            'port': "port",
+            'port': port,
             'version': "version"
         }
     }

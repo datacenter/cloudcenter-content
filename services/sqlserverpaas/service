@@ -25,7 +25,7 @@ case $CloudFamily in
         # Setup a bunch of prerequisits
         yum install gcc git python-pip python-devel unixODBC-devel openssl-devel libffi-devel glibc e2fsprogs krb5-libs openssl gcc-c++ -y
         pip install --upgrade pip
-        pip install msrest msrestazure pyodbc
+        pip install msrest msrestazure pyodbc dnspython
         pip install --pre azure
 
         print_log "Downloading and installing ODBC driver for python: msodbcsql-13.0.0.0"
