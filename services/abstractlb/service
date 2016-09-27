@@ -1,0 +1,86 @@
+#!/bin/bash
+#F5 External Service Script
+date
+. /utils.sh
+
+env
+
+cmd=$1
+serviceStatus=""
+
+#print_ext_service_result "{foo:bar}"
+yum install -y epel-release
+yum install -y python-pip wget
+
+
+
+case $lbType in
+	elb)
+		pip install requests boto3 --upgrade
+
+		#Configure AWS creds for boto
+		mkdir -p ~/.aws
+		echo "[default]" > ~/.aws/config
+		echo "region=us-west-2" >> ~/.aws/config
+		echo "output=json" >> ~/.aws/config
+		echo "[default]" > ~/.aws/credentials
+		echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
+		echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
+
+		wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/abstractlb/elb.py -O elb.py
+
+		case $cmd in
+			start)
+				serviceStatus="Starting"
+				python elb.py start
+
+				serviceStatus="Started"
+				;;
+			stop)
+				serviceStatus="Stopping"
+				python elb.py stop
+				serviceStatus="Stopped"
+				;;
+			update)
+				serviceStatus="Updating"
+				python elb.py reload
+				serviceStatus="Updated"
+				;;
+			*)
+				serviceStatus="No Valid Script Argument"
+				exit 127
+				;;
+		esac
+		;;
+	f5)
+		pip install requests bigsuds --upgrade
+		wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/abstractlb/f5.py -O f5.py
+		case $cmd in
+			start)
+				serviceStatus="Starting"
+				python f5.py start
+
+				serviceStatus="Started"
+				;;
+			stop)
+				serviceStatus="Stopping"
+				python f5.py stop
+				serviceStatus="Stopped"
+				;;
+			update)
+				serviceStatus="Updating"
+				python f5.py reload
+				serviceStatus="Updated"
+				;;
+			*)
+				serviceStatus="No Valid Script Argument"
+				exit 127
+				;;
+		esac
+		;;
+	*)
+		serviceStatus="No Valid LB Type Selected"
+		exit 127
+		;;
+esac
+date
