@@ -1,44 +1,61 @@
 #!/bin/bash
 . /utils.sh
 
-env
+# Required Service Parameters:
+# gitTag - The tag or branch of code that you want to pull from github
+# TODO
 
-cmd=$1
-serviceStatus=""
+# Print the env to the CCM UI for debugging. Remove this line for production.
+print_log "$(env)"
+
+if [ -n $gitTag ]; then
+    tag=$gitTag
+else
+    tag="master"
+fi
+
+print_log "Tag/branch for code pull set to $tag"
+
+cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
 
 
 case $CloudFamily in
-	AzureRM)
-		# Setup a bunch of prerequisits
-		yum install gcc git python-pip python-devel -y
-		pip install --upgrade pip
-		pip install msrest msrestazure
-		pip install --pre azure 
+    AzureRM)
+        print_log "Cloud is AzureRM. Setting up a bunch of pre-reqs..."
+        # Setup a bunch of prerequisits
+        yum install gcc git python-pip python-devel unixODBC-devel openssl-devel libffi-devel glibc e2fsprogs krb5-libs openssl gcc-c++ -y
+        pip install --upgrade pip
+        pip install msrest msrestazure pyodbc dnspython
+        pip install --pre azure
 
-		#Random sed thing to fix tiny error in msrest library.
-		sed -i -re "s/len\(self.data\)/str\(len\(self.data\)\)/g" /usr/lib/python2.7/site-packages/msrest/pipeline.py
+        print_log "Downloading and installing ODBC driver for python: msodbcsql-13.0.0.0"
+        wget https://download.microsoft.com/download/B/C/D/BCDD264C-7517-4B7D-8159-C99FC5535680/msodbcsql-13.0.0.0.tar.gz
+        tar xvzf msodbcsql-13.0.0.0.tar.gz
+        cd msodbcsql-13.0.0.0
+        ./install.sh install --accept-license
+        cd ..
 
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/sqlserverpaas-arm.py
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/template.json
 
-		wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/sqlserverpaas/sqlserverpaas-arm.py
-
-		case $cmd in
-			start)
-				print_log "$(python sqlserverpaas-arm.py start)"
-				serviceStatus="Started"
-				;;
-			stop)
-				print_log "$(python sqlserverpaas-arm.py stop)"
-				serviceStatus="Stopped"
-				;;
-			*)
-				serviceStatus="No Valid Script Argument"
-				exit 127
-				;;
-		esac
-		;;
-	*)
-		exit 127
-		print_error "Not deployed to supported cloud. Currently only Azure Resource Manager supported."
-		;;
+        case $cmd in
+            start)
+                print_log "Executing sqlserverpaas-arm.py start"
+                python sqlserverpaas-arm.py start
+                ;;
+            stop)
+                print_log "Executing sqlserverpaas-arm.py stop"
+                python sqlserverpaas-arm.py stop
+                ;;
+            *)
+                print_log "No Valid Script Argument. Ex start, stop"
+                exit 127
+                ;;
+        esac
+        ;;
+    *)
+        exit 127
+        print_error "Not deployed to supported cloud. Currently only Azure Resource Manager supported."
+        ;;
 esac
 
