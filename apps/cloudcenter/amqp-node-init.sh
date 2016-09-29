@@ -14,15 +14,21 @@
     then
         if [ -n $ccmIP ]; then
             print_log "Found custom parameter ccmIP = ${ccmIP}"
-        elif [ -n $CliqrTier_ccm_IP ]
-            print_log "Didn't find custom parameter ccmIP, but found tier ccm with IP address = ${$CliqrTier_ccm_IP}"
-            $ccmIP=$CliqrTier_ccm_IP
+        elif [ -n $CliqrTier_ccm_IP ]; then
+            print_log "Didn't find custom parameter ccmIP, but found tier ccm with IP address = ${CliqrTier_ccm_IP}"
+            ccmIP=$CliqrTier_ccm_IP
         else
              print_log "Didn't find custom parameter ccmIP or tier called ccm, so you'll have to configure that yourself by running /usr/local/osmosix/bin/cco_config_wizard.sh as root."
         fi
 
+        if [ -n $cloud ]; then
+            print_log "Found custom parameter cloud = ${cloud}"
+        else
+            print_log "Didn't find custom parameter cloudType. Exiting as failed."
+            exit 1
+        fi
+
         os="centos7"
-        cloud="azurerm"
         module="rabbit"
 
         cd /tmp
@@ -51,6 +57,6 @@
         print_log "Triggering a reboot now..."
     else
         print_log "Reboot complete. Back online and ready."
-    if
+    fi
 
 ) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/cco-node-init_$$.log
