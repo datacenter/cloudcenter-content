@@ -1,5 +1,5 @@
 #!/bin/bash
-exec > >(tee -a /var/tmp/wp-bkup.log) 2>&1
+exec > >(tee -a /var/tmp/wp-bkup_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
