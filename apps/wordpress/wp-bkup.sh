@@ -1,11 +1,12 @@
-#!/bin/bash -x
-(
-echo "Username: $(whoami)"
-echo "Working Directory: $(pwd)"
+#!/bin/bash
+exec > >(tee -a /var/tmp/wp-bkup.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+
+echo "Username: $(whoami)"
+echo "Working Directory: $(pwd)"
 
 env
 
@@ -30,5 +31,3 @@ sudo zip -r ~/wordpressbkup.zip *
 ~/bin/aws s3 cp ~/wordpressbkup.zip s3://$s3path/$CliqrDeploymentId/wordpressbkup.zip
 
 sudo rm wordpressbkup.zip
-
-) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/wp-bkup.log
