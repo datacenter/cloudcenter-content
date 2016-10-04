@@ -12,7 +12,7 @@ env
 
 #Install S3
 cd ~
-sudo wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
 sudo ./awscli-bundle/install -b ~/bin/aws
 
@@ -28,4 +28,4 @@ echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 sudo su -c "mysqldump --all-databases -u root -pwelcome2cliqr > dbbak.sql"
 
-~/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql
+sudo ~/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql

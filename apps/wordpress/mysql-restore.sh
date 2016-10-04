@@ -12,7 +12,7 @@ env
 
 #Install S3
 cd ~
-sudo wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
 sudo ./awscli-bundle/install -b ~/bin/aws
 
