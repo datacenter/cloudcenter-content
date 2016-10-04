@@ -4,17 +4,20 @@ exec > >(tee -a /var/tmp/mysql-bkup_$$.log) 2>&1
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+cd ~
 
 echo "Username: $(whoami)"
 echo "Working Directory: $(pwd)"
 
 env
 
+
+
 #Install S3
-cd ~
-sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-sudo unzip -o awscli-bundle.zip
-sudo ./awscli-bundle/install -b ~/bin/aws
+
+wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+unzip -o awscli-bundle.zip
+./awscli-bundle/install -b ~/bin/aws
 
 #Configure S3
 mkdir -p ~/.aws
@@ -28,4 +31,4 @@ echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 sudo su -c "mysqldump --all-databases -u root -pwelcome2cliqr > dbbak.sql"
 
-sudo ~/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql
+~/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql

@@ -4,6 +4,7 @@ exec > >(tee -a /var/tmp/mysql-restore_$$.log) 2>&1
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+cd ~
 
 echo "Username: $(whoami)"
 echo "Working Directory: $(pwd)"
@@ -11,10 +12,9 @@ echo "Working Directory: $(pwd)"
 env
 
 #Install S3
-cd ~
-sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-sudo unzip -o awscli-bundle.zip
-sudo ./awscli-bundle/install -b ~/bin/aws
+wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+unzip -o awscli-bundle.zip
+./awscli-bundle/install -b ~/bin/aws
 
 #Configure S3
 mkdir -p ~/.aws
@@ -26,7 +26,7 @@ echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
 echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 #Download and restore old database
-sudo ~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/dbbak.sql dbbak.sql
+~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/dbbak.sql dbbak.sql
 sudo su -c "mysql -u root -pwelcome2cliqr < dbbak.sql"
 
 #Use simple DB script to replace old front-end IP with new front-end IP in database

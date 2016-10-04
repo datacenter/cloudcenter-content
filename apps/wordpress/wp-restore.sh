@@ -4,6 +4,7 @@ exec > >(tee -a /var/tmp/wp-restore_$$.log) 2>&1
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+cd ~
 
 echo "Username: $(whoami)" # Should execute as root
 echo "Working Directory: $(pwd)"
@@ -11,9 +12,9 @@ echo "Working Directory: $(pwd)"
 env
 
 #Install S3
-sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-sudo unzip -o awscli-bundle.zip
-sudo ./awscli-bundle/install -b ~/bin/aws
+wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+unzip -o awscli-bundle.zip
+./awscli-bundle/install -b ~/bin/aws
 
 #Configure S3
 mkdir -p ~/.aws
@@ -28,10 +29,10 @@ echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 cp /var/www/wp-config.php /tmp
 rm -rf /var/www/*
 
-sudo ~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/wordpressbkup.zip ~/wordpressbkup.zip
+~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/wordpressbkup.zip ~/wordpressbkup.zip
 unzip -o ~/wordpressbkup.zip -d /var/www
 cp /tmp/wp-config.php /var/www
 chown -R apache:apache /var/www
 
 rm ~/wordpressbkup.zip
-sudo ~/bin/aws s3 rm --recursive s3://$s3path/$migrateFromDepId
+~/bin/aws s3 rm --recursive s3://$s3path/$migrateFromDepId
