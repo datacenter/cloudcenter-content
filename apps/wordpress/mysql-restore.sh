@@ -12,21 +12,21 @@ echo "Working Directory: $(pwd)"
 env
 
 #Install S3
-wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-unzip -o awscli-bundle.zip
-./awscli-bundle/install -b ~/bin/aws
+sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+sudo unzip -o awscli-bundle.zip
+sudo ./awscli-bundle/install -b ~/bin/aws
 
 #Configure S3
-mkdir -p ~/.aws
-echo "[default]" > ~/.aws/config
-echo "region=us-west-2" >> ~/.aws/config
-echo "output=json" >> ~/.aws/config
-echo "[default]" > ~/.aws/credentials
-echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
-echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
+sudo mkdir -p ~/.aws
+sudo echo "[default]" > ~/.aws/config
+sudo echo "region=us-west-2" >> ~/.aws/config
+sudo echo "output=json" >> ~/.aws/config
+sudo echo "[default]" > ~/.aws/credentials
+sudo echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
+sudo echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 #Download and restore old database
-~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/dbbak.sql dbbak.sql
+sudo ~/bin/aws s3 cp s3://$s3path/$migrateFromDepId/dbbak.sql dbbak.sql
 sudo su -c "mysql -u root -pwelcome2cliqr < dbbak.sql"
 
 #Use simple DB script to replace old front-end IP with new front-end IP in database
