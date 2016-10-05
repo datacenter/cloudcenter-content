@@ -30,4 +30,4 @@ echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.a
 
 sudo su -c "mysqldump --all-databases -u root -pwelcome2cliqr > dbbak.sql"
 
-sudo ~/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql
+sudo /root/bin/aws s3 cp dbbak.sql s3://$s3path/$CliqrDeploymentId/dbbak.sql
