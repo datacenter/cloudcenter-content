@@ -31,4 +31,4 @@ sudo zip -r ~/wordpressbkup.zip *
 
 sudo ~/bin/aws s3 cp ~/wordpressbkup.zip s3://$s3path/$CliqrDeploymentId/wordpressbkup.zip
 
-sudo rm wordpressbkup.zip
+sudo rm ~/wordpressbkup.zip
