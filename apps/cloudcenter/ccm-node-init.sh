@@ -1,20 +1,35 @@
 #!/bin/bash -x
-(
-    . /usr/local/osmosix/etc/.osmosix.sh
-    . /usr/local/osmosix/etc/userenv
-    . /usr/local/osmosix/service/utils/cfgutil.sh
+exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 
-    env
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
+. /usr/local/osmosix/service/utils/cfgutil.sh
 
-    echo "Username: $(whoami)" # Should execute as cliqruser
-    echo "Working Directory: $(pwd)"
+env
 
-    cd /tmp
-    sudo wget -N http://$dlUser:dlPass@download.cliqr.com/dev-20160917.3/installer/core_installer.bin
-    sudo wget -N http://$dlUser:dlPass@download.cliqr.com/dev-20160917.3/appliance/ccm-installer.jar
-    sudo wget -N http://$dlUser:dlPass@download.cliqr.com/dev-20160917.3/appliance/ccm-response.xml
+echo "Username: $(whoami)" # Should execute as cliqruser
+echo "Working Directory: $(pwd)"
+
+if [ -n "$gitTag" ]; then
+    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
+else
+     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
+     gitTag="master"
+fi
 
 
+yum install python-pip -y
+pip install requests
+
+# Use "?" as sed delimiter to avoid escaping all the slashes
+sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
+
+sudo /etc/init.d/tomcat start
+
+sudo wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps -O elb.py
+if [ $? -ne 0 ]; then
+    agentSendLogMessage  "Failed downloading core_installer.bin"
+fi
 
 
-) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/ccm-node-init_$$.log
+python ccm-config.py
