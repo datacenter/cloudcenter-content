@@ -4,6 +4,7 @@ exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
+cd ~
 
 env
 
@@ -18,8 +19,9 @@ else
 fi
 
 
-yum install python-pip -y
-pip install requests
+sudo yum install python-pip -y
+sudo pip install --upgrade pip
+sudo pip install requests
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
 sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
