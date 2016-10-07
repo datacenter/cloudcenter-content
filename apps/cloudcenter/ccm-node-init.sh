@@ -26,10 +26,13 @@ sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTie
 
 sudo /etc/init.d/tomcat start
 
-sudo wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps -O elb.py
+sudo wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
 if [ $? -ne 0 ]; then
-    agentSendLogMessage  "Failed downloading core_installer.bin"
+    agentSendLogMessage  "Failed downloading https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py. You can still perform the post-install UI configuration manually."
 fi
 
-
 python ccm-config.py
+
+if [ $? -ne 0 ]; then
+    agentSendLogMessage  "Failed executing ccm-config.py. You can still perform the post-install UI configuration manually."
+fi
