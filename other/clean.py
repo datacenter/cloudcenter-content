@@ -1,4 +1,5 @@
 # Deployment cleanup script
+# -*- coding: utf-8 -*
 
 import requests, pdb, sys
 from requests.auth import HTTPBasicAuth
