@@ -19,8 +19,9 @@ else
      gitTag="swarm"
 fi
 
+sudo mv /etc/yum.repos.d/cliqr.repo ~
 
-sudo yum update
+sudo yum update -y
 
 sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [dockerrepo]
@@ -31,8 +32,19 @@ gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 EOF
 
-sudo yum install docker-engine
+sudo yum install docker-engine -y
 
 sudo systemctl enable docker.service
 
 sudo systemctl start docker
+
+IFS=','
+ipArr=($CliqrTier_CentOS_1_NODE_ID) # Array of nodes in my tier.
+master=${arr[0]} # Let the first node in the service tier be the master.
+
+
+
+
+
+
+sudo docker swarm init
