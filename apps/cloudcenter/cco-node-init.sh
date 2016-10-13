@@ -47,7 +47,7 @@ if [ $ERR -ne 0 ]; then
 else
     agentSendLogMessage "Found port 5671 on AMQP Server ${CliqrTier_amqp_PUBLIC_IP}. Restarting tomcat and clearing log file."
     sudo -E /etc/init.d/tomcat stop
-    sudo echo "" > /usr/local/tomcat/logs/osmosix.log
+    sudo su -c 'echo "" > /usr/local/tomcat/logs/osmosix.log'
     sudo -E /etc/init.d/tomcat start
 fi
 
