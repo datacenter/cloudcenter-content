@@ -4,12 +4,14 @@ import json
 import requests
 import sys
 
+towerHost = "" # Put in your Tower hostname or IP here
+
 
 def get_token(session, user='admin', password='password'):
     headers = { 'Content-Type': 'application/json' }
     payload = { 'username': user, 'password': password }
-    r = session.request('POST', 'http://mkv-satwrdev01.co.ihc.com/api/v1/authtoken', data=json.dumps(payload), headers=headers)
-    r = session.request('POST', 'http://mkv-satwrdev01.co.ihc.com/api/v1/authtoken', data=json.dumps(payload), headers=headers)
+    r = session.request('POST', "http://{towerHost}/api/v1/authtoken".format(towerHost = towerHost), data=json.dumps(payload), headers=headers)
+    r = session.request("POST', "http://{towerHost}/api/v1/authtoken".format(towerHost = towerHost), data=json.dumps(payload), headers=headers)
     j = r.json()
     return j['token']
 
@@ -27,8 +29,8 @@ def add_host(session, token, hostname):
         "description": ""
     }
 
-    r = session.request('POST', 'http://mkv-satwrdev01.co.ihc.com/api/v1/inventories/{0}/hosts'.format(inventory_id), data=json.dumps(payload), headers=headers)
-    r = session.request('POST', 'http://mkv-satwrdev01.co.ihc.com/api/v1/inventories/{0}/hosts'.format(inventory_id), data=json.dumps(payload), headers=headers)
+    r = session.request('POST', 'http://{towerHost}/api/v1/inventories/{0}/hosts'.format(inventory_id, towerHost = towerHost), data=json.dumps(payload), headers=headers)
+    r = session.request('POST', 'http://{towerHost}/api/v1/inventories/{0}/hosts'.format(inventory_id, towerHost = towerHost), data=json.dumps(payload), headers=headers)
 
 
 def delete_host(session, token, hostname):
@@ -37,12 +39,12 @@ def delete_host(session, token, hostname):
         'Authorization': 'Token {0}'.format(token)
     }
 
-    r = session.request('GET', 'http://mkv-satwrdev01.co.ihc.com/api/v1/inventories/{0}/hosts/?search={1}'.format(inventory_id, hostname), headers=headers)
+    r = session.request('GET', 'http://{towerHost}/api/v1/inventories/{0}/hosts/?search={1}'.format(inventory_id, hostname, towerHost = towerHost), headers=headers)
     j = r.json()
     if not r.json()['results']:
         return
     url = r.json()['results'][0]['url']
-    r = session.request('DELETE', 'http://mkv-satwrdev01.co.ihc.com/{0}'.format(url), headers=headers)
+    r = session.request('DELETE', 'http://{towerHost}/{0}'.format(url, towerHost = towerHost), headers=headers)
 
 
 if __name__ == '__main__':
