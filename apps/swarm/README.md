@@ -1,3 +1,3 @@
-# swarm
+# Docker Swarm Application
 
-## Application that deploys a docker swarm
+Application used to deploy an empty Docker Swarm
