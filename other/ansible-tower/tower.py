@@ -4,14 +4,17 @@ import json
 import requests
 import sys
 
-towerHost = "" # Put in your Tower hostname or IP here
+towerHost = sys.argv[1]
+username = sys.argv[2]
+password = sys.argv[3]
+
 
 
 def get_token(session, user='admin', password='password'):
     headers = { 'Content-Type': 'application/json' }
     payload = { 'username': user, 'password': password }
-    r = session.request('POST', "http://{towerHost}/api/v1/authtoken".format(towerHost = towerHost), data=json.dumps(payload), headers=headers)
-    r = session.request("POST', "http://{towerHost}/api/v1/authtoken".format(towerHost = towerHost), data=json.dumps(payload), headers=headers)
+    r = session.request("POST", "http://{towerHost}/api/v1/authtoken".format(towerHost = towerHost), data=json.dumps(payload), headers=headers)
+    r = session.request("POST", "http://{towerHost}/api/v1/authtoken".format(towerHost = towerHost), data=json.dumps(payload), headers=headers)
     j = r.json()
     return j['token']
 
@@ -67,7 +70,7 @@ if __name__ == '__main__':
 
 
     session = requests.Session()
-    token = get_token(session)
+    token = get_token(session, user=username, password=password)
 
     if options.add:
         add_host(session, token, options.hostname)
