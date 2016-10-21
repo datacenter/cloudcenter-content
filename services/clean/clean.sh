@@ -11,13 +11,13 @@ print_log "$(env)"
 if [ -n $gitTag ]; then
     tag=$gitTag
 else
-    tag="master"
+    tag="clean"
 fi
 
 print_log "Tag/branch for code pull set to $tag"
 
-yum install -y python-pip
-pip install requests
+yum install -y python-pip --upgrade
+pip install --upgrade pip requests
 
 wget -N --no-cache https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/clean/clean.py
 
