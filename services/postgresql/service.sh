@@ -18,10 +18,12 @@ USER_ENV="/usr/local/osmosix/etc/userenv"
 case $cmd in
 	install) # envs not available
 	    yum install -y postgresql-server postgresql-contrib
+        systemctl enable postgresql
 		;;
 	deploy)
 	    postgresql-setup initdb
 	    if [ -n "${dbFiles}" ]; then
+            systemctl start postgresql
 	        su postgres -c "psql -f ${dbFiles}"
 	    fi
 		;;
@@ -38,7 +40,6 @@ case $cmd in
 		log "[START] Starting $SVCNAME"
 
         systemctl start postgresql
-        systemctl enable postgresql
 
 		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
 			log "[START] Invoking post-start user script"
