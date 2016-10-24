@@ -22,7 +22,7 @@ case $cmd in
 	deploy)
 	    postgresql-setup initdb
 	    if [ -n "${dbFiles}" ]; then
-	        psql -u $username -p${password} < ${dbFiles}
+	        su postgres -c "psql -f ${dbFiles}"
 	    fi
 		;;
 	configure)
