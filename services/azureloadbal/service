@@ -30,9 +30,7 @@ case $CloudFamily in
         pip install --pre azure
         pip install pyhaikunator
 
-        # wget -N http://cliqrdemo-repo.s3.amazonaws.com/services/azurelb/azurelb.py
- #       wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/sqlserverpaas-arm.py
- #       wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/template.json
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/zureloadbal/azurelb.py
 
         case $cmd in
             start)
