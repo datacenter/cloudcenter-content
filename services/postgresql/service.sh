@@ -8,6 +8,7 @@ OSSVC_HOME=/usr/local/osmosix/service
 . $OSSVC_HOME/utils/cfgutil.sh
 . $OSSVC_HOME/utils/install_util.sh
 . $OSSVC_HOME/utils/os_info_util.sh
+. $OSSVC_HOME/utils/agent_util.sh
 
 cmd=$1
 SVCNAME="postgresql"
@@ -15,12 +16,18 @@ SVCHOME="$OSSVC_HOME/$SVCNAME"
 USER_ENV="/usr/local/osmosix/etc/userenv"
 
 case $cmd in
-	install)
+	install) # envs not available
+	    yum install -y postgresql-server postgresql-contrib
 		;;
 	deploy)
+	    postgresql-setup initdb
+	    if [ -n "${dbFiles}" ]; then
+	        psql -u $username -p${password} < ${dbFiles}
+	    fi
 		;;
 	configure)
 		log "[CONFIGURE] Configuring $SVCNAME"
+		sed -i -e 's$127.0.0.1/32            ident$0.0.0.0/0               md5$g' /var/lib/pgsql/data/pg_hba.conf
 		;;
 	start)
 		if [ ! -z "$cliqrUserScript" -a -f "$cliqrUserScript" ]; then
@@ -29,7 +36,9 @@ case $cmd in
 		fi
 
 		log "[START] Starting $SVCNAME"
-		service wildfly start
+
+        systemctl start postgresql
+        systemctl enable postgresql
 
 		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
 			log "[START] Invoking post-start user script"
