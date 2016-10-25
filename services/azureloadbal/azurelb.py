@@ -50,7 +50,7 @@ account = os.environ['CliqrCloudAccountId']
 azureRegion = regionmap[os.environ['region']]
 
 # Resource Group
-GROUP_NAME = os.environ['Cloud_Setting_ResourceGroup']
+GROUP_NAME = os.environ['CliqrTier_AppCluster_Cloud_Setting_ResourceGroup']
 # Network
 VNET_NAME = os.environ['CliqrTier_AppCluster_Cloud_Setting_VirtualNetwork'].split()[1]
 SUBNET_NAME = os.environ['CliqrTier_AppCluster_Cloud_Setting_subnetId']
