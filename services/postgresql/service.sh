@@ -18,18 +18,32 @@ USER_ENV="/usr/local/osmosix/etc/userenv"
 case $cmd in
 	install) # envs not available
 	    yum install -y postgresql-server postgresql-contrib
+
+	    # Set the DB service to startup on boot
         systemctl enable postgresql
 		;;
 	deploy)
+	    # Init the database
 	    postgresql-setup initdb
-	    if [ -n "${dbFiles}" ]; then
-            systemctl start postgresql
-	        su postgres -c "psql -f ${dbFiles}"
+
+	    # Configure to accept password auth and listen on all IPs
+		sed -i -e 's$127.0.0.1/32            ident$0.0.0.0/0               md5$g' /var/lib/pgsql/data/pg_hba.conf
+
+	    # Start the database service
+        systemctl restart postgresql
+
+		# Set password for postgres user.
+        # Using 'echo' to pipe in the DB command as I couldn't figure out all the quotes needed otherwise.
+	    echo "ALTER ROLE postgres WITH PASSWORD '${cliqrDatabaseRootPass}'" | su postgres -c "psql"
+
+	    # If the user has specified a DB setup SQL script, run it here.
+	    if [ -n "${cliqrDBSetupScript}" ]; then
+	        su postgres -c "psql -f ${cliqrDBSetupScript}"
 	    fi
+
 		;;
 	configure)
 		log "[CONFIGURE] Configuring $SVCNAME"
-		sed -i -e 's$127.0.0.1/32            ident$0.0.0.0/0               md5$g' /var/lib/pgsql/data/pg_hba.conf
 		;;
 	start)
 		if [ ! -z "$cliqrUserScript" -a -f "$cliqrUserScript" ]; then
@@ -59,6 +73,7 @@ case $cmd in
 		fi
 
 		log "[STOP] Stopping $SVCNAME"
+        systemctl stop postgresql
 
 		log "[STOP] Invoking post-stop user script"
 		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
@@ -73,6 +88,7 @@ case $cmd in
 		fi
 
 		log "[RESTART] Restarting $SVCNAME"
+        systemctl restart postgresql
 
 		log "[RESTART] Invoking post-restart user script"
 		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
