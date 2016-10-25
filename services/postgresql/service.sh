@@ -18,6 +18,7 @@ USER_ENV="/usr/local/osmosix/etc/userenv"
 case $cmd in
 	install) # envs not available
 	    yum install -y postgresql-server postgresql-contrib
+	    agentSendLogMessage "Installed PostgreSQL $(yum info postgresql-server | grep Version)"
 
 	    # Set the DB service to startup on boot
         systemctl enable postgresql
@@ -33,7 +34,7 @@ case $cmd in
         systemctl restart postgresql
 
 		# Set password for postgres user.
-        # Using 'echo' to pipe in the DB command as I couldn't figure out all the quotes needed otherwise.
+        # Using 'echo' to pipe in the DB command as I couldn't figure out all the nested quotes needed otherwise.
 	    echo "ALTER ROLE postgres WITH PASSWORD '${cliqrDatabaseRootPass}'" | su postgres -c "psql"
 
 	    # If the user has specified a DB setup SQL script, run it here.
