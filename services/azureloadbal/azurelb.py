@@ -186,7 +186,7 @@ if cmd == "start" :
         'port': 80,
         'interval_in_seconds': 60,
         'number_of_probes': 60,
-        'request_path': '/static/html/tutorial.html'
+        'request_path': HEALTH_PROBE_FILE
     }]
 
 
