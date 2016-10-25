@@ -29,6 +29,7 @@ case $cmd in
 
 	    # Configure to accept password auth and listen on all IPs
 		sed -i -e 's$127.0.0.1/32            ident$0.0.0.0/0               md5$g' /var/lib/pgsql/data/pg_hba.conf
+		sed -i -e "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
 
 	    # Start the database service
         systemctl restart postgresql

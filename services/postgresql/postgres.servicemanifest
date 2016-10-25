@@ -83,7 +83,7 @@
       "helpText": "",
       "type": "string",
       "valueList": null,
-      "defaultValue": "postgresql-0.1",
+      "defaultValue": "postgresql-0.11",
       "confirmValue": "",
       "userVisible": true,
       "userEditable": true,
