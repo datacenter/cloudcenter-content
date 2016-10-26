@@ -1,0 +1,139 @@
+#!/bin/bash
+
+OSSVC_HOME=/usr/local/osmosix/service
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
+. $OSSVC_HOME/utils/cfgutil.sh
+. $OSSVC_HOME/utils/install_util.sh
+. $OSSVC_HOME/utils/os_info_util.sh
+. /usr/local/osmosix/service/utils/agent_util.sh
+
+cmd=$1
+SVCNAME=$OSSVC_CONFIG
+SVCNAME=customService
+SVCHOME="$OSSVC_HOME/$OSSVC_CONFIG"
+
+DOCKER_INSTALLER="https://get.docker.com"
+DOCKER_STORAGE_PATH="/data/docker"
+TAGNAME="cliqr/docker"
+FOLDERNAME="/tmp/cliqr-docker"
+ETCFOLDER="/usr/local/osmosix/etc"
+CONTAINERNAME="cliqr-container"
+DOCKERHUBPTN="%dockerHub%"
+GITHUBHTTPSPTN="%github_https%"
+GITHUBGITPTN="%github_git%"
+SERVICE_INSTALL_FAILURE="Failed to install Docker service"
+SERVICE_START_FAILURE="Failed to start Docker service"
+
+
+currTime=`date +"%d-%m-%y-%H-%M-%S"`
+export logFile=${SVCHOME}/scriptLog
+
+installDocker () {
+	# Move the cliqr repo to avoid repo conflicts
+        mv /etc/yum.repos.d/cliqr.repo /root
+
+	# Install Docker
+	curl $DOCKER_INSTALLER | bash
+	# Stop and start the docker to listen on 0.0.0.0
+	service docker stop
+	sleep 5
+	# For Centos 7
+        docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+	# For Centos 6
+	#docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+	#docker -d -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+}
+
+installSysdig () {
+	# Move this out of this function
+	yum update -y ; yum install -y kernel-devel;
+	# Install sysdig client
+	## http://www.sysdig.org/install/
+	curl -s https://s3.amazonaws.com/download.draios.com/stable/install-sysdig | sudo bash
+
+	# Start Sysdig Container
+	#docker run --name sysdig-agent --privileged --net host --pid host -e ACCESS_KEY=$SYSDIG_ACCESS_KEY [-e TAGS=[TAGS]] -v /var/run/docker.sock:/host/var/run/docker.sock -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro sysdig/agent
+	docker run -d --name sysdig-agent --privileged --net host --pid host -e ACCESS_KEY=e9d7394c-0948-4027-9498-068cb375d802 -e TAGS=sysdig -v /var/run/docker.sock:/host/var/run/docker.sock -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro sysdig/agent &
+	sleep 5
+	echo "Sysdig agent installed successfully"
+	agentSendLogMessage "Sysdig agent installed successfully"
+}
+
+installSwarmMaster () {
+	token=`docker run --rm swarm create`
+	echo $token >> /home/cliqruser/swarmToken
+	docker run -d -p 3375:3375 -t swarm manage -H 0.0.0.0:3375 token://$token
+	docker run -d swarm join --addr=$OSMOSIX_PRIVATE_IP:2375 token://$token
+}
+
+installSwarmSlave () {
+	# lowestIP is the Swarm Master
+	# The swarm token is on the the master at /home/cliqruser/swarmToken
+	scp -o StrictHostKeyChecking=no -i /home/cliqruser/.ssh/cliqruserKey cliqruser@$lowestIP:/home/cliqruser/swarmToken /home/cliqruser/swarmToken
+	token=`cat /home/cliqruser/swarmToken`
+	docker run -d swarm join --addr=$OSMOSIX_PRIVATE_IP:2375 token://$token
+}
+
+printLog() {
+        # agentSendLogMessage "In printLog: $logFile"
+        cmd=$1
+        pmsg=$2
+        currTime=`date +"%d-%m-%y-%H-%M-%S"`
+        echo "$currTime: $cmd -- $pmsg" >> $logFile
+}
+
+returnLowestTierIP () {
+        # The tier name is decided by the developer. Get the Tier name and then the IP List for that Tier.
+        varTierIPList=CliqrTier_${cliqrAppTierName}_IP
+        # For Public IP
+        #varTierPublicIPList=CliqrTier_${cliqrAppTierName}_PUBLIC_IP
+
+        # temporary file to save the ip addresses
+        fname=/tmp/ipList; sortedList=/tmp/sortedList
+        if [ -f $fname ]; then rm -rf $fname; fi
+        if [ -f $sortedList ]; then rm -rf $sortedList; fi
+        for i in $(echo ${!varTierIPList} | sed "s/,/ /g")
+        do
+                echo "$i" >> $fname
+        done
+        sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n $fname >> $sortedList
+        ip=$(head -n 1 $sortedList)
+        #echo "In function : $ip"
+        echo $ip
+}
+
+checkIfLowestIP () {
+        # OSMOSIX_PUBLIC_IP and OSMOSIX_PRIVATE_IP are set since we source .osmosix.sh.
+        # .osmosix.sh is for internal purpose and is subject to change.
+        if [ "$lowestIP" == "$OSMOSIX_PRIVATE_IP" ]
+        then
+                #echo "I am the master : $lowestIP  : $OSMOSIX_PRIVATE_IP"
+                echo "Master"
+		agentSendLogMessage "I am Master"
+        else
+                #echo " I wait for the master : $lowestIP : $OSMOSIX_PRIVATE_IP"
+                echo "Slave"
+		agentSendLogMessage "I am Slave"
+        fi
+}
+
+
+
+lowestIP=`returnLowestTierIP`
+#echo "Lowest IP is $lowestIP"
+role=`checkIfLowestIP`
+echo "Role is $role"
+installDocker
+installSysdig
+case $role in
+	Master)
+		installSwarmMaster
+		;;
+	Slave)
+		installSwarmSlave
+		;;
+	*)
+		echo "Invalid Role : $role"
+		;;
+esac
