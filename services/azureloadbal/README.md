@@ -19,3 +19,6 @@ The load balancer will deploy into an existing Virtual network and subnet that a
 Authentication is completed by utilizing the account information already provided as environment variables within a Cloud Center/Azure deployment.
 TODO:
 1) Add support for SSL(443)
+2) Adding text update for testing
+3) adding another update
+4)
