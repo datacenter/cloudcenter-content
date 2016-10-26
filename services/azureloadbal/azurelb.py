@@ -227,15 +227,15 @@ if cmd == "start" :
     )
    
     lb_info = lb_async_creation.result()
-    print_log("Load Balancer Results: " + str(lb_info))
+    # print_log("Load Balancer Results: " + str(lb_info))
     print_log("Created Load Balancer:")
 
     # Associating NIC to BackEnd Pool
     print_log("Associating VM NICs to BackEnd Pool")
 
-    print_log("Testing subnetid :" + SUBNET_NAME)
-    print_log("Testing group name :" + GROUP_NAME)
-    print_log("Testing vnet name :" + VNET_NAME)
+    # print_log("Testing subnetid :" + SUBNET_NAME)
+    # print_log("Testing group name :" + GROUP_NAME)
+    # print_log("Testing vnet name :" + VNET_NAME)
 
     print_log("Get subnet Info")
     async_subnet_get = network_client.subnets.get(
@@ -275,7 +275,7 @@ if cmd == "start" :
 
     print_log("Finished Creating Load Balancer Components")
 
-    print_log("LoadBalancer DNS Name: " + DOMAIN_LABEL_NAME + ".eastus.cloudapp.azure.com")
+    # print_log("LoadBalancer DNS Name: " + DOMAIN_LABEL_NAME + ".eastus.cloudapp.azure.com")
 
 elif cmd == "update" :
 # update backend pool with new nic's
