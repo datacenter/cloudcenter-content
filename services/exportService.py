@@ -15,8 +15,9 @@ parser.add_argument("username", help="Your API username. Not the same as your UI
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
 group = parser.add_mutually_exclusive_group(required=True)
-group.add_argument("-e", "--export", help="(text, not int) Service ID of the service that you want to export.")
-group.add_argument("-i", "--import", help="Filename of the service that you want to import.")
+group.add_argument("-e", "--export", dest="e", metavar='servicename', help="(text, not int) Service ID of the service that you want to export.")
+group.add_argument("-i", "--import", dest="i", metavar='filename', help="Filename of the service that you want to import.")
+parser.add_argument("-o", "--overwrite", action='store_true', help="When importing, overwrite existing service in CloudCenter. When exporting, overwrite existing file.")
 args = parser.parse_args()
 parser.parse_args()
 
@@ -103,19 +104,118 @@ def getServiceManifest(serviceName):
 
     return j
 
-#parser.add_option("--import", dest="add", action="store_true", default=False)
-#parser.add_argument("--export", dest="export", default=None)
-#parser.add_option("--serviceName", dest="hostname", default=None)
+# Get the name of the service from the JSON
+def getServiceName(serviceJson):
+    serviceName = serviceJson['name']
+    return(serviceName)
+
+# Return a list of images used in the service
+def getImagesFromService(serviceJson):
+    images = []
+    for image in serviceJson['images']:
+        images.append(image['name'])
+
+    return images
+
+def getImages():
+    tenantId = getTenantId()
+    url = baseUrl+"/v1/tenants/"+tenantId+"/images"
+
+    querystring = {}
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    response = s.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+
+    j = response.json()
+
+    images = []
+    for image in j.images:
+        images.append(image['name'])
+    return images
+
+def createImage(image):
+    tenantId = getTenantId()
+    url = baseUrl+"/v1/tenants/"+tenantId+"/images"
+
+    payload = {'name': image}
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    response = s.request("POST", url, headers=headers, payload=payload, verify=False, auth=HTTPBasicAuth(username, apiKey))
+    print("Image {} created".format(image))
 
 
-if(args.export):
-    serviceName = args.export
+
+# Import the service into a CloudCenter instance
+def importService(serviceJson):
+    tenantId = getTenantId()
+    serviceName = getServiceName(serviceJson = serviceJson)
+    serviceId = getServiceId(tenantId = tenantId, serviceName = serviceName)
+
+    newImages = getImagesFromService(serviceJson) not in getImages()
+
+    if newImages:
+        print("Images {} not found. I will create them, but they will be UNMAPPED."
+              "You will have to create the workers if necessary and map them yourself.".format(newImages.join(", ")))
+        for image in newImages:
+            createImage(image)
+    else:
+        print("All images named in this service have been found in the instance"
+              ", but I can't promise that they are mapped properly or working with this service.")
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    if serviceId:
+        print("Service ID: {} for service {} found.".format(serviceId, serviceName))
+        if not args.overwrite:
+            print("--overwrite not specified. Exiting")
+            sys.exit()
+        else:
+            print("--overwrite specified. Updating existing service.")
+            url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
+            response = s.request("PUT", url, headers=headers, payload=serviceJson, verify=False, auth=HTTPBasicAuth(username, apiKey))
+    else:
+        print("Service ID for service {} not found. Creating".format(serviceName))
+        url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
+        response = s.request("POST", url, headers=headers, payload=serviceJson, verify=False, auth=HTTPBasicAuth(username, apiKey))
+
+
+
+
+
+# TODO: Check for existing file and properly use the overwrite flag.
+if args.e :
+    serviceName = args.e
     print("Exporting service: {}".format(serviceName))
     j = getServiceManifest(serviceName)
     filename = "{serviceName}.servicemanifest".format(serviceName=serviceName)
-    f = open(filename, 'w')
+    with open(filename, 'w') as f:
+        json.dump(j, f, indent=4)
 
-    json.dump(j, f, indent=4)
     print("Service {} exported to {}".format(serviceName, filename))
+
+if args.i :
+    serviceFileName = args.i
+    serviceJson = None
+
+    with open(serviceFileName, 'r') as f:
+        serviceJson = json.load(f)
+
+    importService(serviceJson)
+
+
 
 
