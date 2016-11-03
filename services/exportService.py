@@ -6,18 +6,20 @@
 import requests, pdb, sys, json
 from requests.auth import HTTPBasicAuth
 import argparse
-
+import pdb
 
 requests.packages.urllib3.disable_warnings()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("username", help="Your API username. Not the same as your UI Login. See admin for help.")
+parser.add_argument("username", help="Your API username. Not the same as your UI Login. See your CloudCenter admin for help.")
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
+parser.add_argument("-o", "--overwrite", action='store_true', help="When importing, overwrite existing service in CloudCenter. When exporting, overwrite existing file.")
+
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-e", "--export", dest="e", metavar='servicename', help="(text, not int) Service ID of the service that you want to export.")
-group.add_argument("-i", "--import", dest="i", metavar='filename', help="Filename of the service that you want to import.")
-parser.add_argument("-o", "--overwrite", action='store_true', help="When importing, overwrite existing service in CloudCenter. When exporting, overwrite existing file.")
+group.add_argument("-i", "--import", dest="i", metavar='filename', help="Filename of the service that you want to import.", type=argparse.FileType('r'))
+
 args = parser.parse_args()
 parser.parse_args()
 
@@ -75,15 +77,65 @@ def getServiceId(tenantId, serviceName):
         #print(json.dumps(user['username'], indent=2))
         if service['name'] == serviceName:
             serviceId = service['id']
-            break
-    if not serviceId:
-        print("Couldn't find serviceId")
-        sys.exit(1)
+
     return serviceId
+
+def getImageId(tenantId, imageName):
+    url = baseUrl+"/v1/tenants/"+tenantId+"/images/"
+
+    querystring = {
+        "size" : 0
+    }
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    response = s.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+
+    j = response.json()
+    imageId = None
+    for image in j['images']:
+        #print(json.dumps(user['username'], indent=2))
+        if image['name'] == imageName:
+            imageId = image['id']
+
+    return imageId
+
+def getImageName(tenantId, imageId):
+    url = baseUrl+"/v1/tenants/"+tenantId+"/images/"
+
+    querystring = {
+        "size" : 0
+    }
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    response = s.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+
+    j = response.json()
+    imageName = None
+    for image in j['images']:
+        #print(json.dumps(user['username'], indent=2))
+        if int(image['id']) == imageId:
+            imageName = image['name']
+
+    return imageName
 
 def getServiceManifest(serviceName):
     tenantId = getTenantId()
     serviceId = getServiceId(tenantId, serviceName)
+
+    if not serviceId:
+        print("Couldn't find serviceId for service {} in tenant Id {}".format(serviceName, tenantId))
+        sys.exit(1)
+
     url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
 
     querystring = {}
@@ -98,9 +150,17 @@ def getServiceManifest(serviceName):
 
     j = response.json()
 
-    # Get rid of these two instance-specific parameters to make it importable.
-    j.pop("id")
-    j.pop("logoPath")
+    # Add a custom attribute to persist the name of the default image which makes this portal. The
+    # default image Id won't be. Remove the default image Id for safety.
+    j['defaultImageName'] = getImageName(tenantId, j['defaultImageId'])
+    j.pop("defaultImageId", None)
+
+    # Get rid of these instance/user/tenant-specific parameters to make it importable.
+    j.pop("id", None)
+    j.pop("logoPath", None)
+    j.pop("ownerUserId", None)
+    j.pop("resource", None)
+
 
     return j
 
@@ -134,7 +194,7 @@ def getImages():
     j = response.json()
 
     images = []
-    for image in j.images:
+    for image in j['images']:
         images.append(image['name'])
     return images
 
@@ -142,17 +202,21 @@ def createImage(image):
     tenantId = getTenantId()
     url = baseUrl+"/v1/tenants/"+tenantId+"/images"
 
-    payload = {'name': image}
-
     headers = {
         'x-cliqr-api-key-auth': "true",
         'accept': "application/json",
         'content-type': "application/json",
         'cache-control': "no-cache"
     }
-    response = s.request("POST", url, headers=headers, payload=payload, verify=False, auth=HTTPBasicAuth(username, apiKey))
-    print("Image {} created".format(image))
+    image.pop('id', None)
+    image.pop('resource', None)
+    image.pop('systemImage', None)
 
+    response = s.request("POST", url, headers=headers, data=json.dumps(image), verify=False, auth=HTTPBasicAuth(username, apiKey))
+    newImage = response.json()
+    print(json.dumps(newImage, indent=2))
+    print("Image {} created with ID {}".format(newImage['name'], int(newImage['id'])))
+    return int(response.json()['id'])
 
 
 # Import the service into a CloudCenter instance
@@ -160,17 +224,26 @@ def importService(serviceJson):
     tenantId = getTenantId()
     serviceName = getServiceName(serviceJson = serviceJson)
     serviceId = getServiceId(tenantId = tenantId, serviceName = serviceName)
+    serviceJson.pop("id", None)
+    serviceJson.pop("logoPath", None)
+    serviceJson.pop("ownerUserId", None)
+    serviceJson.pop("resource", None)
 
-    newImages = getImagesFromService(serviceJson) not in getImages()
+    # Update all the imageIds in the service to match the ones in the instance that you're importing into.
+    for image in serviceJson['images']:
+        imageId = getImageId(tenantId, image['name'])
+        if imageId:
+            image['id'] = imageId
+            # This just sets the default image Id to whichever of the images comes through this loop LAST.
+            serviceJson['defaultImageId'] = imageId
+        else:
+            print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
+                  "You will have to create the worker if necessary and map it yourself.".format(image['name']))
+            image['id'] = createImage(image)
 
-    if newImages:
-        print("Images {} not found. I will create them, but they will be UNMAPPED."
-              "You will have to create the workers if necessary and map them yourself.".format(newImages.join(", ")))
-        for image in newImages:
-            createImage(image)
-    else:
-        print("All images named in this service have been found in the instance"
-              ", but I can't promise that they are mapped properly or working with this service.")
+    # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
+    # Image Id for the defalt Image.
+    serviceJson['defaultImageId'] = getImageId(tenantId, serviceJson['defaultImageName'])
 
     headers = {
         'x-cliqr-api-key-auth': "true",
@@ -179,18 +252,22 @@ def importService(serviceJson):
         'cache-control': "no-cache"
     }
     if serviceId:
-        print("Service ID: {} for service {} found.".format(serviceId, serviceName))
+        print("Service ID: {} for service {} found in the CloudCenter instance.".format(serviceId, serviceName))
         if not args.overwrite:
             print("--overwrite not specified. Exiting")
             sys.exit()
         else:
             print("--overwrite specified. Updating existing service.")
             url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
-            response = s.request("PUT", url, headers=headers, payload=serviceJson, verify=False, auth=HTTPBasicAuth(username, apiKey))
+            serviceJson['id'] = serviceId
+            response = s.request("PUT", url, headers=headers, data=json.dumps(serviceJson), verify=False, auth=HTTPBasicAuth(username, apiKey))
+            print(json.dumps(response.json(), indent=2))
     else:
         print("Service ID for service {} not found. Creating".format(serviceName))
         url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
-        response = s.request("POST", url, headers=headers, payload=serviceJson, verify=False, auth=HTTPBasicAuth(username, apiKey))
+        response = s.request("POST", url, headers=headers, data=json.dumps(serviceJson), verify=False, auth=HTTPBasicAuth(username, apiKey))
+        print(json.dumps(response.json(), indent=2))
+        print("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
 
 
@@ -208,11 +285,7 @@ if args.e :
     print("Service {} exported to {}".format(serviceName, filename))
 
 if args.i :
-    serviceFileName = args.i
-    serviceJson = None
-
-    with open(serviceFileName, 'r') as f:
-        serviceJson = json.load(f)
+    serviceJson = json.load(args.i)
 
     importService(serviceJson)
 
