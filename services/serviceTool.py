@@ -160,7 +160,9 @@ def getServiceManifest(serviceName):
     j.pop("logoPath", None)
     j.pop("ownerUserId", None)
     j.pop("resource", None)
-
+    for  port in j['servicePorts']:
+        port.pop("id", None)
+        port.pop("resource", None)
 
     return j
 
@@ -228,6 +230,9 @@ def importService(serviceJson):
     serviceJson.pop("logoPath", None)
     serviceJson.pop("ownerUserId", None)
     serviceJson.pop("resource", None)
+    for  port in serviceJson['servicePorts']:
+        port.pop("id", None)
+        port.pop("resource", None)
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
     for image in serviceJson['images']:
