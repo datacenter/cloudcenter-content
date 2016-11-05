@@ -6,6 +6,7 @@
 import requests, pdb, sys, json
 from requests.auth import HTTPBasicAuth
 import argparse
+import re
 import pdb
 
 requests.packages.urllib3.disable_warnings()
@@ -293,7 +294,7 @@ def import_service(service):
             print("Repo {} not found. I will create it so that the service will import, but can't promise it will be accessible or not.".format(repo['displayName']))
             repo['id'] = createRepo(repo)
         # Create a map of old repo IDs to new ones.
-        repomap[oldRepoId] = repo['id']
+        repomap[str(oldRepoId)] = str(repo['id'])
 
     service_json = json.dumps(service)
 
