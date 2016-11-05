@@ -1,0 +1,337 @@
+{
+    "visible": true,
+    "perms": [
+        "write",
+        "delete",
+        "administration",
+        "read"
+    ],
+    "name": "f5ext",
+    "childServices": [],
+    "externalActions": [
+        {
+            "actionName": "UPDATE",
+            "actionValue": "%REPO_ID_37%services/f5ext/service update",
+            "actionType": "URL"
+        },
+        {
+            "actionName": "STOP",
+            "actionValue": "%REPO_ID_37%services/f5ext/service stop",
+            "actionType": "URL"
+        },
+        {
+            "actionName": "START",
+            "actionValue": "%REPO_ID_37%services/f5ext/service start",
+            "actionType": "URL"
+        }
+    ],
+    "parentService": false,
+    "serviceParamSpecs": [
+        {
+            "exampleValue": null,
+            "helpText": "bigIPAddress",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "54.234.107.193",
+            "displayName": "bigIPAddress",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "bigIPAddress"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": false,
+            "userEditable": false,
+            "defaultValue": "admin",
+            "displayName": "Username",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "bigIPusername"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": false,
+            "userEditable": false,
+            "defaultValue": "cliqr",
+            "displayName": "Password",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "bigIPpassword"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "",
+            "type": "list",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 0,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "LB_METHOD_LEAST_CONNECTION_MEMBER",
+            "displayName": "Load Balancing Method",
+            "valueList": "LB_METHOD_ROUND_ROBIN,LB_METHOD_RATIO_MEMBER,LB_METHOD_LEAST_CONNECTION_MEMBER,LB_METHOD_OBSERVED_MEMBER,LB_METHOD_PREDICTIVE_MEMBER,LB_METHOD_RATIO_NODE_ADDRESS,LB_METHOD_LEAST_CONNECTION_NODE_ADDRESS,LB_METHOD_FASTEST_NODE_ADDRESS",
+            "optional": false,
+            "systemParam": true,
+            "paramName": "lbMethod"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "What IP address do you want to use for the VIP?",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "",
+            "displayName": "VIP Address",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "vipAddress"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "What port do you want the VIP to receive traffic on?",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "80",
+            "displayName": "Virtual Server Port",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "vsPort"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "What port should traffic be sent to on the real servers?",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "80",
+            "displayName": "Real Server Port",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "rsPort"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "lbType",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": false,
+            "userEditable": false,
+            "defaultValue": "f5",
+            "displayName": "lbType",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "lbType"
+        }
+    ],
+    "serviceType": "EXTERNAL",
+    "parentServiceId": "36",
+    "displayName": "F5 External",
+    "images": [
+        {
+            "resource": "https://sandbox.cliqr.com/v1/tenants/37/images/20",
+            "visibility": "PUBLIC",
+            "perms": [
+                "read"
+            ],
+            "name": "Ubuntu 14.04",
+            "osName": "LINUX",
+            "enabled": true,
+            "imageType": "CLOUD_WORKER",
+            "systemImage": true,
+            "id": "20",
+            "numOfNics": 1,
+            "description": "Ubuntu 14.04",
+            "count": 23,
+            "internalImageName": "CloudWorker-Ubuntu14.04",
+            "tenantId": 1,
+            "detail": null,
+            "tags": []
+        }
+    ],
+    "systemService": false,
+    "serviceActions": [
+        {
+            "actionName": "RELOAD",
+            "actionValue": "service reload",
+            "actionType": "SCRIPT"
+        },
+        {
+            "actionName": "START",
+            "actionValue": "service start",
+            "actionType": "SCRIPT"
+        },
+        {
+            "actionName": "STOP",
+            "actionValue": "service stop",
+            "actionType": "SCRIPT"
+        }
+    ],
+    "bundleLocation": "%REPO_ID_37%services/sandf5.zip",
+    "externalBundleLocation": "",
+    "externalService": false,
+    "servicePorts": [
+        {
+            "toPort": "22",
+            "protocol": "TCP",
+            "fromPort": "22"
+        }
+    ],
+    "description": "",
+    "defaultImageName": "Ubuntu 14.04",
+    "costPerHour": 0.15,
+    "repositories": [
+        {
+            "resource": "https://sandbox.cliqr.com/v1/tenants/37/services/134/37",
+            "certname": null,
+            "port": 80,
+            "bucketName": null,
+            "chefValidationKey": null,
+            "accessKey": null,
+            "type": "HTTP",
+            "sslCredential": null,
+            "chefUser": null,
+            "description": "CliQr demo repository",
+            "usernamePassword": null,
+            "chefUserKey": null,
+            "accessSecret": null,
+            "displayName": "CliQrDemoRepo",
+            "perms": [
+                "read"
+            ],
+            "region": null,
+            "hostname": "cliqrdemo-repo.s3.amazonaws.com",
+            "id": "37",
+            "trustedCert": null
+        }
+    ],
+    "egressRestrictions": []
+}
