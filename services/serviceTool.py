@@ -6,6 +6,7 @@
 import requests, pdb, sys, json
 from requests.auth import HTTPBasicAuth
 import argparse
+import re
 import pdb
 
 requests.packages.urllib3.disable_warnings()
@@ -104,6 +105,29 @@ def getImageId(tenantId, imageName):
 
     return imageId
 
+def getRepoId(repoName):
+    url = baseUrl+"/repositories/"
+
+    querystring = {
+        "size" : 0
+    }
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    response = s.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+
+    j = response.json()
+    repoId = None
+    for repo in j['repositories']:
+        if repo['displayName'] == repoName:
+            repoId = repo['id']
+
+    return repoId
+
 def getImageName(tenantId, imageId):
     url = baseUrl+"/v1/tenants/"+tenantId+"/images/"
 
@@ -160,7 +184,9 @@ def getServiceManifest(serviceName):
     j.pop("logoPath", None)
     j.pop("ownerUserId", None)
     j.pop("resource", None)
-
+    for  port in j['servicePorts']:
+        port.pop("id", None)
+        port.pop("resource", None)
 
     return j
 
@@ -199,7 +225,6 @@ def getImages():
     return images
 
 def createImage(image):
-    tenantId = getTenantId()
     url = baseUrl+"/v1/tenants/"+tenantId+"/images"
 
     headers = {
@@ -214,36 +239,77 @@ def createImage(image):
 
     response = s.request("POST", url, headers=headers, data=json.dumps(image), verify=False, auth=HTTPBasicAuth(username, apiKey))
     newImage = response.json()
-    print(json.dumps(newImage, indent=2))
     print("Image {} created with ID {}".format(newImage['name'], int(newImage['id'])))
-    return int(response.json()['id'])
+    return int(newImage['id'])
+
+def createRepo(repo):
+    url = baseUrl+"/repositories/"
+
+    headers = {
+        'x-cliqr-api-key-auth': "true",
+        'accept': "application/json",
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+    repo.pop('id', None)
+    repo.pop('resource', None)
+
+    response = s.request("POST", url, headers=headers, data=json.dumps(repo), verify=False, auth=HTTPBasicAuth(username, apiKey))
+    newRepo = response.json()
+    print("Repo {} created with ID {}".format(newRepo['displayName'], int(newRepo['id'])))
+    return int(newRepo['id'])
 
 
 # Import the service into a CloudCenter instance
-def importService(serviceJson):
+def import_service(service):
     tenantId = getTenantId()
-    serviceName = getServiceName(serviceJson = serviceJson)
+    serviceName = getServiceName(serviceJson = service)
     serviceId = getServiceId(tenantId = tenantId, serviceName = serviceName)
-    serviceJson.pop("id", None)
-    serviceJson.pop("logoPath", None)
-    serviceJson.pop("ownerUserId", None)
-    serviceJson.pop("resource", None)
+    service.pop("id", None)
+    service.pop("logoPath", None)
+    service.pop("ownerUserId", None)
+    service.pop("resource", None)
+    for  port in service['servicePorts']:
+        port.pop("id", None)
+        port.pop("resource", None)
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    for image in serviceJson['images']:
-        imageId = getImageId(tenantId, image['name'])
-        if imageId:
-            image['id'] = imageId
-            # This just sets the default image Id to whichever of the images comes through this loop LAST.
-            serviceJson['defaultImageId'] = imageId
-        else:
-            print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
-                  "You will have to create the worker if necessary and map it yourself.".format(image['name']))
-            image['id'] = createImage(image)
+    if len(service['images']) > 0:
+        for image in service['images']:
+            imageId = getImageId(tenantId, image['name'])
+            if imageId:
+                image['id'] = imageId
+            else:
+                print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
+                      "You will have to create the worker if necessary and map it yourself.".format(image['name']))
+                image['id'] = createImage(image)
+        # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
+        # Image Id for the defalt Image.
+        service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
 
-    # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
-    # Image Id for the defalt Image.
-    serviceJson['defaultImageId'] = getImageId(tenantId, serviceJson['defaultImageName'])
+    # Update all the imageIds in the service to match the ones in the instance that you're importing into.
+    if len(service['repositories']) > 0:
+        repomap = {}
+        for repo in service['repositories']:
+            oldRepoId = repo['id']
+            repoId = getRepoId(repo['displayName'])
+            if repoId:
+                repo['id'] = repoId
+            else:
+                print("Repo {} not found. I will create it so that the service will import, but can't promise it will be accessible or not.".format(repo['displayName']))
+                repo['id'] = createRepo(repo)
+            # Create a map of old repo IDs to new ones.
+            repomap[str(oldRepoId)] = str(repo['id'])
+
+        service_json = json.dumps(service)
+
+        pattern = re.compile('|'.join(repomap.keys()))
+        result = pattern.sub(lambda x: repomap[x.group()], service_json)
+
+        service = json.loads(result)
+
+    print(json.dumps(service, indent=2))
+
 
     headers = {
         'x-cliqr-api-key-auth': "true",
@@ -259,14 +325,12 @@ def importService(serviceJson):
         else:
             print("--overwrite specified. Updating existing service.")
             url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
-            serviceJson['id'] = serviceId
-            response = s.request("PUT", url, headers=headers, data=json.dumps(serviceJson), verify=False, auth=HTTPBasicAuth(username, apiKey))
-            print(json.dumps(response.json(), indent=2))
+            service['id'] = serviceId
+            s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
     else:
         print("Service ID for service {} not found. Creating".format(serviceName))
         url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
-        response = s.request("POST", url, headers=headers, data=json.dumps(serviceJson), verify=False, auth=HTTPBasicAuth(username, apiKey))
-        print(json.dumps(response.json(), indent=2))
+        response = s.request("POST", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
         print("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
 
@@ -287,7 +351,7 @@ if args.e :
 if args.i :
     serviceJson = json.load(args.i)
 
-    importService(serviceJson)
+    import_service(serviceJson)
 
 
 
