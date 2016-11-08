@@ -1,8 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Deployment cleanup script
-# -*- coding: utf-8 -*
 
 import requests, pdb, sys
 from requests.auth import HTTPBasicAuth
+
 requests.packages.urllib3.disable_warnings()
 
 if len(sys.argv) != 4:

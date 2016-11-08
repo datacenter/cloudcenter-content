@@ -1,0 +1,121 @@
+#!/bin/bash
+
+exec > >(tee -a /usr/local/osmosix/logs/service.log) 2>&1
+
+OSSVC_HOME=/usr/local/osmosix/service
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
+. $OSSVC_HOME/utils/cfgutil.sh
+. $OSSVC_HOME/utils/install_util.sh
+. $OSSVC_HOME/utils/os_info_util.sh
+
+cmd=$1
+SVCNAME="wildfly"
+SVCHOME="$OSSVC_HOME/$SVCNAME"
+USER_ENV="/usr/local/osmosix/etc/userenv"
+
+
+case $cmd in
+	install)
+		log "[INSTALL] Installing $SVCNAME"
+		yum install java-1.8.0-openjdk-devel -y
+		wget http://download.jboss.org/wildfly/9.0.1.Final/wildfly-9.0.1.Final.zip
+		unzip wildfly-9.0.1.Final.zip -d /opt/
+		rm -f wildfly-9.0.1.Final.zip
+		ln -s /opt/wildfly-9.0.1.Final /opt/wildfly
+		cp ./wildfly.conf /etc/default/wildfly.conf
+		cp /opt/wildfly/bin/init.d/wildfly-init-redhat.sh /etc/init.d/wildfly
+		chkconfig --add wildfly
+		chkconfig wildfly on
+		mkdir -p /var/log/wildfly
+		adduser wildfly
+		chown -R wildfly:wildfly /opt/wildfly-9.0.1.Final
+		chown -R wildfly:wildfly /opt/wildfly
+		chown -R wildfly:wildfly /var/log/wildfly
+		;;
+	deploy)
+		log "[DEPLOY] Deploying $SVCNAME"
+		/opt/wildfly/bin/add-user.sh $mgmtUser $mgmtPW
+		if [ -n "$wfWarURL" ] # Custom service parameter for the app binary.
+		then
+			log "[DEPLOY] Downloading $wfWarURL to /opt/wildfly/standalone/deployments/ROOT.war"
+			mv $wfWarURL /opt/wildfly/standalone/deployments/ROOT.war # Always place the app binary at / by naming it ROOT.war
+		fi
+		;;
+	configure)
+		log "[CONFIGURE] Configuring $SVCNAME"
+		;;
+	start)
+		if [ ! -z "$cliqrUserScript" -a -f "$cliqrUserScript" ]; then
+			log "[START] Invoking pre-start user script"
+			$cliqrUserScript 1 $cliqrUserScriptParams
+		fi
+
+		log "[START] Starting $SVCNAME"
+		service wildfly start
+
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			log "[START] Invoking post-start user script"
+			$cliqrUserScript 2 $cliqrUserScriptParams
+		fi
+
+		# Run restore script in case of migration
+		if [ "$appMigrating" == "true" ]; then
+				runMigrationRestoreScript
+		fi
+		log "[START] $SVCNAME successfully started."
+		;;
+	stop)
+		log "[STOP] Invoking pre-stop user script"
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			$cliqrUserScript 3 $cliqrUserScriptParams
+		fi
+
+		log "[STOP] Stopping $SVCNAME"
+		service wildfly stop
+
+		log "[STOP] Invoking post-stop user script"
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			$cliqrUserScript 4 $cliqrUserScriptParams
+		fi
+		log "[STOP] $SVCNAME successfully stopped."
+		;;
+	restart)
+		log "[RESTART] Invoking pre-restart user script"
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			$cliqrUserScript 5 $cliqrUserScriptParams
+		fi
+
+		log "[RESTART] Restarting $SVCNAME"
+		service wildfly restart
+
+		log "[RESTART] Invoking post-restart user script"
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			$cliqrUserScript 6 $cliqrUserScriptParams
+		fi
+		;;
+	reload)
+		log "[RELOAD] Invoking pre-reload user script"
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			$cliqrUserScript 7 $cliqrUserScriptParams
+		fi
+
+		log "[RELOAD] Reloding $SVCNAME settings"
+
+		log "[RELOAD] Invoking post-reload user script"
+		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+			$cliqrUserScript 8 $cliqrUserScriptParams
+		fi
+		log "[RELOAD] $SVCNAME successfully reloaded."
+		;;
+	cleanup)
+
+		;;
+	upgrade)
+		log "[UPGRADE] Upgrading."
+		;;
+	*)
+		log "[ERROR] unknown command"
+		exit 127
+		;;
+esac
