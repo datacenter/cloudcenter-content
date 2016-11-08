@@ -1,0 +1,48 @@
+{
+  "displayName": "Swarm Service",
+  "name": "swarm",
+  "description": "",
+  "parentServiceId": "61",
+  "costPerHour": "0.00",
+  "bundleLocation": "",
+  "systemService": false,
+  "serviceType": "EXTERNAL",
+  "serviceActions": [],
+  "externalBundleLocation": "",
+  "externalActions": [
+    {
+      "actionName": "START",
+      "actionType": "URL",
+      "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/armtemplate/service start"
+    },
+    {
+      "actionName": "STOP",
+      "actionType": "URL",
+      "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/armtemplate/service stop"
+    }
+  ],
+  "serviceParamSpecs": [
+    {
+      "paramName": "serviceDef",
+      "displayName": "Swarm Service",
+      "helpText": "URL to your Swarm Service JSON file.",
+      "type": "string",
+      "valueConstraint": {
+        "maxLength": 255,
+        "allowSpaces": true
+      },
+      "valueList": null,
+      "collectionList": null,
+      "defaultValue": "",
+      "userVisible": true,
+      "userEditable": true,
+      "optional": false,
+      "webserviceListParams": null,
+      "systemParam": true
+    }
+  ],
+  "servicePorts": [],
+  "images": [],
+  "defaultImageId": "",
+  "repositories": []
+}
