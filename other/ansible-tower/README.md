@@ -1,0 +1,1 @@
+# Script to add nodes to an inventory in Ansible Tower

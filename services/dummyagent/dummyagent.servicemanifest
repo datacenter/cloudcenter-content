@@ -1,0 +1,122 @@
+{
+    "costPerHour": 0.0,
+    "serviceParamSpecs": [],
+    "bundleLocation": "",
+    "serviceType": "VM_AGENT",
+    "name": "dummyagent",
+    "visible": true,
+    "images": [
+        {
+            "internalImageName": "CloudWorker-CentOS7.x",
+            "description": "CentOS 7.x",
+            "osName": "LINUX",
+            "visibility": "PUBLIC",
+            "count": 24,
+            "enabled": true,
+            "name": "CentOS 7.x",
+            "perms": [
+                "read"
+            ],
+            "resource": "https://sandbox.cliqr.com/v1/tenants/37/images/21",
+            "tags": [],
+            "detail": null,
+            "tenantId": 1,
+            "id": "21",
+            "imageType": "CLOUD_WORKER",
+            "numOfNics": 1,
+            "systemImage": true
+        }
+    ],
+    "systemService": false,
+    "defaultImageName": "CentOS 7.x",
+    "parentService": false,
+    "displayName": "DummyAgent",
+    "childServices": [],
+    "repositories": [],
+    "description": "",
+    "perms": [
+        "write",
+        "delete",
+        "administration",
+        "read"
+    ],
+    "egressRestrictions": [],
+    "serviceActions": [
+        {
+            "actionType": "CMD",
+            "actionName": "CLEANUP",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Clean Up';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "UPGRADE",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Upgrade';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "RELOAD",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Reload';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "START",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Start';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "STOP",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Stop';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "DEPLOY",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Deploy';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "INSTALL",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Install';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "RESTART",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Restart';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "CONFIGURE",
+            "actionValue": ". /usr/local/osmosix/service/utils/agent_util.sh;agentSendLogMessage 'DUMMY Service Agent Lifecycle: Configure';sleep 2"
+        }
+    ],
+    "externalService": false,
+    "parentServiceId": "37",
+    "servicePorts": [],
+    "externalBundleLocation": "",
+    "externalActions": [
+        {
+            "actionType": "CMD",
+            "actionName": "PRE_VM_INIT",
+            "actionValue": ". utils.sh; print_log 'DUMMY Service: Pre VM Init';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "POST_VM_INIT",
+            "actionValue": ". utils.sh; print_log 'DUMMY Service: Post VM Init';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "PRE_VM_START",
+            "actionValue": ". utils.sh; print_log 'DUMMY Service: Pre VM Start';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "POST_VM_STOP",
+            "actionValue": ". utils.sh; print_log 'DUMMY Service: Post VM Stop';sleep 2"
+        },
+        {
+            "actionType": "CMD",
+            "actionName": "PRE_VM_STOP",
+            "actionValue": ". utils.sh; print_log 'DUMMY Service: Pre VM Stop';sleep 2"
+        }
+    ]
+}
