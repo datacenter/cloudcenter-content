@@ -1,4 +1,5 @@
 # Infoblox
 
-### Miscellaneous Infoblox integration scripts. Far from complete as-is, but a good working example. In particular, there are probably more parameters required to be printed out to CloudCenter than what are included in these examples.
-- Note that the "New" scripts were written later to support an OLDER version of the Infoblox API that doesn't support getting the next available IP along with the create_host call. So couldn't use the python module, so had to write from scratch using python reuqests alone.
+Infoblox callout integration sript examples. There are two versions:
+- One version uses a library to connect to Infoblox for convenience, but only works on newer versions of the API that support the next_avilable function for IP address in the create_host API call. This is the recommended script for newer APIs.
+- The other version is written just using requests, which works with older versions of the API but is more verbose.
