@@ -28,7 +28,7 @@ headers = {
     }
 
 response = requests.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-print(response.text)
+print(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
     if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Error']:
