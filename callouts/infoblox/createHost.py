@@ -1,20 +1,16 @@
 #!/usr/bin/env python
-import infoblox, sys, requests, os, random
+# For use with newer version of the WAPI that include the next_available function in the create_host method.
+# Known NOT to work with 1.0 of the WAPI
+
+import infoblox # Use this 3rd party library for convenience.
+import os
+import requests
+
 requests.packages.urllib3.disable_warnings()
 
-#Check to see if command line included enough arguments.
-#if (len(sys.argv) < 3):
-#	print "Usage: createHost.py <fqdn> <network CIDR>"
-#	quit()
-
-#Write environment variables to file for development purposes
-f = open('/usr/local/osmosix/callout/ipam/environment', 'w')
-for key in os.environ.keys():
-    f.write("%s=%s\n" % (key,os.environ[key]))
-f.close()
 
 #Assign command line arguments to named variables
-hostname = "worker" + str(os.getenv('eNV_JOB_ID', "-storage" + str(random.randint(1, 1000)))) # Use jobID as part of name. If not set, use 0 as default
+hostname = os.environ['vmName'] # The VM name should come from CloudCenter. Use the name of the VM as the OS hostname
 domain = "test.com"
 fqdn = hostname + "." + domain #sys.argv[1]
 network = "10.110.1.0/24" #sys.argv[2]
