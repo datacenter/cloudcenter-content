@@ -7,8 +7,6 @@ exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/agent_util.sh
 cd ~
 
-env
-
 echo "Username: $(whoami)" # Should execute as cliqruser
 echo "Working Directory: $(pwd)"
 
@@ -19,6 +17,12 @@ else
      gitTag="cc-from-appliances"
 fi
 
+yum install -y wget vim
+
+# Download necessary files
+wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.6.1-20161109.1/installer/core_installer.bin
+wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.6.1-20161109.1/appliance/ccm-installer.jar
+wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.6.1-20161109.1/appliance/ccm-response.xml
 
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
