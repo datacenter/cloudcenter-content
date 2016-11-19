@@ -46,6 +46,9 @@ if [ $ERR -ne 0 ]; then
     agentSendLogMessage "Failed to find port 5671 on AMQP Server ${CliqrTier_amqp_PUBLIC_IP} after about 5 min. Skipping tomcat restart."
 else
     agentSendLogMessage "Found port 5671 on AMQP Server ${CliqrTier_amqp_PUBLIC_IP}. Restarting tomcat and clearing log file."
+
+    # Source profile to ensure pick up the JAVA_HOME env variable.
+    . /etc/profile
     sudo -E /etc/init.d/tomcat stop
     sudo su -c 'echo "" > /usr/local/tomcat/logs/osmosix.log'
     sudo -E /etc/init.d/tomcat start
