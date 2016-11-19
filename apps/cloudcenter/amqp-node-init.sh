@@ -27,3 +27,4 @@ sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/lo
 . /etc/profile
 sudo -E /etc/init.d/tomcatgua restart
 sudo -E /etc/init.d/rabbitmq-server restart
+sudo /usr/local/osmosix/bin/rabbit_config.sh
