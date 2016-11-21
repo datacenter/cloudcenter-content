@@ -29,6 +29,7 @@ wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPas
 sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
 
 sudo /etc/init.d/tomcat stop
+rm -f /usr/local/tomcat/catalina.pid
 sudo echo "" > /usr/local/tomcat/logs/osmosix.log
 sudo /etc/init.d/tomcat start
 
