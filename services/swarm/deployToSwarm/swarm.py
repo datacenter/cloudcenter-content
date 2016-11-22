@@ -28,6 +28,7 @@ def print_ext_service_result(msg):
 
 cmd = sys.argv[1]
 
+service_name = os.environ['parentJobName']+os.environ['parentJobId']
 
 s = requests.Session()
 
@@ -44,11 +45,13 @@ if cmd == "start" :
     except Exception as err:
         print_log("Error loading the ARM Template: {0}. Check your syntax".format(err))
         sys.exit(1)
-
+    serviceDef['Name'] = service_name
     r = s.request("POST", url+"services/create", data=json.dumps(serviceDef))
 
 elif cmd == "stop" :
-    pass
+    r = s.request("DELETE", url+"services/{name}".format(name=service_name))
+    #print(json.dumps(r.json(), indent=2))
+
 elif cmd == "reload" :
     pass
 
