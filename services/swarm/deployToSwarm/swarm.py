@@ -39,7 +39,7 @@ url = "http://{swarmIp}:{swarmPort}/".format(swarmIp=swarmIp, swarmPort=swarmPor
 
 if cmd == "start" :
     try:
-        with open(os.environ['serviceDef'], 'r') as template_file_fd:
+        with open("/serviceDef.json", 'r') as template_file_fd:
             serviceDef = json.load(template_file_fd)
     except Exception as err:
         print_log("Error loading the ARM Template: {0}. Check your syntax".format(err))
