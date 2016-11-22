@@ -282,32 +282,37 @@ def import_service(service):
             print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
                   "You will have to create the worker if necessary and map it yourself.".format(image['name']))
             image['id'] = createImage(image)
+    if len(service['repositories']) > 0:
+        # Update all the imageIds in the service to match the ones in the instance that you're importing into.
+        repomap = {}
+        for repo in service['repositories']:
+            oldRepoId = repo['id']
+            repoId = getRepoId(repo['displayName'])
+            if repoId:
+                repo['id'] = repoId
+            else:
+                print("Repo {} not found. I will create it so that the service will import, but can't promise it will be accessible or not.".format(repo['displayName']))
+                repo['id'] = createRepo(repo)
+            # Create a map of old repo IDs to new ones.
+            repomap[str(oldRepoId)] = str(repo['id'])
 
-    # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    repomap = {}
-    for repo in service['repositories']:
-        oldRepoId = repo['id']
-        repoId = getRepoId(repo['displayName'])
-        if repoId:
-            repo['id'] = repoId
-        else:
-            print("Repo {} not found. I will create it so that the service will import, but can't promise it will be accessible or not.".format(repo['displayName']))
-            repo['id'] = createRepo(repo)
-        # Create a map of old repo IDs to new ones.
-        repomap[str(oldRepoId)] = str(repo['id'])
+        service_json = json.dumps(service)
 
-    service_json = json.dumps(service)
+        pattern = re.compile('|'.join(repomap.keys()))
+        result = pattern.sub(lambda x: repomap[x.group()], service_json)
 
-    pattern = re.compile('|'.join(repomap.keys()))
-    result = pattern.sub(lambda x: repomap[x.group()], service_json)
-
-    service = json.loads(result)
+        service = json.loads(result)
 
     print(json.dumps(service, indent=2))
 
     # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
-    # Image Id for the defalt Image.
-    service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
+    # Image Id for the default Image.
+    if 'defaultImageName' in service:
+        service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
+    else:
+        print("Your manifest file didn't have a defaultImageName key, as it would if exported from the instance "
+              "using this tool. Therefore I'm not able to update the image ID to the one that matches your instance"
+              ", which may be different than the one it came from. Funny image related things may happen.")
 
     headers = {
         'x-cliqr-api-key-auth': "true",
