@@ -274,16 +274,21 @@ def import_service(service):
         port.pop("resource", None)
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    for image in service['images']:
-        imageId = getImageId(tenantId, image['name'])
-        if imageId:
-            image['id'] = imageId
-        else:
-            print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
-                  "You will have to create the worker if necessary and map it yourself.".format(image['name']))
-            image['id'] = createImage(image)
+    if len(service['images']) > 0:
+        for image in service['images']:
+            imageId = getImageId(tenantId, image['name'])
+            if imageId:
+                image['id'] = imageId
+            else:
+                print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
+                      "You will have to create the worker if necessary and map it yourself.".format(image['name']))
+                image['id'] = createImage(image)
+        # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
+        # Image Id for the defalt Image.
+        service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
+
+    # Update all the imageIds in the service to match the ones in the instance that you're importing into.
     if len(service['repositories']) > 0:
-        # Update all the imageIds in the service to match the ones in the instance that you're importing into.
         repomap = {}
         for repo in service['repositories']:
             oldRepoId = repo['id']

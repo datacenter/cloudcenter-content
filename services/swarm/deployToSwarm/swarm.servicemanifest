@@ -1,0 +1,153 @@
+{
+    "childServices": [], 
+    "perms": [
+        "write", 
+        "delete", 
+        "administration", 
+        "read"
+    ], 
+    "repositories": [], 
+    "egressRestrictions": [], 
+    "externalBundleLocation": "", 
+    "visible": true, 
+    "costPerHour": 0.0, 
+    "systemService": false, 
+    "servicePorts": [], 
+    "parentServiceId": "110", 
+    "serviceType": "EXTERNAL", 
+    "description": "", 
+    "serviceParamSpecs": [
+      {
+        "systemParam": true,
+        "collectionList": [],
+        "displayName": "Swarm Service",
+        "userVisible": true,
+        "confirmValue": "",
+        "optional": false,
+        "defaultValue": "",
+        "webserviceListParams": null,
+        "helpText": "URL to your Swarm Service JSON file.",
+        "userEditable": true,
+        "valueList": null,
+        "paramName": "serviceDef",
+        "exampleValue": null,
+        "dataUnit": null,
+        "type": "string",
+        "scope": null,
+        "valueConstraint": {
+          "regex": null,
+          "sizeValue": 0,
+          "calloutWorkflowName": null,
+          "maxValue": 0,
+          "minValue": 0,
+          "allowSpaces": true,
+          "step": 0,
+          "maxLength": 255
+        }
+      },        {
+        "systemParam": true,
+        "collectionList": [],
+        "displayName": "Swarm Hostname",
+        "userVisible": true,
+        "confirmValue": "",
+        "optional": false,
+        "defaultValue": "",
+        "webserviceListParams": null,
+        "helpText": "IP or Hostname of your swarm.",
+        "userEditable": true,
+        "valueList": null,
+        "paramName": "swarmIp",
+        "exampleValue": null,
+        "dataUnit": null,
+        "type": "string",
+        "scope": null,
+        "valueConstraint": {
+          "regex": null,
+          "sizeValue": 0,
+          "calloutWorkflowName": null,
+          "maxValue": 0,
+          "minValue": 0,
+          "allowSpaces": true,
+          "step": 0,
+          "maxLength": 255
+        }
+      },
+      {
+        "systemParam": true,
+        "collectionList": [],
+        "displayName": "Swarm Port",
+        "userVisible": true,
+        "confirmValue": "",
+        "optional": false,
+        "defaultValue": "",
+        "webserviceListParams": null,
+        "helpText": "Port your swarm is listening on.",
+        "userEditable": true,
+        "valueList": null,
+        "paramName": "swarmPort",
+        "exampleValue": null,
+        "dataUnit": null,
+        "type": "string",
+        "scope": null,
+        "valueConstraint": {
+          "regex": null,
+          "sizeValue": 0,
+          "calloutWorkflowName": null,
+          "maxValue": 0,
+          "minValue": 0,
+          "allowSpaces": true,
+          "step": 0,
+          "maxLength": 255
+        }
+      },
+
+      {
+            "systemParam": true, 
+            "collectionList": [], 
+            "displayName": "Git Tag", 
+            "userVisible": true, 
+            "confirmValue": "", 
+            "optional": false, 
+            "defaultValue": "swarm", 
+            "webserviceListParams": null, 
+            "helpText": "Tag or Branch you want to use code from.", 
+            "userEditable": true, 
+            "valueList": null, 
+            "paramName": "gitTag", 
+            "exampleValue": null, 
+            "dataUnit": null, 
+            "type": "string", 
+            "scope": null, 
+            "valueConstraint": {
+                "regex": null, 
+                "sizeValue": 0, 
+                "calloutWorkflowName": null, 
+                "maxValue": 0, 
+                "minValue": 0, 
+                "allowSpaces": true, 
+                "step": 0, 
+                "maxLength": 255
+            }
+        }
+    ], 
+    "images": [], 
+    "parentService": false, 
+    "bundleLocation": "", 
+    "defaultImageName": null, 
+    "displayName": "Swarm Service", 
+    "name": "swarm", 
+    "externalService": false, 
+    "serviceActions": [], 
+    "externalActions": [
+        {
+            "actionName": "START", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/swarm/deployToSwarm/swarm.sh start",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "STOP", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/swarm/deployToSwarm/swarm.sh stop",
+            "actionType": "URL"
+        }
+    ]
+}
