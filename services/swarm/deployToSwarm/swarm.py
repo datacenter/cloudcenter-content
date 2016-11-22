@@ -42,78 +42,12 @@ if cmd == "start" :
         print_log("Error loading the ARM Template: {0}. Check your syntax".format(err))
         sys.exit(1)
 
+    r = s.request("POST", url+"services/create", data=json.dumps(serviceDef))
+
 elif cmd == "stop" :
     pass
 elif cmd == "reload" :
     pass
 
-data = {
-    "Name": "web",
-    "TaskTemplate": {
-        "ContainerSpec": {
-            "Image": "nginx:alpine",
-            "Mounts": [
-                {
-                    "ReadOnly": True,
-                    "Source": "web-data",
-                    "Target": "/usr/share/nginx/html",
-                    "Type": "volume",
-                    "VolumeOptions": {
-                        "DriverConfig": {
-                        },
-                        "Labels": {
-                            "com.example.something": "something-value"
-                        }
-                    }
-                }
-            ],
-            "User": "33"
-        },
-        "LogDriver": {
-            "Name": "json-file",
-            "Options": {
-                "max-file": "3",
-                "max-size": "10M"
-            }
-        },
-        "Placement": {},
-        "Resources": {
-            "Limits": {
-                "MemoryBytes": 104857600
-            },
-            "Reservations": {
-            }
-        },
-        "RestartPolicy": {
-            "Condition": "on-failure",
-            "Delay": 10000000000,
-            "MaxAttempts": 10
-        }
-    },
-    "Mode": {
-        "Replicated": {
-            "Replicas": 4
-        }
-    },
-    "UpdateConfig": {
-        "Delay": 30000000000,
-        "Parallelism": 2,
-        "FailureAction": "pause"
-    },
-    "EndpointSpec": {
-        "Ports": [
-            {
-                "Protocol": "tcp",
-                "PublishedPort": 8080,
-                "TargetPort": 80
-            }
-        ]
-    },
-    "Labels": { # TODO: Figure out better unique env for tier.
-        "cccJob": os.environ['parentJobName']+os.environ['parentJobId']
-    }
-}
-
-r = s.request("POST", url+"services/create", data=json.dumps(data))
 
 print(r.json())
