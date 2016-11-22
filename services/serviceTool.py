@@ -303,8 +303,6 @@ def import_service(service):
 
         service = json.loads(result)
 
-    print(json.dumps(service, indent=2))
-
     # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
     # Image Id for the default Image.
     if 'defaultImageName' in service:
@@ -313,6 +311,8 @@ def import_service(service):
         print("Your manifest file didn't have a defaultImageName key, as it would if exported from the instance "
               "using this tool. Therefore I'm not able to update the image ID to the one that matches your instance"
               ", which may be different than the one it came from. Funny image related things may happen.")
+
+    print(json.dumps(service, indent=2))
 
     headers = {
         'x-cliqr-api-key-auth': "true",
