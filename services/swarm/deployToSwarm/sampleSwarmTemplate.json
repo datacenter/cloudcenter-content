@@ -5,7 +5,7 @@
       "Image": "nginx:alpine",
       "Mounts": [
         {
-          "ReadOnly": True,
+          "ReadOnly": true,
           "Source": "web-data",
           "Target": "/usr/share/nginx/html",
           "Type": "volume",
@@ -60,7 +60,7 @@
       }
     ]
   },
-  "Labels": { # TODO: Figure out better unique env for tier.
+  "Labels": {
     "cccJob": "job1234"
   }
 }
