@@ -7,6 +7,9 @@ import os
 
 requests.packages.urllib3.disable_warnings()
 
+swarmIp = os.getenv('swarmIp')
+swarmPort = os.getenv('swarmPort', '2376')
+
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
     print(msg)
@@ -28,11 +31,11 @@ cmd = sys.argv[1]
 
 s = requests.Session()
 
-url = "http://54.70.83.127:2376/"
+url = "http://{swarmIp}:{swarmPort}/".format(swarmIp=swarmIp, swarmPort=swarmPort)
 
-r = s.request("GET", url+"services")
+#r = s.request("GET", url+"services")
 
-print(r.json())
+#print(r.json())
 
 if cmd == "start" :
     try:

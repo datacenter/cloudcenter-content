@@ -33,18 +33,25 @@ gpgkey=https://yum.dockerproject.org/gpg
 EOF
 
 sudo yum install docker-engine -y
-
 sudo systemctl enable docker.service
 
-sudo systemctl start docker
+
 
 IFS=','
 ipArr=($CliqrTier_CentOS_1_NODE_ID) # Array of nodes in my tier.
 master=${arr[0]} # Let the first node in the service tier be the master.
 
 
+sudo mkdir /etc/systemd/system/docker.service.d -p
+sudo tee /etc/systemd/system/docker.service.d/docker.conf <<-'EOF'
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -D -H tcp://0.0.0.0:2376
+EOF
 
 
+sudo systemctl daemon-reload
+sudo systemctl start docker
 
 
-sudo docker swarm init
+sudo docker -H localhost:2376 swarm init
