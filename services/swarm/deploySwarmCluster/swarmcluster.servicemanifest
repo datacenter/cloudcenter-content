@@ -19,7 +19,7 @@
             "fromPort": "5432"
         }
     ], 
-    "parentServiceId": "40", 
+    "parentServiceId": "110",
     "serviceType": "VM_AGENT", 
     "description": "", 
     "serviceParamSpecs": [
@@ -123,7 +123,7 @@
         }, 
         {
             "actionName": "CLEANUP", 
-            "actionValue": " cleanup", 
+            "actionValue": "",
             "actionType": "URL"
         }
     ], 
