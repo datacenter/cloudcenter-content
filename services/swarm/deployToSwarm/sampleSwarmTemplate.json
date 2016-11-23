@@ -1,66 +1,36 @@
 {
-  "Name": "web",
+  "Name": "web31",
   "TaskTemplate": {
     "ContainerSpec": {
-      "Image": "nginx:alpine",
-      "Mounts": [
-        {
-          "ReadOnly": true,
-          "Source": "web-data",
-          "Target": "/usr/share/nginx/html",
-          "Type": "volume",
-          "VolumeOptions": {
-            "DriverConfig": {
-            },
-            "Labels": {
-              "com.example.something": "something-value"
-            }
-          }
-        }
-      ],
-      "User": "33"
+      "Image": "httpd"
     },
-    "LogDriver": {
-      "Name": "json-file",
-      "Options": {
-        "max-file": "3",
-        "max-size": "10M"
-      }
-    },
-    "Placement": {},
     "Resources": {
-      "Limits": {
-        "MemoryBytes": 104857600
-      },
-      "Reservations": {
-      }
+      "Limits": {},
+      "Reservations": {}
     },
     "RestartPolicy": {
-      "Condition": "on-failure",
-      "Delay": 10000000000,
-      "MaxAttempts": 10
-    }
+      "Condition": "any",
+      "MaxAttempts": 0
+    },
+    "Placement": {}
   },
   "Mode": {
     "Replicated": {
-      "Replicas": 4
+      "Replicas": 1
     }
   },
   "UpdateConfig": {
-    "Delay": 30000000000,
-    "Parallelism": 2,
+    "Parallelism": 1,
     "FailureAction": "pause"
   },
   "EndpointSpec": {
+    "Mode": "vip",
     "Ports": [
       {
         "Protocol": "tcp",
-        "PublishedPort": 8080,
-        "TargetPort": 80
+        "TargetPort": 80,
+        "PublishedPort": 8083
       }
     ]
-  },
-  "Labels": {
-    "cccJob": "job1234"
   }
 }
