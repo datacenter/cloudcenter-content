@@ -27,7 +27,6 @@ def print_ext_service_result(msg):
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
-
 cmd = sys.argv[1]
 
 service_name = os.environ['parentJobName']+os.environ['parentJobId']
