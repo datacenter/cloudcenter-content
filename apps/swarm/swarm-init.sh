@@ -16,7 +16,7 @@ if [ -n "$gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
 else
      agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
-     gitTag="swarm"
+     gitTag="swarmapp0.1"
 fi
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~
