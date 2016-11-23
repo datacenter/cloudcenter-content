@@ -16,7 +16,7 @@
   },
   "Mode": {
     "Replicated": {
-      "Replicas": 1
+      "Replicas": 5
     }
   },
   "UpdateConfig": {
