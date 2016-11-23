@@ -46,14 +46,19 @@ if cmd == "start" :
     except Exception as err:
         print_log("Error loading the Swarm Template: {0}. Check your syntax".format(err))
         sys.exit(1)
-    serviceDef['Name'] = service_name
-    serviceDef['EndpointSpec']['Ports'] = [
-        {
-            "Protocol": "tcp",
-            "TargetPort": exposedPort,
-            "PublishedPort": publishedPort
-        }
-    ]
+
+    try:
+        serviceDef['Name'] = service_name
+        serviceDef['EndpointSpec']['Ports'] = [
+            {
+                "Protocol": "tcp",
+                "TargetPort": int(exposedPort),
+                "PublishedPort": int(publishedPort)
+            }
+        ]
+    except Exception as err:
+        print_log("Error setting name and published/exposed ports. Ensure valid port numbers.".format(err))
+        sys.exit(1)
 
     try:
         r = s.request("POST", url+"services/create", data=json.dumps(serviceDef))
