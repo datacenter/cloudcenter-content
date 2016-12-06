@@ -358,10 +358,6 @@ def import_service(service):
         response = s.request("POST", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
         print("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
-
-
-
-
 # TODO: Check for existing file and properly use the overwrite flag.
 if args.e :
     serviceName = args.e
