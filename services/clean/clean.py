@@ -1,8 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Deployment cleanup script
-# -*- coding: utf-8 -*
 
 import requests, pdb, sys
 from requests.auth import HTTPBasicAuth
+
 requests.packages.urllib3.disable_warnings()
 
 if len(sys.argv) != 4:
@@ -25,7 +28,7 @@ headers = {
     }
 
 response = requests.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-print(response.text)
+print(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
     if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Error']:

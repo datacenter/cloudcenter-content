@@ -1,0 +1,58 @@
+#!/bin/bash
+. /utils.sh
+
+# Required Service Parameters:
+# gitTag - The tag or branch of code that you want to pull from github
+# TODO
+
+# Print the env to the CCM UI for debugging. Remove this line for production.
+print_log "$(env)"
+
+if [ -n $gitTag ]; then
+    tag=$gitTag
+else
+    tag="master"
+fi
+
+print_log "Tag/branch for code pull set to $tag"
+
+cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
+
+
+case $CloudFamily in
+    AzureRM)
+        print_log "Cloud Family: "$CloudFamily
+        print_log "Cloud is AzureRM. Setting up a bunch of pre-reqs..."
+        # Setup a bunch of prerequisits
+        yum install gcc git python-pip python-devel openssl-devel libffi-devel glibc e2fsprogs krb5-libs openssl gcc-c++ -y
+        pip install --upgrade pip
+        pip install msrest msrestazure
+        pip install --pre azure
+        pip install pyhaikunator
+
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$gitTag/services/azureloadbal/azurelb.py
+
+        case $cmd in
+            start)
+                print_log "Executing azurelb.py start"
+                python azurelb.py start
+                ;;
+            update)
+                print_log "Executing azurelb.py update"
+                python azurelb.py update
+                ;;
+            stop)
+                print_log "Executing azurelb.py stop"
+                python azurelb.py stop
+                ;;
+            *)
+                print_log "No Valid Script Argument. Ex start, stop"
+                exit 127
+                ;;
+        esac
+        ;;
+    *)
+        exit 127
+        print_error "Not deployed to supported cloud. Currently only Azure Resource Manager supported."
+        ;;
+esac
