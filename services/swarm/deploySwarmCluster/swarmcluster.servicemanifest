@@ -1,0 +1,131 @@
+{
+    "childServices": [], 
+    "perms": [
+        "write", 
+        "delete", 
+        "administration", 
+        "read"
+    ], 
+    "repositories": [], 
+    "egressRestrictions": [], 
+    "externalBundleLocation": "", 
+    "visible": true, 
+    "costPerHour": 0.0, 
+    "systemService": false, 
+    "servicePorts": [
+        {
+            "toPort": "5432", 
+            "protocol": "TCP", 
+            "fromPort": "5432"
+        }
+    ], 
+    "parentServiceId": "110",
+    "serviceType": "VM_AGENT", 
+    "description": "", 
+    "serviceParamSpecs": [
+        {
+            "systemParam": true, 
+            "collectionList": [], 
+            "displayName": "gitTag", 
+            "userVisible": true, 
+            "confirmValue": "", 
+            "optional": false, 
+            "defaultValue": "swarm", 
+            "webserviceListParams": null, 
+            "helpText": "", 
+            "userEditable": true, 
+            "valueList": null, 
+            "paramName": "gitTag", 
+            "exampleValue": null, 
+            "dataUnit": null, 
+            "type": "string", 
+            "scope": null, 
+            "valueConstraint": {
+                "regex": null, 
+                "sizeValue": 0, 
+                "calloutWorkflowName": null, 
+                "maxValue": 0, 
+                "minValue": 0, 
+                "allowSpaces": true, 
+                "step": 0, 
+                "maxLength": 255
+            }
+        }
+    ], 
+    "images": [
+        {
+            "count": 24, 
+            "resource": "https://sandbox.cliqr.com/v1/tenants/37/images/21", 
+            "description": "CentOS 7.x", 
+            "internalImageName": "CloudWorker-CentOS7.x", 
+            "tags": [], 
+            "perms": [
+                "read"
+            ], 
+            "detail": null, 
+            "numOfNics": 1, 
+            "enabled": true, 
+            "osName": "LINUX", 
+            "visibility": "PUBLIC", 
+            "tenantId": 1, 
+            "systemImage": true, 
+            "id": "21", 
+            "imageType": "CLOUD_WORKER", 
+            "name": "CentOS 7.x"
+        }
+    ], 
+    "parentService": false, 
+    "bundleLocation": "", 
+    "defaultImageName": "CentOS 7.x", 
+    "displayName": "SwarmCluster",
+    "name": "swarmcluster",
+    "externalService": false, 
+    "serviceActions": [
+        {
+            "actionName": "RELOAD", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "STOP", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "CONFIGURE", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "INSTALL", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "UPGRADE", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "DEPLOY", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "RESTART", 
+            "actionValue": "",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "START", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/swarm/deploySwarmCluster/service start",
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "CLEANUP", 
+            "actionValue": "",
+            "actionType": "URL"
+        }
+    ], 
+    "externalActions": []
+}
