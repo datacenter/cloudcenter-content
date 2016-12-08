@@ -1,0 +1,54 @@
+#!/bin/bash
+. /utils.sh
+
+# Required Service Parameters:
+# gitTag - The tag or branch of code that you want to pull from github
+# TODO
+
+# Print the env to the CCM UI for debugging. Remove this line for production.
+print_log "$(env)"
+
+if [ -n $gitTag ]; then
+ tag=$gitTag
+else
+ tag="cloudformation"
+fi
+
+print_log "Tag/branch for code pull set to $tag"
+
+cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
+
+
+
+# Setup a bunch of prerequisits
+yum install -y gcc git python-pip python-devel 
+pip install --upgrade pip
+pip install boto3
+pip install boto
+
+
+mkdir ~/.aws
+wget -N http://cliqrdemo-repo.s3.amazonaws.com/joey/cloudformation/credentials -O ~/.aws/credentials
+sed -i "s|aakid|$CliqrCloudAccountPwd|g" ~/.aws/credentials
+sed -i "s|aaskey|$CliqrCloud_AccessSecretKey|g" ~/.aws/credentials
+sed -i "s|regionid|$region|g" ~/.aws/credentials
+
+
+case $cmd in
+    start)
+        print_log "Executing createwp.py start"
+        wget -N http://cliqrdemo-repo.s3.amazonaws.com/joey/cloudformation/createwp.py
+        python createwp.py
+        ;;
+    stop)
+        print_log "Executing deletewp.py stop"
+        wget -N http://cliqrdemo-repo.s3.amazonaws.com/joey/cloudformation/deletewp.py
+        python deletewp.py
+        rm -rf ~/.aws
+        ;;
+    *)
+        print_log "No Valid Script Argument. Ex start, stop"
+        exit 127
+        ;;
+esac
+       
