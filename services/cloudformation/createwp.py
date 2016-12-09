@@ -40,7 +40,9 @@ try:
     cft = boto3.client('cloudformation')
     with open('/cf-template.json', 'r') as template_file_fd:
         template = template_file_fd.read()
-    create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template)
+    with open('/cf-params.json', 'r') as params_file_fd:
+        params = json.load(params_file_fd)
+    create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template, Parameters=params)
 
     stack_id = create_cft.get("StackId")
 

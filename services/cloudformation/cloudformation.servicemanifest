@@ -31,6 +31,35 @@
             "optional": false
         },
         {
+            "type": "string",
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "scope": null,
+            "dataUnit": null,
+            "exampleValue": null,
+            "defaultValue": "",
+            "webserviceListParams": null,
+            "helpText": "Enter the URL to the Cloud Formation Parameters(json)",
+            "userEditable": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "step": 0,
+                "minValue": 0,
+                "allowSpaces": true,
+                "maxValue": 0,
+                "calloutWorkflowName": null,
+                "regex": null
+            },
+            "paramName": "Paramsurl",
+            "displayName": "Cloud Formation Params URL",
+            "systemParam": true,
+            "valueList": null,
+            "confirmValue": "",
+            "collectionList": [],
+            "optional": false
+        },
+        {
             "paramName": "gitTag",
             "displayName": "gitTag",
             "helpText": "",
