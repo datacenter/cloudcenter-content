@@ -38,7 +38,7 @@ for i in JOB_NAME:
 
 
 cft = boto3.client('cloudformation')
-with open(os.environ['Templateurl'], 'r') as template_file_fd:
+with open('/cf-template.json', 'r') as template_file_fd:
     template = template_file_fd.read()
 create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template)
 
