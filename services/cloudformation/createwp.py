@@ -41,7 +41,7 @@ try:
     with open('/cf-template.json', 'r') as template_file_fd:
         template = template_file_fd.read()
 
-    params = None
+    params = []
     if os.path.isfile('/cf-params.json'):
         with open('/cf-params.json', 'r') as params_file_fd:
             params = json.load(params_file_fd)
@@ -89,9 +89,9 @@ try:
 
     # After all that, if it doesn't look complete, just delete it. At the end to ensure as much info as
     # possible about what went wrong is passed to UI.
-    if stack['Stacks'][0]['StackStatus'] != 'CREATE_COMPLETE':
+    if stack['Stacks'][0]['StackStatus'] not in ['CREATE_COMPLETE']:
         print_log("Looks like the stack didn't deploy properly for some reason. Deleting it.")
-        cft.delete_stack(StackName=stack_id)
+        #cft.delete_stack(StackName=stack_id)
         sys.exit(1)
 
     # checkstatus = []
