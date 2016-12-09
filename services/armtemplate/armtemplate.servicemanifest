@@ -1,5 +1,5 @@
 {
-  "displayName": "Swarm Service - Test",
+  "displayName": "Swarm Service",
   "repositories": [],
   "parentServiceId": "110",
   "serviceActions": [],
@@ -183,16 +183,16 @@
     {
       "scope": null,
       "displayName": "Replicas",
-      "helpText": "",
+      "helpText": "How many replicas of the container you want to run on your swarm.",
       "valueList": null,
       "paramName": "swarmReplicas",
       "valueConstraint": {
-        "maxLength": 0,
+        "maxLength": 255,
         "sizeValue": 0,
         "calloutWorkflowName": null,
         "step": 0,
         "minValue": 0,
-        "maxValue": 255,
+        "maxValue": 0,
         "regex": null,
         "allowSpaces": true
       },
@@ -200,8 +200,8 @@
       "optional": false,
       "userVisible": true,
       "systemParam": true,
-      "type": "number",
-      "defaultValue": "2",
+      "type": "string",
+      "defaultValue": "",
       "collectionList": [],
       "dataUnit": null,
       "webserviceListParams": null,
@@ -238,8 +238,8 @@
     "delete"
   ],
   "costPerHour": 0.0,
-  "logoPath": "/assets/img/appTiers/swarmtest/logo.png",
+  "logoPath": "/assets/img/appTiers/swarm/logo.png",
   "childServices": [],
-  "name": "swarmtest",
+  "name": "swarm",
   "externalService": false
 }

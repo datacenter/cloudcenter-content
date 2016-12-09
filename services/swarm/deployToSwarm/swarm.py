@@ -41,27 +41,7 @@ url = "http://{swarmIp}:{swarmPort}/".format(swarmIp=swarmIp, swarmPort=swarmPor
 
 #print(r.json())
 
-if cmd == "start" :
-    # try:
-    #     with open("/serviceDef.json", 'r') as template_file_fd:
-    #         serviceDef = json.load(template_file_fd)
-    # except Exception as err:
-    #     print_log("Error loading the Swarm Template: {0}. Check your syntax".format(err))
-    #     sys.exit(1)
-    #
-    # try:
-    #     serviceDef['Name'] = service_name
-    #     serviceDef['EndpointSpec']['Ports'] = [
-    #         {
-    #             "Protocol": "tcp",
-    #             "TargetPort": int(exposedPort),
-    #             "PublishedPort": int(publishedPort)
-    #         }
-    #     ]
-    # except Exception as err:
-    #     print_log("Error setting name and published/exposed ports. Ensure valid port numbers.".format(err))
-    #     sys.exit(1)
-
+if cmd == "start":
     serviceDef = {
         "Name": service_name,
         "TaskTemplate": {
@@ -110,8 +90,14 @@ if cmd == "start" :
 
 
 elif cmd == "stop" :
-    r = s.request("DELETE", url+"services/{name}".format(name=service_name))
-    #print(json.dumps(r.json(), indent=2))
+    try:
+        r = s.request("DELETE", url+"services/{name}".format(name=service_name))
+        print_log(r.status_code)
+        print_log(json.dumps(r.json(), indent=2))
+        r.raise_for_status()
+    except Exception as err:
+        print_log("Error deleting the Swarm Template: {0}.".format(err))
+        sys.exit(1)
 
 elif cmd == "reload" :
     pass
