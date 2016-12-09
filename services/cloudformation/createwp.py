@@ -42,7 +42,9 @@ try:
         template = template_file_fd.read()
     with open('/cf-params.json', 'r') as params_file_fd:
         params = json.load(params_file_fd)
-    create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template, Parameters=params)
+
+    # TODO: Security review required for IAM capabilties
+    create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template, Parameters=params, Capabilities=['CAPABILITY_NAMED_IAM'])
 
     stack_id = create_cft.get("StackId")
 
