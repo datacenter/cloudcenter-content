@@ -75,9 +75,9 @@ try:
     for event in reversed(stack_events['StackEvents']):
         status = event.get('ResourceStatus', None)
         reason = event.get('ResourceStatusReason', None)
-        timestamp = event.get('Timestamp', None)
+        # timestamp = event.get('Timestamp', None)
         resource_type = event.get('ResourceType', None)
-        message = "{} {} {}, Reason: {}".format(timestamp, resource_type, status, reason)
+        message = "{} {}, Reason: {}".format(resource_type, status, reason)
         print_log(message)
 
     for output in stack['Stacks'][0]['Outputs']:
