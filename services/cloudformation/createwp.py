@@ -90,7 +90,7 @@ try:
     # After all that, if it doesn't look complete, just delete it. At the end to ensure as much info as
     # possible about what went wrong is passed to UI.
     if stack['Stacks'][0]['StackStatus'] not in ['CREATE_COMPLETE']:
-        print_log("Looks like the stack didn't deploy properly for some reason. Deleting it.")
+        print_log("Looks like the stack didn't deploy properly for some reason.")
         #cft.delete_stack(StackName=stack_id)
         sys.exit(1)
 
