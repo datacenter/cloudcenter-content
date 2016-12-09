@@ -17,6 +17,6 @@ fi
 pip install --upgrade pip
 pip install --upgrade requests
 
-wget -N $serviceDef -O /serviceDef.json
-wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$gitTag/services/swarm/deployToSwarm/swarm.py
+#wget -N $serviceDef -O /serviceDef.json
+wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/swarm/deployToSwarm/swarm.py
 python swarm.py $cmd
