@@ -24,7 +24,7 @@ def print_ext_service_result(msg):
 
 
 # cmd = sys.argv[1]
-
+# Big fat try block to ensure that whatever bad happens, it gets bubbled to CCM UI.
 try:
     JOB_NAME = os.environ['parentJobName']+os.environ['currentTierJobId']
     TEMPLATE_URL = os.environ['Templateurl']
@@ -34,7 +34,7 @@ try:
     for i in JOB_NAME:
         if i in symbol:
                print_log("Job Name must satisfy regular expression pattern: [a-zA-Z][-a-zA-Z0-9]*")
-               sys.exit(errno.EINVAL)
+               sys.exit(1)
 
 
     cft = boto3.client('cloudformation')
