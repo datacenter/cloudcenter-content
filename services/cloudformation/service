@@ -40,6 +40,7 @@ case $cmd in
     start)
         print_log "Executing createwp.py start"
         wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/cloudformation/createwp.py
+        wget $Templateurl -O /cf-template.json
         python createwp.py
         ;;
     stop)
