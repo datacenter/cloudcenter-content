@@ -6,7 +6,7 @@
 # TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
-print_log "$(env)"
+# print_log "$(env)"
 
 if [ -n $gitTag ]; then
  tag=$gitTag
