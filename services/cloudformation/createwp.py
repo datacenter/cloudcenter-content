@@ -26,7 +26,7 @@ def print_ext_service_result(msg):
 # cmd = sys.argv[1]
 
 try:
-    JOB_NAME = os.environ['parentJobName']
+    JOB_NAME = os.environ['parentJobName']+os.environ['currentTierJobId']
     TEMPLATE_URL = os.environ['Templateurl']
     REGION_NAME = os.environ['region']
 
