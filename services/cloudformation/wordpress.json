@@ -70,15 +70,17 @@
 
   "Mappings" : {
     "AWSInstanceType2Arch" : {
-      "t2.small"    : { "Arch" : "HVM64"  },
+      "t2.small"    : { "Arch" : "HVM64"  }
     },
 
     "AWSInstanceType2NATArch" : {
-      "t2.medium"   : { "Arch" : "NATHVM64"  },
+      "t2.medium"   : { "Arch" : "NATHVM64"  }
     }
 ,
     "AWSRegionArch2AMI" : {
-      "us-east-1"        : {"PV64" : "ami-2a69aa47", "HVM64" : "ami-6869aa05", "HVMG2" : "ami-2e5e9c43"}
+      "us-east-1"        : {"PV64" : "ami-2a69aa47", "HVM64" : "ami-6869aa05", "HVMG2" : "ami-2e5e9c43"},
+      "us-west-1"        : {"HVM64" : "ami-23e8a343"},
+      "us-west-2"        : {"HVM64" : "ami-5ec1673e"}
     }
 
   },

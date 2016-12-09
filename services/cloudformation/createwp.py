@@ -4,6 +4,7 @@ import os
 import time
 import boto3
 import boto.cloudformation
+import json
 
 
 def print_log(msg):
@@ -37,7 +38,9 @@ for i in JOB_NAME:
 
 
 cft = boto3.client('cloudformation')
-create_cft = cft.create_stack(StackName=JOB_NAME,TemplateURL=TEMPLATE_URL)
+with open(os.environ['Templateurl'], 'r') as template_file_fd:
+    template = template_file_fd.read()
+create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template)
 
 stack_id = create_cft.get("StackId")
 
