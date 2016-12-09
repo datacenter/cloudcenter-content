@@ -44,7 +44,10 @@ case $cmd in
         print_log "Downloading template and python script."
         wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/cloudformation/createwp.py
         wget $Templateurl -O /cf-template.json
-        wget $Paramsurl -O /cf-params.json
+        if [ -n "$Paramsurl" ]
+        then
+            wget $Paramsurl -O /cf-params.json
+        fi
 
         print_log "Executing createwp.py start"
         python createwp.py
