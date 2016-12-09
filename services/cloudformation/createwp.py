@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os.path
 import sys
 import os
 import time

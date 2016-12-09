@@ -75,12 +75,12 @@
     "externalActions": [
         {
             "actionType": "URL",
-            "actionValue": "%REPO_ID_37%joey/cloudformation/service start",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/cloudformation/service start",
             "actionName": "START"
         },
         {
             "actionType": "URL",
-            "actionValue": "%REPO_ID_37%joey/cloudformation/service stop",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/cloudformation/service stop",
             "actionName": "STOP"
         }
     ],
@@ -95,29 +95,5 @@
     "externalService": false,
     "parentServiceId": "110",
     "systemService": false,
-    "repositories": [
-        {
-            "type": "HTTP",
-            "chefValidationKey": null,
-            "port": 80,
-            "region": null,
-            "chefUser": null,
-            "usernamePassword": null,
-            "sslCredential": null,
-            "perms": [
-                "read"
-            ],
-            "hostname": "cliqrdemo-repo.s3.amazonaws.com",
-            "accessSecret": null,
-            "certname": null,
-            "accessKey": null,
-            "trustedCert": null,
-            "description": "CliQr demo repository",
-            "resource": "https://sandbox.cliqr.com/v1/tenants/37/services/244/37",
-            "bucketName": null,
-            "displayName": "CliQrDemoRepo",
-            "chefUserKey": null,
-            "id": "37"
-        }
-    ]
+    "repositories": []
 }
