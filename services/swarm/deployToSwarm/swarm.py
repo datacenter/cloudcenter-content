@@ -11,6 +11,8 @@ swarmIp = os.getenv('swarmIp')
 swarmPort = os.getenv('swarmPort', '2376')
 publishedPort = os.getenv('publishedPort')
 exposedPort = os.getenv('exposedPort')
+swarmReplicas = os.getenv('swarmReplicas')
+swarmImage = os.getenv('swarmImage')
 
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
@@ -40,25 +42,62 @@ url = "http://{swarmIp}:{swarmPort}/".format(swarmIp=swarmIp, swarmPort=swarmPor
 #print(r.json())
 
 if cmd == "start" :
-    try:
-        with open("/serviceDef.json", 'r') as template_file_fd:
-            serviceDef = json.load(template_file_fd)
-    except Exception as err:
-        print_log("Error loading the Swarm Template: {0}. Check your syntax".format(err))
-        sys.exit(1)
+    # try:
+    #     with open("/serviceDef.json", 'r') as template_file_fd:
+    #         serviceDef = json.load(template_file_fd)
+    # except Exception as err:
+    #     print_log("Error loading the Swarm Template: {0}. Check your syntax".format(err))
+    #     sys.exit(1)
+    #
+    # try:
+    #     serviceDef['Name'] = service_name
+    #     serviceDef['EndpointSpec']['Ports'] = [
+    #         {
+    #             "Protocol": "tcp",
+    #             "TargetPort": int(exposedPort),
+    #             "PublishedPort": int(publishedPort)
+    #         }
+    #     ]
+    # except Exception as err:
+    #     print_log("Error setting name and published/exposed ports. Ensure valid port numbers.".format(err))
+    #     sys.exit(1)
 
-    try:
-        serviceDef['Name'] = service_name
-        serviceDef['EndpointSpec']['Ports'] = [
-            {
-                "Protocol": "tcp",
-                "TargetPort": int(exposedPort),
-                "PublishedPort": int(publishedPort)
+    serviceDef = {
+        "Name": service_name,
+        "TaskTemplate": {
+            "ContainerSpec": {
+                "Image": swarmImage
+            },
+            "Resources": {
+                "Limits": {},
+                "Reservations": {}
+            },
+            "RestartPolicy": {
+                "Condition": "any",
+                "MaxAttempts": 0
+            },
+            "Placement": {}
+        },
+        "Mode": {
+            "Replicated": {
+                "Replicas": int(swarmReplicas)
             }
-        ]
-    except Exception as err:
-        print_log("Error setting name and published/exposed ports. Ensure valid port numbers.".format(err))
-        sys.exit(1)
+        },
+        "UpdateConfig": {
+            "Parallelism": 1,
+            "FailureAction": "pause"
+        },
+        "EndpointSpec": {
+            "Mode": "vip",
+            "Ports": [
+                {
+                    "Protocol": "tcp",
+                    "TargetPort": int(exposedPort),
+                    "PublishedPort": int(publishedPort)
+                }
+            ]
+        }
+    }
 
     try:
         r = s.request("POST", url+"services/create", data=json.dumps(serviceDef))
