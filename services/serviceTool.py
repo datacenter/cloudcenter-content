@@ -339,7 +339,7 @@ def import_service(service):
         logoPath = j['params'][0]['value']
         service['logoPath'] = logoPath
 
-    print(json.dumps(service, indent=2))
+    # print(json.dumps(service, indent=2))
 
     headers = {
         'x-cliqr-api-key-auth': "true",
@@ -356,7 +356,8 @@ def import_service(service):
             print("--overwrite specified. Updating existing service.")
             url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
             service['id'] = serviceId
-            s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
+            resp = s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
+            print(json.dumps(resp.json(), indent=2))
     else:
         print("Service ID for service {} not found. Creating".format(serviceName))
         url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
