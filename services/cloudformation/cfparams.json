@@ -1,10 +1,6 @@
 [
   {
-    "ParameterKey":"MasterUsername",
-    "ParameterValue":"mdavis"
-  },
-  {
-    "ParameterKey":"MasterUserPassword",
-    "ParameterValue":"Welcome2cliqr"
+    "ParameterKey":"HostedZone",
+    "ParameterValue":"mdavis.com"
   }
 ]
