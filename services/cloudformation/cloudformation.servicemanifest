@@ -8,7 +8,7 @@
             "scope": null,
             "dataUnit": null,
             "exampleValue": null,
-            "defaultValue": "http://cliqrdemo-repo.s3.amazonaws.com/joey/cloudformation/wordpress.json",
+            "defaultValue": "",
             "webserviceListParams": null,
             "helpText": "Enter the URL to the Cloud Formation Template(json)",
             "userEditable": true,
