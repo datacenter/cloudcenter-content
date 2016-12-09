@@ -57,7 +57,7 @@
             "valueList": null,
             "confirmValue": "",
             "collectionList": [],
-            "optional": false
+            "optional": true
         },
         {
             "paramName": "gitTag",

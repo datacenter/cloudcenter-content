@@ -23,7 +23,7 @@ def print_ext_service_result(msg):
 # cmd = sys.argv[1]
 
 
-JOB_NAME = os.environ['parentJobName']
+JOB_NAME = os.environ['parentJobName']+os.environ['currentTierJobId']
 
 print_log("Job Name: " + str(JOB_NAME))
 cft = boto3.client('cloudformation')
