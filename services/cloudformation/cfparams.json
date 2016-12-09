@@ -1,14 +1,14 @@
 [
   {
-    "parameter_key":"OperatorEMail",
-    "parameter_value":"micdavi3@cisco.com"
+    "ParameterKey":"OperatorEMail",
+    "ParameterValue":"micdavi3@cisco.com"
   },
   {
-    "parameter_key":"DBUser",
-    "parameter_value":"mdavis"
+    "ParameterKey":"DBUser",
+    "ParameterValue":"mdavis"
   },
   {
-    "parameter_key":"DBPassword",
-    "parameter_value":"welcome2cliqr"
+    "ParameterKey":"DBPassword",
+    "ParameterValue":"welcome2cliqr"
   }
 ]
