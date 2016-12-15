@@ -14,15 +14,18 @@ exposedPort = os.getenv('exposedPort')
 swarmReplicas = os.getenv('swarmReplicas')
 swarmImage = os.getenv('swarmImage')
 
+
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
 
+
 def print_error(msg):
     print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
+
 
 def print_ext_service_result(msg):
     print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
@@ -36,10 +39,6 @@ service_name = os.environ['parentJobName']+os.environ['parentJobId']
 s = requests.Session()
 
 url = "http://{swarmIp}:{swarmPort}/".format(swarmIp=swarmIp, swarmPort=swarmPort)
-
-#r = s.request("GET", url+"services")
-
-#print(r.json())
 
 if cmd == "start":
     serviceDef = {
@@ -89,7 +88,7 @@ if cmd == "start":
         sys.exit(1)
 
 
-elif cmd == "stop" :
+elif cmd == "stop":
     try:
         r = s.request("DELETE", url+"services/{name}".format(name=service_name))
         print_log(r.status_code)
@@ -99,8 +98,5 @@ elif cmd == "stop" :
         print_log("Error deleting the Swarm Template: {0}.".format(err))
         sys.exit(1)
 
-elif cmd == "reload" :
+elif cmd == "reload":
     pass
-
-
-print(r.json())
