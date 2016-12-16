@@ -59,7 +59,6 @@ fi
 sudo yum install python-pip -y
 sudo pip install --upgrade pip
 sudo pip install requests
-sudo pip install beautifulsoup4
 wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
 if [ $? -ne 0 ]; then
     agentSendLogMessage  "Failed downloading https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py. You can still perform the post-install UI configuration manually."
