@@ -3,14 +3,13 @@
 
 # Deployment cleanup script
 
-import requests, pdb, sys, json
+import requests, sys, json
 from requests.auth import HTTPBasicAuth
+requests.packages.urllib3.disable_warnings()
+
 import argparse
 import re
-import pdb
-import urllib
 
-requests.packages.urllib3.disable_warnings()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("username", help="Your API username. Not the same as your UI Login. See your CloudCenter admin for help.")
@@ -378,9 +377,12 @@ if args.e :
 
     # Download logo too
     try:
-        urllib.request.urlretrieve(logoPath, logoFile)
+        response = s.request("GET", logoPath)
+        with open(logoFile, 'wb') as out_file:
+            out_file.write(response.content)
         print("Logo downloaded to {}".format(logoFile))
-    except urllib.error.HTTPError as err:
+
+    except Exception as err:
         print("Unable to download logo from {}: {}".format(logoPath, err))
 
 if args.i :
