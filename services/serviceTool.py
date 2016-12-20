@@ -274,7 +274,7 @@ def import_service(service):
         port.pop("resource", None)
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    if len(service['images']) > 0:
+    if len(service.get('images', [])) > 0:
         for image in service['images']:
             imageId = getImageId(tenantId, image['name'])
             if imageId:
@@ -288,7 +288,7 @@ def import_service(service):
         service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    if len(service['repositories']) > 0:
+    if len(service.get('repositories', [])) > 0:
         repomap = {}
         for repo in service['repositories']:
             oldRepoId = repo['id']
