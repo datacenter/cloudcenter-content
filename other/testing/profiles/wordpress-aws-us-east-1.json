@@ -1,0 +1,121 @@
+{
+  "appId": "5915",
+  "appVersion": "4",
+  "name": "wp6",
+  "metadatas": [
+    {
+      "namespace": "",
+      "name": "Name",
+      "value": "%USER_NAME%-%JOB_NAME%",
+      "editable": false,
+      "required": true
+    }
+  ],
+  "environmentId": "456",
+  "tagIds": [
+    234
+  ],
+  "policyIds": [
+    193
+  ],
+  "preventTermination": false,
+  "parameters": {
+    "appParams": [
+      {
+        "name": "aws_access_key_id",
+        "value": ""
+      },
+      {
+        "name": "aws_secret_access_key",
+        "value": ""
+      },
+      {
+        "name": "gitTag",
+        "value": "wordpress4.6.0-20161005"
+      },
+      {
+        "name": "SENSU_SERVER_IP",
+        "value": "54.210.247.173"
+      },
+      {
+        "name": "s3path",
+        "value": "mdavis-cliqrdemo/WordPressMigrate"
+      },
+      {
+        "name": "cliqrIgnoreAppFailure",
+        "value": "true"
+      }
+    ],
+    "cloudParams": {
+      "cloudRegionId": "5",
+      "accountId": "38"
+    }
+  },
+  "jobs": [
+    {
+      "tierId": "5916",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "4",
+          "accountId": "38",
+          "volumes": [
+            {
+              "name": "Volume1",
+              "size": 10,
+              "type": "gp2",
+              "iops": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "tierId": "5917",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "4",
+          "accountId": "38",
+          "volumes": []
+        }
+      },
+      "numNodesToLaunch": 1
+    },
+    {
+      "tierId": "5918",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "4",
+          "accountId": "38",
+          "volumes": []
+        }
+      }
+    }
+  ]
+}

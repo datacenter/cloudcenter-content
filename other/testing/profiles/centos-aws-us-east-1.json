@@ -1,0 +1,79 @@
+{
+  "appId": "5911",
+  "appVersion": "1",
+  "name": "c4",
+  "metadatas": [
+    {
+      "namespace": "",
+      "name": "Name",
+      "value": "%USER_NAME%-%JOB_NAME%",
+      "editable": false,
+      "required": true
+    }
+  ],
+  "environmentId": "235",
+  "tagIds": [
+    149
+  ],
+  "policyIds": [
+    121
+  ],
+  "preventTermination": false,
+  "parameters": {
+    "appParams": [
+      {
+        "name": "cliqrIgnoreAppFailure",
+        "value": "false"
+      },
+      {
+        "name": "SENSU_SERVER_IP",
+        "value": "54.210.247.173"
+      }
+    ],
+    "cloudParams": {
+      "cloudRegionId": "4",
+      "accountId": "38"
+    }
+  },
+  "jobs": [
+    {
+      "tierId": "5912",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "4",
+          "accountId": "38",
+          "volumes": [],
+          "cloudProperties": [
+            {
+              "name": "subnetId",
+              "value": "subnet-2785337e"
+            },
+            {
+              "name": "vpcId",
+              "value": "vpc-798ffb1c"
+            }
+          ],
+          "nics": [
+            {
+              "order": 1,
+              "allocationMode": "DHCP",
+              "allocatePublicIp": "true",
+              "id": "subnet-2785337e"
+            }
+          ],
+          "instance": "t2.medium"
+        }
+      },
+      "numNodesToLaunch": 1
+    }
+  ]
+}

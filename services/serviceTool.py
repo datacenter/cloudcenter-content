@@ -3,12 +3,14 @@
 
 # Deployment cleanup script
 
-import requests, sys, json
+import requests
+import sys
+import json
+import argparse
+import re
 from requests.auth import HTTPBasicAuth
 requests.packages.urllib3.disable_warnings()
 
-import argparse
-import re
 
 
 parser = argparse.ArgumentParser()
