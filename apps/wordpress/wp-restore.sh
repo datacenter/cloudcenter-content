@@ -28,8 +28,8 @@ echo "aws_access_key_id=$aws_access_key_id" | sudo tee --append /root/.aws/crede
 echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.aws/credentials
 
 #cd /var/www
-cp /var/www/wp-config.php /tmp
-rm -rf /var/www/*
+sudo cp /var/www/wp-config.php /tmp
+sudo rm -rf /var/www/*
 
 sudo /root/bin/aws s3 cp s3://$s3path/$migrateFromDepId/wordpressbkup.zip ~/wordpressbkup.zip
 sudo unzip -o ~/wordpressbkup.zip -d /var/www
