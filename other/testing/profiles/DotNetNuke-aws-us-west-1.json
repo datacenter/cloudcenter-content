@@ -1,0 +1,79 @@
+{
+  "appId": "9214",
+  "appVersion": "07.04.00",
+  "name": "g8",
+  "metadatas": [
+    {
+      "namespace": "",
+      "name": "Name",
+      "value": "%USER_NAME%-%JOB_NAME%",
+      "editable": false,
+      "required": true
+    }
+  ],
+  "environmentId": "456",
+  "tagIds": [
+    234
+  ],
+  "policyIds": [
+    193
+  ],
+  "preventTermination": false,
+  "parameters": {
+    "appParams": [],
+    "cloudParams": {
+      "cloudRegionId": "5",
+      "accountId": "38"
+    }
+  },
+  "jobs": [
+    {
+      "tierId": "9215",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "5",
+          "accountId": "38",
+          "volumes": [],
+          "instance": "m3.large"
+        }
+      },
+      "numNodesToLaunch": 1
+    },
+    {
+      "tierId": "9237",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "5",
+          "accountId": "38",
+          "volumes": [
+            {
+              "name": "Volume1",
+              "size": 10,
+              "type": "gp2",
+              "iops": null
+            }
+          ],
+          "instance": "m3.large"
+        }
+      }
+    }
+  ]
+}

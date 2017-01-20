@@ -1,0 +1,113 @@
+{
+  "appId": "9557",
+  "appVersion": "1",
+  "name": "f8",
+  "metadatas": [
+    {
+      "namespace": "",
+      "name": "Tenant",
+      "value": "%USER_NAME%",
+      "editable": false,
+      "required": true
+    },
+    {
+      "namespace": "",
+      "name": "Job",
+      "value": "%JOB_NAME%",
+      "editable": false,
+      "required": true
+    },
+    {
+      "namespace": "",
+      "name": "Name",
+      "value": "%USER_NAME%-%JOB_NAME%",
+      "editable": false,
+      "required": true
+    }
+  ],
+  "environmentId": "456",
+  "tagIds": [
+    234
+  ],
+  "policyIds": [
+    193
+  ],
+  "preventTermination": false,
+  "parameters": {
+    "appParams": [],
+    "cloudParams": {
+      "cloudRegionId": "39",
+      "accountId": "191"
+    }
+  },
+  "jobs": [
+    {
+      "tierId": "9559",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "39",
+          "accountId": "191",
+          "volumes": [],
+          "instance": "Standard_DS2"
+        }
+      },
+      "numNodesToLaunch": 1
+    },
+    {
+      "tierId": "9560",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "39",
+          "accountId": "191",
+          "volumes": [
+            {
+              "name": "Volume1",
+              "size": 30,
+              "type": null,
+              "iops": null
+            }
+          ],
+          "instance": "Standard_DS2"
+        }
+      }
+    },
+    {
+      "tierId": "9665",
+      "policyIds": null,
+      "tagIds": [],
+      "securityProfileIds": [],
+      "parameters": {
+        "appParams": [
+          {
+            "name": "referredJob",
+            "value": ""
+          }
+        ],
+        "cloudParams": {
+          "cloudRegionId": "39",
+          "accountId": "191",
+          "volumes": [],
+          "instance": "Basic_A1"
+        }
+      }
+    }
+  ]
+}
