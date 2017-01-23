@@ -29,6 +29,7 @@ wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPas
 sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
 
 sudo /etc/init.d/tomcat stop
+rm -f /usr/local/tomcat/catalina.pid
 sudo echo "" > /usr/local/tomcat/logs/osmosix.log
 sudo /etc/init.d/tomcat start
 
@@ -52,4 +53,19 @@ if [ $ERR -ne 0 ]; then
     agentSendLogMessage "Failed to start server after about 5 minutes"
 else
     agentSendLogMessage "Server Started."
+fi
+
+#TODO Move all this to External Post-Start
+sudo yum install python-pip -y
+sudo pip install --upgrade pip
+sudo pip install requests
+wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
+if [ $? -ne 0 ]; then
+    agentSendLogMessage  "Failed downloading https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py. You can still perform the post-install UI configuration manually."
+fi
+
+python ccm-config.py
+
+if [ $? -ne 0 ]; then
+    agentSendLogMessage  "Failed executing ccm-config.py. You can still perform the post-install UI configuration manually."
 fi

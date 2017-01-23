@@ -8,6 +8,7 @@ from requests.auth import HTTPBasicAuth
 import argparse
 import re
 import pdb
+import urllib
 
 requests.packages.urllib3.disable_warnings()
 
@@ -16,6 +17,7 @@ parser.add_argument("username", help="Your API username. Not the same as your UI
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
 parser.add_argument("-o", "--overwrite", action='store_true', help="When importing, overwrite existing service in CloudCenter. When exporting, overwrite existing file.")
+parser.add_argument("-l", "--logo", type=argparse.FileType('rb'), help="Filename of the NEW or UPDATED logo to attach to this service. Can be ommitted to leave logo unchanged.")
 
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-e", "--export", dest="e", metavar='servicename', help="(text, not int) Service ID of the service that you want to export.")
@@ -181,7 +183,7 @@ def getServiceManifest(serviceName):
 
     # Get rid of these instance/user/tenant-specific parameters to make it importable.
     j.pop("id", None)
-    j.pop("logoPath", None)
+    #j.pop("logoPath", None)
     j.pop("ownerUserId", None)
     j.pop("resource", None)
     for  port in j['servicePorts']:
@@ -266,7 +268,6 @@ def import_service(service):
     serviceName = getServiceName(serviceJson = service)
     serviceId = getServiceId(tenantId = tenantId, serviceName = serviceName)
     service.pop("id", None)
-    service.pop("logoPath", None)
     service.pop("ownerUserId", None)
     service.pop("resource", None)
     for  port in service['servicePorts']:
@@ -274,40 +275,71 @@ def import_service(service):
         port.pop("resource", None)
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    for image in service['images']:
-        imageId = getImageId(tenantId, image['name'])
-        if imageId:
-            image['id'] = imageId
-        else:
-            print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
-                  "You will have to create the worker if necessary and map it yourself.".format(image['name']))
-            image['id'] = createImage(image)
+    if len(service.get('images', [])) > 0:
+        for image in service['images']:
+            imageId = getImageId(tenantId, image['name'])
+            if imageId:
+                image['id'] = imageId
+            else:
+                print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
+                      "You will have to create the worker if necessary and map it yourself.".format(image['name']))
+                image['id'] = createImage(image)
+        # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
+        # Image Id for the defalt Image.
+        service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
 
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
-    repomap = {}
-    for repo in service['repositories']:
-        oldRepoId = repo['id']
-        repoId = getRepoId(repo['displayName'])
-        if repoId:
-            repo['id'] = repoId
-        else:
-            print("Repo {} not found. I will create it so that the service will import, but can't promise it will be accessible or not.".format(repo['displayName']))
-            repo['id'] = createRepo(repo)
-        # Create a map of old repo IDs to new ones.
-        repomap[str(oldRepoId)] = str(repo['id'])
+    if len(service.get('repositories', [])) > 0:
+        repomap = {}
+        for repo in service['repositories']:
+            oldRepoId = repo['id']
+            repoId = getRepoId(repo['displayName'])
+            if repoId:
+                repo['id'] = repoId
+            else:
+                print("Repo {} not found. I will create it so that the service will import, but can't promise it will be accessible or not.".format(repo['displayName']))
+                repo['id'] = createRepo(repo)
+            # Create a map of old repo IDs to new ones.
+            repomap[str(oldRepoId)] = str(repo['id'])
 
-    service_json = json.dumps(service)
+        service_json = json.dumps(service)
 
-    pattern = re.compile('|'.join(repomap.keys()))
-    result = pattern.sub(lambda x: repomap[x.group()], service_json)
+        pattern = re.compile('|'.join(repomap.keys()))
+        result = pattern.sub(lambda x: repomap[x.group()], service_json)
 
-    service = json.loads(result)
-
-    print(json.dumps(service, indent=2))
+        service = json.loads(result)
 
     # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
-    # Image Id for the defalt Image.
-    service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
+    # Image Id for the default Image.
+    if 'defaultImageName' in service:
+        service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
+    else:
+        print("Your manifest file didn't have a defaultImageName key, as it would if exported from the instance "
+              "using this tool. Therefore I'm not able to update the image ID to the one that matches your instance"
+              ", which may be different than the one it came from. Funny image related things may happen.")
+
+    # Upload Logo
+    if args.logo:
+        logofile = args.logo
+        headers = {
+            'accept': "*/*"#,
+            #'Accept-Encoding' : "gzip, deflate, br",
+            #'Content-Type' : "multipart/form-data",
+            #'Accept-Language' : "en-US,en;q=0.8"
+        }
+        params = {
+            "type" : "logo"
+        }
+        url = baseUrl+"/v1/file"
+        files = {'file': logofile}
+        response = s.request("POST", url, files=files, params=params, headers=headers, verify=False, auth=HTTPBasicAuth(username, apiKey))
+        # After uploading the image the response contains a temporary location for the logo which has to be placed into
+        # the logoPath for the service. This gets change behind the scenes automatically to what it should be.
+        j = response.json()
+        logoPath = j['params'][0]['value']
+        service['logoPath'] = logoPath
+
+    print(json.dumps(service, indent=2))
 
     headers = {
         'x-cliqr-api-key-auth': "true",
@@ -331,20 +363,25 @@ def import_service(service):
         response = s.request("POST", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
         print("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
-
-
-
-
 # TODO: Check for existing file and properly use the overwrite flag.
 if args.e :
     serviceName = args.e
+    logoPath = "{}/assets/img/appTiers/{}/logo.png".format(baseUrl, serviceName)
+    logoFile = "{}.png".format(serviceName)
+    filename = "{serviceName}.servicemanifest".format(serviceName=serviceName)
+
     print("Exporting service: {}".format(serviceName))
     j = getServiceManifest(serviceName)
-    filename = "{serviceName}.servicemanifest".format(serviceName=serviceName)
     with open(filename, 'w') as f:
         json.dump(j, f, indent=4)
-
     print("Service {} exported to {}".format(serviceName, filename))
+
+    # Download logo too
+    try:
+        urllib.request.urlretrieve(logoPath, logoFile)
+        print("Logo downloaded to {}".format(logoFile))
+    except urllib.error.HTTPError as err:
+        print("Unable to download logo from {}: {}".format(logoPath, err))
 
 if args.i :
     serviceJson = json.load(args.i)
