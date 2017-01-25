@@ -20,9 +20,9 @@ fi
 yum install -y wget vim
 
 # Download necessary files
-wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.6.1-20161109.1/installer/core_installer.bin
-wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.6.1-20161109.1/appliance/ccm-installer.jar
-wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.6.1-20161109.1/appliance/ccm-response.xml
+wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/installer/core_installer.bin
+wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.7.0-20170105.3/appliance/ccm-installer.jar
+wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/appliance/ccm-response.xml
 
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
