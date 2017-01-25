@@ -21,8 +21,8 @@ fi
 
 cd /tmp
 wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/installer/core_installer.bin
-wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.7.0-20170105.3/appliance/cco-installer.jar
-wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/appliance/conn_broker-response.xml
+wget --no-check-certificate -O cco-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.7.0-20170105.3/appliance/cco-installer.jar
+wget --no-check-certificate -O conn_broker-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/appliance/conn_broker-response.xml
 # sudo chmod +x core_installer.bin
 # sudo core_installer.bin centos7 amazon rabbit
 
