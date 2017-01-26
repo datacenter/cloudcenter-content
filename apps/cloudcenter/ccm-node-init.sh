@@ -19,7 +19,6 @@ fi
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~
 sudo yum install -y wget vim java-1.8.0-openjdk nmap
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
 
 # Download necessary files
 wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/installer/core_installer.bin
@@ -46,7 +45,7 @@ MAX=50
 SLEEP_TIME=5
 ERR=0
 
-until $(curl https://$CliqrTier_ccm_PUBLIC_IP -k -m 5 ); do
+until $(curl https://${CliqrTier_ccm_PUBLIC_IP} -k -m 5 ); do
   sleep ${SLEEP_TIME}
   let "COUNT++"
   echo $COUNT
@@ -61,7 +60,7 @@ else
     agentSendLogMessage "Server Started."
 fi
 
-#TODO Move all this to External Post-Start
+# TODO Move all this to External Post-Start
 sudo yum install python-pip -y
 sudo pip install --upgrade pip
 sudo pip install requests
@@ -75,3 +74,7 @@ python ccm-config.py
 if [ $? -ne 0 ]; then
     agentSendLogMessage  "Failed executing ccm-config.py. You can still perform the post-install UI configuration manually."
 fi
+# TODO ------
+
+
+sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
