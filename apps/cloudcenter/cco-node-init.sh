@@ -62,8 +62,10 @@ else
 
     # Source profile to ensure pick up the JAVA_HOME env variable.
     . /etc/profile
+    sudo -E /etc/init.d/mongod start
     sudo -E /etc/init.d/tomcat stop
-    sudo su -c 'echo "" > /usr/local/tomcat/logs/osmosix.log'
+    sudo rm /usr/local/tomcat/logs/osmosix.log
+    # sudo su -c 'echo "" > /usr/local/tomcat/logs/osmosix.log'
     sudo -E /etc/init.d/tomcat start
 fi
 
