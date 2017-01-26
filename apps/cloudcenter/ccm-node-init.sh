@@ -14,7 +14,7 @@ if [ -n "$gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
 else
      agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
-     gitTag="cc-from-appliances"
+     gitTag="cloudcenter-fullinstall"
 fi
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~
