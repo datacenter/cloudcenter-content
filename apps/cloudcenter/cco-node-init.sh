@@ -7,7 +7,7 @@ exec > >(tee -a /var/tmp/cco-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/agent_util.sh
 cd ~
 
-env
+# env
 
 echo "Username: $(whoami)" # Should execute as cliqruser
 echo "Working Directory: $(pwd)"
@@ -19,19 +19,19 @@ else
      gitTag="cloudcenter-fullinstall"
 fi
 
-sudo mv /etc/yum.repos.d/cliqr.repo ~
+sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
 sudo yum install -y wget vim java-1.8.0-openjdk nmap
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
 
 
 # Download necessary files
+cd /tmp
 wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/installer/core_installer.bin
 wget --no-check-certificate -O cco-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.7.0-20170105.3/appliance/cco-installer.jar
 wget --no-check-certificate -O cco-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/appliance/cco-response.xml
 
 sudo chmod +x core_installer.bin
 sudo ./core_installer.bin centos7 amazon cco
-java -jar cco-installer.jar cco-response.xml
+sudo java -jar cco-installer.jar cco-response.xml
 
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
@@ -67,5 +67,6 @@ else
     sudo -E /etc/init.d/tomcat start
 fi
 
+sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
 
 
