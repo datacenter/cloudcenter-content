@@ -16,7 +16,7 @@ if [ -n "$gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
 else
      agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
-     gitTag="cc-from-appliances"
+     gitTag="cloudcenter-fullinstall"
 fi
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~
@@ -32,12 +32,12 @@ sudo chmod +x core_installer.bin
 sudo ./core_installer.bin centos7 amazon rabbit
 sudo java -jar cco-installer.jar conn_broker-response.xml
 
-# Use "?" as sed delimiter to avoid escaping all the slashes
-# sudo sed -i -e "s?dnsName=?dnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/osmosix/etc/gateway_config.properties
-# sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/local/tomcatgua/webapps/access/WEB-INF/gua.properties
+ # Use "?" as sed delimiter to avoid escaping all the slashes
+ sudo sed -i -e "s?dnsName=?dnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/osmosix/etc/gateway_config.properties
+ sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/local/tomcatgua/webapps/access/WEB-INF/gua.properties
 
-# Source profile to ensure pick up the JAVA_HOME env variable.
-# . /etc/profile
-# sudo -E /etc/init.d/tomcatgua restart
-# sudo -E /etc/init.d/rabbitmq-server restart
-# sudo /usr/local/osmosix/bin/rabbit_config.sh
+ # Source profile to ensure pick up the JAVA_HOME env variable.
+ . /etc/profile
+ sudo -E /etc/init.d/tomcatgua restart
+ sudo -E /etc/init.d/rabbitmq-server restart
+ sudo /usr/local/osmosix/bin/rabbit_config.sh
