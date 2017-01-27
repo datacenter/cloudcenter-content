@@ -5,16 +5,16 @@ exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
-cd ~
 
 echo "Username: $(whoami)" # Should execute as cliqruser
 echo "Working Directory: $(pwd)"
 
+defaultGitTag="cc-full-4.7.0-1"
 if [ -n "$gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
 else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
-     gitTag="cloudcenter-fullinstall"
+     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
+     gitTag=${defaultGitTag}
 fi
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~
