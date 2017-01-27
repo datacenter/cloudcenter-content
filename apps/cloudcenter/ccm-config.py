@@ -2,7 +2,7 @@
 import requests
 import os
 import json
-requests.packages.urllib3.disable_warnings()
+# requests.packages.urllib3.disable_warnings()
 
 
 ccmIp = os.getenv('CliqrTier_ccm_PUBLIC_IP')
