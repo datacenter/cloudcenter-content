@@ -21,21 +21,22 @@ sudo mv /etc/yum.repos.d/cliqr.repo ~
 sudo yum install -y wget vim java-1.8.0-openjdk nmap
 
 # Download necessary files
+cd /tmp
 wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/installer/core_installer.bin
 wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.7.0-20170105.3/appliance/ccm-installer.jar
 wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/appliance/ccm-response.xml
 
 sudo chmod +x core_installer.bin
 sudo ./core_installer.bin centos7 amazon ccm
-java -jar ccm-installer.jar ccm-response.xml
+sudo java -jar ccm-installer.jar ccm-response.xml
 
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
 sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
 
 sudo /etc/init.d/tomcat stop
-rm -f /usr/local/tomcat/catalina.pid
-sudo echo "" > /usr/local/tomcat/logs/osmosix.log
+sudo rm -f /usr/local/tomcat/catalina.pid
+sudo rm -f /usr/local/tomcat/logs/osmosix.log
 sudo /etc/init.d/tomcat start
 
 
@@ -64,7 +65,7 @@ fi
 sudo yum install python-pip -y
 sudo pip install --upgrade pip
 sudo pip install requests
-wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
 if [ $? -ne 0 ]; then
     agentSendLogMessage  "Failed downloading https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py. You can still perform the post-install UI configuration manually."
 fi
