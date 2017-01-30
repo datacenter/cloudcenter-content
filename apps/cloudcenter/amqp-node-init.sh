@@ -46,6 +46,7 @@ sudo /usr/local/osmosix/bin/rabbit_config.sh
 sudo sed -i -e "s?dnsName=?dnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/osmosix/etc/gateway_config.properties
 sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/local/tomcatgua/webapps/access/WEB-INF/gua.properties
 
+sudo /etc/init.d/guacd start
 sudo -E /etc/init.d/tomcatgua restart
 
 # Source profile to ensure pick up the JAVA_HOME env variable.
