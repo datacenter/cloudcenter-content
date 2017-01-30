@@ -17,6 +17,10 @@ else
      gitTag=${defaultGitTag}
 fi
 
+ccRel="release-4.7.1-20170128.5"
+
+agentSendLogMessage  "CloudCenter release ${ccRel} selected."
+
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
 sudo yum install -y wget vim java-1.8.0-openjdk nmap
@@ -24,9 +28,9 @@ sudo yum install -y wget vim java-1.8.0-openjdk nmap
 # Download necessary files
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
-wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/installer/core_installer.bin
-wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/release-4.7.0-20170105.3/appliance/ccm-installer.jar
-wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/release-4.7.0-20170105.3/appliance/ccm-response.xml
+wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/${ccRel}/installer/core_installer.bin
+wget --no-check-certificate -O ccm-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/${ccRel}/appliance/ccm-installer.jar
+wget --no-check-certificate -O ccm-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/${ccRel}/appliance/ccm-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
