@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -x
+#!/usr/bin/env bash
+set -x
 exec > >(tee -a /var/tmp/jaspersoft-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
@@ -45,3 +46,4 @@ sudo sed -e 's/appServerDir = C:/# appServerDir = C:/' \
 cd /opt/jasperreports-server-cp-6.1.1-bin/buildomatic/
 sudo ./js-install-ce.sh minimal
 sudo /etc/init.d/tomcat start
+#https://downloads.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%206.3.0/jasperreports-server-cp-6.3.0-linux-x64-installer.run?r=http%3A%2F%2Fcommunity.jaspersoft.com%2Fproject%2Fjasperreports-server%2Freleases&ts=1486080002&use_mirror=pilotfiber
