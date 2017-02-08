@@ -287,7 +287,7 @@ def import_service(service):
         # Image Id for the defalt Image.
         service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
 
-    # Update all the imageIds in the service to match the ones in the instance that you're importing into.
+    # Create any respositories that are referenced by the service but not yet in the instance.
     if len(service.get('repositories', [])) > 0:
         repomap = {}
         for repo in service['repositories']:
@@ -355,11 +355,14 @@ def import_service(service):
             print("--overwrite specified. Updating existing service.")
             url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
             service['id'] = serviceId
-            s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
+            response = s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
+            print(json.dumps(response.json(), indent=2))
+
     else:
         print("Service ID for service {} not found. Creating".format(serviceName))
         url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
         response = s.request("POST", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
+        print(json.dumps(response.json(), indent=2))
         print("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
 # TODO: Check for existing file and properly use the overwrite flag.
