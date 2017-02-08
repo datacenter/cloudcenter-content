@@ -3,20 +3,28 @@
 
 # Deployment cleanup script
 
-import requests, sys, json
-from requests.auth import HTTPBasicAuth
-requests.packages.urllib3.disable_warnings()
-
 import argparse
 import re
+import requests
+import sys
+import json
+import logging
+from requests.auth import HTTPBasicAuth
 
+# requests.packages.urllib3.disable_warnings()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("username", help="Your API username. Not the same as your UI Login. See your CloudCenter admin for help.")
+parser.add_argument("username", help="Your API username. Not the same as your UI Login."
+                                     " See your CloudCenter admin for help.")
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
-parser.add_argument("-o", "--overwrite", action='store_true', help="When importing, overwrite existing service in CloudCenter. When exporting, overwrite existing file.")
-parser.add_argument("-l", "--logo", type=argparse.FileType('rb'), help="Filename of the NEW or UPDATED logo to attach to this service. Can be ommitted to leave logo unchanged.")
+parser.add_argument("-d", "--debug", help="Set debug logging", action='store_const', const=logging.DEBUG)
+parser.add_argument("-o", "--overwrite", action='store_true',
+                    help="When importing, overwrite existing service in CloudCenter. When exporting,"
+                         " overwrite existing file.")
+parser.add_argument("-l", "--logo", type=argparse.FileType('rb'),
+                    help="Filename of the NEW or UPDATED logo to attach to this service."
+                         " Can be ommitted to leave logo unchanged.")
 
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-e", "--export", dest="e", metavar='servicename', help="(text, not int) Service ID of the service that you want to export.")
@@ -49,7 +57,6 @@ def getTenantId():
     j = response.json()
     tenantId = None
     for user in j['users']:
-        #print(json.dumps(user['username'], indent=2))
         if user['username'] == username:
             tenantId = user['tenantId']
             break
@@ -172,7 +179,7 @@ def getServiceManifest(serviceName):
         'cache-control': "no-cache"
     }
     response = s.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-
+    logging.debug(json.dumps(response.json(), indent=2))
     j = response.json()
 
     # Add a custom attribute to persist the name of the default image which makes this portal. The
@@ -284,7 +291,7 @@ def import_service(service):
                       "You will have to create the worker if necessary and map it yourself.".format(image['name']))
                 image['id'] = createImage(image)
         # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
-        # Image Id for the defalt Image.
+        # Image Id for the default Image.
         service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
 
     # Create any respositories that are referenced by the service but not yet in the instance.
@@ -321,13 +328,10 @@ def import_service(service):
     if args.logo:
         logofile = args.logo
         headers = {
-            'accept': "*/*"#,
-            #'Accept-Encoding' : "gzip, deflate, br",
-            #'Content-Type' : "multipart/form-data",
-            #'Accept-Language' : "en-US,en;q=0.8"
+            'accept': "*/*"
         }
         params = {
-            "type" : "logo"
+            "type": "logo"
         }
         url = baseUrl+"/v1/file"
         files = {'file': logofile}
@@ -359,6 +363,9 @@ def import_service(service):
             print(json.dumps(response.json(), indent=2))
 
     else:
+        if not args.logo:
+            logging.critical("You must specify a logo file for new services. Use the -l switch.")
+            exit(1)
         print("Service ID for service {} not found. Creating".format(serviceName))
         url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
         response = s.request("POST", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
@@ -366,7 +373,10 @@ def import_service(service):
         print("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
 # TODO: Check for existing file and properly use the overwrite flag.
-if args.e :
+if args.debug:
+    logging.basicConfig(level=args.debug)
+
+if args.e:
     serviceName = args.e
     logoPath = "{}/assets/img/appTiers/{}/logo.png".format(baseUrl, serviceName)
     logoFile = "{}.png".format(serviceName)
@@ -388,7 +398,7 @@ if args.e :
     except Exception as err:
         print("Unable to download logo from {}: {}".format(logoPath, err))
 
-if args.i :
+if args.i:
     serviceJson = json.load(args.i)
 
     import_service(serviceJson)
