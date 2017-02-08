@@ -1,2 +1,5 @@
 Thumbs.db
 .gitignore
+.idea/*
+.idea.old/
+/.idea/
