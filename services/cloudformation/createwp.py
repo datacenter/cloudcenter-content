@@ -67,7 +67,7 @@ try:
         time.sleep(5)
         stack = cft.describe_stacks(StackName=stack_id)
         i =+ 1
-        if i > 120: # break after 10min, just in case.
+        if i > 240: # break after 10min, just in case.
             break
 
 
