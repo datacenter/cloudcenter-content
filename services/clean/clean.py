@@ -6,6 +6,7 @@
 import requests
 import json
 import argparse
+import logging
 from requests.auth import HTTPBasicAuth
 
 requests.packages.urllib3.disable_warnings()
@@ -14,11 +15,17 @@ parser = argparse.ArgumentParser()
 parser.add_argument("username", help="Your API username. Not the same as your UI Login. See your CloudCenter admin for help.")
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
+parser.add_argument("-d", "--debug", help="Set debug logging", action='store_const', const=logging.DEBUG)
+
 
 args = parser.parse_args()
 username = args.username
 apiKey = args.apiKey
 ccm = args.ccm
+
+if args.debug:
+    logging.basicConfig(level=args.debug)
+
 
 url = "https://"+ccm+"/v1/jobs"
 
@@ -32,7 +39,7 @@ headers = {
     }
 
 response = requests.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-# print(response.text.encode('utf-8'))
+logging.debug(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
     if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Error', 'Stopped', 'Suspended']:
@@ -46,9 +53,9 @@ for job in response.json()['jobs']:
             'cache-control': "no-cache"
         }
 
-        print("Terminating and hiding Job {}".format(job['id']))
+        logging.info("Terminating and hiding Job {}".format(job['id']))
         response = requests.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-        print(json.dumps(response.json(), indent=2))
+        logging.debug(json.dumps(response.json(), indent=2))
     if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated']:
         deploymentId = job['deploymentInfo']['deploymentId']
 
@@ -60,7 +67,7 @@ for job in response.json()['jobs']:
             'cache-control': "no-cache"
             }
 
-        print("Hiding Job {}".format(job['id']))
+        logging.info("Hiding Job {}".format(job['id']))
         response = requests.request("PUT", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-        print(job['id'])
-        print(json.dumps(response.json(), indent=2))
+        logging.info(job['id'])
+        logging.debug(json.dumps(response.json(), indent=2))
