@@ -4,7 +4,6 @@
 # Deployment cleanup script
 
 import requests
-import sys
 import json
 import argparse
 from requests.auth import HTTPBasicAuth
