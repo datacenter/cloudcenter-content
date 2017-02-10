@@ -9,7 +9,7 @@ exec > >(tee -a /var/tmp/cco-node-init_$$.log) 2>&1
 echo "Username: $(whoami)" # Should execute as cliqruser
 echo "Working Directory: $(pwd)"
 
-defaultGitTag="cc-full-4.7.0-1"
+defaultGitTag="cc-full-4.7.1.1"
 if [ -n "$gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
 else
@@ -17,7 +17,7 @@ else
      gitTag=${defaultGitTag}
 fi
 
-ccRel="release-4.7.1-20170128.5"
+ccRel="release-4.7.1.1-20170206.2"
 
 agentSendLogMessage  "CloudCenter release ${ccRel} selected."
 
