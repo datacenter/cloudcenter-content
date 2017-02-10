@@ -61,7 +61,7 @@ def getTenantId():
             tenantId = user['tenantId']
             break
     if not tenantId:
-        print("Couldn't find tenantId")
+        logging.error("Couldn't find tenantId")
         sys.exit(1)
     return tenantId
 
@@ -165,7 +165,7 @@ def getServiceManifest(serviceName):
     serviceId = getServiceId(tenantId, serviceName)
 
     if not serviceId:
-        print("Couldn't find serviceId for service {} in tenant Id {}".format(serviceName, tenantId))
+        logging.error("Couldn't find serviceId for service {} in tenant Id {}".format(serviceName, tenantId))
         sys.exit(1)
 
     url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
@@ -247,7 +247,7 @@ def createImage(image):
 
     response = s.request("POST", url, headers=headers, data=json.dumps(image), verify=False, auth=HTTPBasicAuth(username, apiKey))
     newImage = response.json()
-    print("Image {} created with ID {}".format(newImage['name'], int(newImage['id'])))
+    logging.info("Image {} created with ID {}".format(newImage['name'], int(newImage['id'])))
     return int(newImage['id'])
 
 def createRepo(repo):
@@ -264,7 +264,7 @@ def createRepo(repo):
 
     response = s.request("POST", url, headers=headers, data=json.dumps(repo), verify=False, auth=HTTPBasicAuth(username, apiKey))
     newRepo = response.json()
-    print("Repo {} created with ID {}".format(newRepo['displayName'], int(newRepo['id'])))
+    logging.info("Repo {} created with ID {}".format(newRepo['displayName'], int(newRepo['id'])))
     return int(newRepo['id'])
 
 
@@ -287,7 +287,7 @@ def import_service(service):
             if imageId:
                 image['id'] = imageId
             else:
-                print("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
+                logging.warn("Image {} not found. I will create it so that the service will import, but it will be UNMAPPED."
                       "You will have to create the worker if necessary and map it yourself.".format(image['name']))
                 image['id'] = createImage(image)
         # Assume that key defaultImageName was properly inserted into the exported JSON, then use that to get correct
@@ -320,7 +320,7 @@ def import_service(service):
     if 'defaultImageName' in service:
         service['defaultImageId'] = getImageId(tenantId, service['defaultImageName'])
     else:
-        print("Your manifest file didn't have a defaultImageName key, as it would if exported from the instance "
+        logging.warn("Your manifest file didn't have a defaultImageName key, as it would if exported from the instance "
               "using this tool. Therefore I'm not able to update the image ID to the one that matches your instance"
               ", which may be different than the one it came from. Funny image related things may happen.")
 
@@ -342,7 +342,7 @@ def import_service(service):
         logoPath = j['params'][0]['value']
         service['logoPath'] = logoPath
 
-    print(json.dumps(service, indent=2))
+    logging.debug(json.dumps(service, indent=2))
 
     headers = {
         'x-cliqr-api-key-auth': "true",
@@ -351,26 +351,26 @@ def import_service(service):
         'cache-control': "no-cache"
     }
     if serviceId:
-        print("Service ID: {} for service {} found in the CloudCenter instance.".format(serviceId, serviceName))
+        logging.info("Service ID: {} for service {} found in the CloudCenter instance.".format(serviceId, serviceName))
         if not args.overwrite:
             print("--overwrite not specified. Exiting")
             sys.exit()
         else:
-            print("--overwrite specified. Updating existing service.")
+            logging.info("--overwrite specified. Updating existing service.")
             url = baseUrl+"/v1/tenants/"+tenantId+"/services/"+serviceId
             service['id'] = serviceId
             response = s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
-            print(json.dumps(response.json(), indent=2))
+            logging.debug(json.dumps(response.json(), indent=2))
 
     else:
         if not args.logo:
             logging.critical("You must specify a logo file for new services. Use the -l switch.")
             exit(1)
-        print("Service ID for service {} not found. Creating".format(serviceName))
+        logging.info("Service ID for service {} not found. Creating".format(serviceName))
         url = baseUrl+"/v1/tenants/"+tenantId+"/services/"
         response = s.request("POST", url, headers=headers, data=json.dumps(service), verify=False, auth=HTTPBasicAuth(username, apiKey))
-        print(json.dumps(response.json(), indent=2))
-        print("Service {} created with Id {}".format(serviceName, response.json()['id']))
+        logging.debug(json.dumps(response.json(), indent=2))
+        logging.info("Service {} created with Id {}".format(serviceName, response.json()['id']))
 
 # TODO: Check for existing file and properly use the overwrite flag.
 if args.debug:
@@ -382,21 +382,21 @@ if args.e:
     logoFile = "{}.png".format(serviceName)
     filename = "{serviceName}.servicemanifest".format(serviceName=serviceName)
 
-    print("Exporting service: {}".format(serviceName))
+    logging.info("Exporting service: {}".format(serviceName))
     j = getServiceManifest(serviceName)
     with open(filename, 'w') as f:
         json.dump(j, f, indent=4)
-    print("Service {} exported to {}".format(serviceName, filename))
+    logging.info("Service {} exported to {}".format(serviceName, filename))
 
     # Download logo too
     try:
         response = s.request("GET", logoPath)
         with open(logoFile, 'wb') as out_file:
             out_file.write(response.content)
-        print("Logo downloaded to {}".format(logoFile))
+        logging.info("Logo downloaded to {}".format(logoFile))
 
     except Exception as err:
-        print("Unable to download logo from {}: {}".format(logoPath, err))
+        logging.error("Unable to download logo from {}: {}".format(logoPath, err))
 
 if args.i:
     serviceJson = json.load(args.i)
