@@ -6,8 +6,25 @@ exec > >(tee -a /var/tmp/amqp-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
-echo "Username: $(whoami)" # Should execute as cliqruser
-echo "Working Directory: $(pwd)"
+dlFile () {
+    agentSendLogMessage  "Attempting to download $1"
+    if [ -n "$dlUser" ]; then
+        agentSendLogMessage  "Found user ${dlUser} specified. Using that and specified password for download auth."
+        agentSendLogMessage $(wget --no-check-certificate -O $2 --user $dlUser --password $dlPass $1)
+    else
+        agentSendLogMessage  "Didn't find username specified. Downloading with no auth."
+        agentSendLogMessage $(wget --no-check-certificate -O $2 $1)
+    fi
+    if [ "$?" = "0" ]; then
+        agentSendLogMessage  "$1 downloaded"
+    else
+        agentSendLogMessage  "Error downloading $1"
+        exit 1
+    fi
+}
+
+agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
+agentSendLogMessage "Working Directory: $(pwd)"
 
 defaultGitTag="cc-full-4.7.1.1"
 if [ -n "$gitTag" ]; then
@@ -17,7 +34,7 @@ else
      gitTag=${defaultGitTag}
 fi
 
-ccRel="release-4.7.1.1-20170206.2"
+# ccRel="release-4.7.1.1-20170206.2"
 
 agentSendLogMessage  "CloudCenter release ${ccRel} selected."
 
@@ -28,9 +45,9 @@ sudo yum install -y wget vim java-1.8.0-openjdk nmap
 # Download necessary files
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
-wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/${ccRel}/installer/core_installer.bin
-wget --no-check-certificate -O cco-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/${ccRel}/appliance/cco-installer.jar
-wget --no-check-certificate -O conn_broker-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/${ccRel}/appliance/conn_broker-response.xml
+dlFile ${baseUrl}/installer/core_installer.bin core_installer.bin
+dlFile ${baseUrl}/appliance/cco-installer.jar cco-installer.jar
+dlFile ${baseUrl}/appliance/conn_broker-response.xml conn_broker-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
