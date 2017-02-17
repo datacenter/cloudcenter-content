@@ -87,21 +87,4 @@ else
     agentSendLogMessage "Server Started."
 fi
 
-# TODO Move all this to External Post-Start
-sudo yum install python-pip -y
-sudo pip install --upgrade pip
-sudo pip install requests
-wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
-if [ $? -ne 0 ]; then
-    agentSendLogMessage  "Failed downloading https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py. You can still perform the post-install UI configuration manually."
-fi
-
-python ccm-config.py
-
-if [ $? -ne 0 ]; then
-    agentSendLogMessage  "Failed executing ccm-config.py. You can still perform the post-install UI configuration manually."
-fi
-# TODO ------
-
-
 sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
