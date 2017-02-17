@@ -81,18 +81,18 @@ response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(
 # Import Apps
 
 # Download app zip
-# app_url = "https://github.com/datacenter/cloudcenter-content/raw/cc-full-4.7.1.1/apps/cloudcenter/cloudcenter.zip"
-# response = s.request("GET", app_url)
-# app_file = response.content
-#
-# url = baseUrl+"/apps_portation/import_apps"
-# headers = {
-#     'accept': "*/*"
-# }
-# params = {}
-# url = baseUrl+"/v1/file"
-# files = {'file': app_file}
-#
-# response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(apiUser, apiPass), verify=False)
+apps = os.getenv('loadApps', None)
+for app_url in apps.splitlines():
+    response = s.request("GET", app_url)
+    app_file = response.content
+
+    # Import App
+    url = baseUrl+"/apps_portation/import_apps"
+    headers = {
+        'accept': "*/*"
+    }
+    params = {}
+    files = {'file': app_file}
+    response = s.request("POST", url, files=files, headers=headers, auth=(apiUser, apiPass), verify=False)
 
 
