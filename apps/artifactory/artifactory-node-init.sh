@@ -25,7 +25,15 @@ else
      gitTag=${defaultGitTag}
 fi
 
+sudo mv /etc/yum.repos.d/cliqr.repo ~
+sudo yum install -y wget java-1.8.0-openjdk
+
 cd /tmp
 dlFile https://bintray.com/jfrog/artifactory-rpms/rpm bintray-jfrog-artifactory-rpms.repo
 sudo mv bintray-jfrog-artifactory-rpms.repo /etc/yum.repos.d/
-sudo yum install jfrog-artifactory-oss
+sudo yum install -y jfrog-artifactory-oss
+
+sudo service artifactory start
+
+
+sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
