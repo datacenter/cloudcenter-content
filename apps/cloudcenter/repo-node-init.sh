@@ -65,10 +65,7 @@ else
      If repo.cliqrtech.com, then send to Cisco TAC for CloudCenter."
 fi
 
-COUNT=0
-# MAX=50
 SLEEP_TIME=30
-ERR=0
 
 agentSendLogMessage  "Waiting for SSH key to be registered with master.
  Trying every ${SLEEP_TIME} seconds. I'll wait forever..."
