@@ -53,7 +53,8 @@ if [ -n "${privateKey}" ]; then
     agentSendLogMessage  "Found private key. Using it to sync. Remember to send the corresponding
     public key to whoever owns the master repo (${masterRepo}) and ask them to add it.
     If repo.cliqrtech.com, then send to Cisco TAC for CloudCenter."
-    echo ${privateKey} > key
+    echo "${privateKey}" > key
+    chmod 400 key
     ssh-keygen -y -f /tmp/key > /tmp/key.pub
     sudo mv key /home/repo/.ssh/id_rsa
     sudo mv key.pub /home/repo/.ssh/id_rsa.pub
@@ -74,12 +75,6 @@ agentSendLogMessage  "Waiting for SSH key to be registered with master.
 
 until $(sudo su repo -c "ssh repo@${masterRepo} -q rsync --version"); do
   sleep ${SLEEP_TIME}
-  let "COUNT++"
-  echo $COUNT
-#  if [ $COUNT -gt 50 ]; then
-#    ERR=1
-#    break
-#  fi
 done
 
 
