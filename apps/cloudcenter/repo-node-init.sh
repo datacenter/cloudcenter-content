@@ -60,16 +60,19 @@ if [ -n "${privateKey}" ]; then
     sudo mv key.pub /home/repo/.ssh/id_rsa.pub
     sudo chown repo:repo /home/repo/.ssh/id_rsa
     sudo chown repo:repo /home/repo/.ssh/id_rsa.pub
+
+    agentSendLogMessage  "Syncing repo. This will take a while, maybe 15-60 minutes.
+     If you want to see what's going on, login and look at /tmp/repo_sync.log"
+    sudo su repo -c "/usr/bin/repo_sync.sh"
 else
      agentSendLogMessage  "No private key submitted. Generating one automatically."
      agentSendLogMessage $(sudo cat /home/repo/.ssh/id_rsa.pub)
      agentSendLogMessage  "Send this to whoever owns the master repo (${masterRepo}) and ask them to add it.
-     If repo.cliqrtech.com, then send to Cisco TAC for CloudCenter."
-     exit 1
+     If repo.cliqrtech.com, then send to Cisco TAC for CloudCenter. Once it's registered, come back
+     and login to this VM and run /usr/bin/sync_repo.sh to sync the repo."
 fi
 
-SLEEP_TIME=30
-
+# SLEEP_TIME=30
 #agentSendLogMessage  "Waiting for SSH key to be registered with master.
 # Trying every ${SLEEP_TIME} seconds. I'll wait forever..."
 #
@@ -78,6 +81,3 @@ SLEEP_TIME=30
 #done
 #
 
-agentSendLogMessage  "Syncing repo. This will take a while, maybe 15-60 minutes.
- If you want to see what's going on, login and look at /tmp/repo_sync.log"
-sudo su repo -c "/usr/bin/repo_sync.sh"
