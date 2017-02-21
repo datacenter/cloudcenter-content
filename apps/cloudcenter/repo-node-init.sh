@@ -43,11 +43,20 @@ sudo yum install -y wget rsync
 # Download necessary files
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
-dlFile ${baseUrl}/installer/repo_installer.bin
+dlFile http://download.cliqr.com/release-4.7.1.1-20170206.2/installer/repo_installer.bin
 
 sudo chmod +x repo_installer.bin
 agentSendLogMessage  "Running repo installer"
 sudo ./repo_installer.bin centos7 ${cloudType} repo
+
+if [ -n "${privateKey}" ]; then
+    agentSendLogMessage  "Found private key. Using it to sync"
+else
+     agentSendLogMessage  "No private key submitted. Generating one automatically."
+     agentSendLogMessage $(sudo cat /home/repo/.ssh/id_rsa.pub)
+     agentSendLogMessage  "Send this to whoever owns the master repo (${masterRepo}) and ask them to add it.
+     If repo.cliqrtech.com, then send to Cisco TAC for CloudCenter."
+fi
 
 agentSendLogMessage  "Syncing repo. This will take a while, maybe 15-60 minutes.
  If you want to see what's going on, login and look at /tmp/repo_sync.log"
