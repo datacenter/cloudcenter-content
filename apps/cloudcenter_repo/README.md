@@ -1,12 +1,17 @@
-# Cisco CloudCenter Custom Repo
+# Cisco CloudCenter Package Store
 
-The CloudCenter custom repo appliance is used when installing other components in a network
+The CloudCenter Package Store appliance is used when installing other components in a network
 that cannot download from the internet. In that case you point the installer bin file at the custom
  repo by setting environment variable CUSTOM_REPO prior to executing the installer.
 
-This application deploys an instance of the CloudCenter custom repo. Of course, to work properly,
+This application deploys an instance of the CloudCenter Package Store. Of course, to work properly,
 it must itself be able to download files from the internet. Also of course, you will only be able 
-to use this application in an existing CC instance.
+to use this application in an existing CC instance. This applicaiton can be used to create the initial repo in a
+DMZ or other similar network, then it can either be referenced in place from the protected network or it can simply be
+moved into the protected network. You could also just export the VM and re-import it where needed.
+
+See this page for more information:
+http://docs.cliqr.com/display/CCD46/Phase+4%3A+Install+Components
 
 ## Usage
 1. Download the app zip from GitHub.
