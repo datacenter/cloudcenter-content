@@ -47,7 +47,7 @@ dlFile http://download.cliqr.com/release-4.7.1.1-20170206.2/installer/repo_insta
 
 sudo chmod +x repo_installer.bin
 agentSendLogMessage  "Running repo installer"
-sudo ./repo_installer.bin centos7 ${cloudType} repo
+sudo ./repo_installer.bin centos7 ${OSMOSIX_CLOUD} repo
 
 if [ -n "${privateKey}" ]; then
     agentSendLogMessage  "Found private key. Using it to sync. Remember to send the corresponding
