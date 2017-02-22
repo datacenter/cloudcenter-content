@@ -12,8 +12,7 @@ import string
 # Gather up the information needed from environment variables.
 # Need to look at the logs to get the actual env variables names. These are wrong, but give the right idea.
 depEnv = os.environ['depEnv']
-region = os.environ['region']
-osType = os.environ['osType']
+osType = os.environ['eNV_osName']
 
 # Create maps (dictionaries) that associate the CloudCenter info to the custom values that should go into the VM name.
 # You will need to look in the callout logs for the keys to use for this.
