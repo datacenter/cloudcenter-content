@@ -72,10 +72,11 @@ fi
 agentSendLogMessage  "Adding ${masterRepo} SSH fingerprint to known_hosts"
 sudo su repo -c "ssh-keyscan ${masterRepo} >> ~/.ssh/known_hosts"
 
+SLEEP_TIME=30
+
 agentSendLogMessage  "Waiting for SSH key to be registered with master.
 Trying every ${SLEEP_TIME} seconds. I'll wait forever..."
 
-SLEEP_TIME=30
 result=1
 while [ "${result}" -ne "0" ]; do
     sudo su repo -c "ssh repo@${masterRepo} -q rsync --version"
