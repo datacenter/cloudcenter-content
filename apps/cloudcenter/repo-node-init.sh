@@ -69,11 +69,15 @@ else
      and login to this VM and run /usr/bin/sync_repo.sh to sync the repo."
 fi
 
-SLEEP_TIME=30
+agentSendLogMessage  "Adding ${masterRepo} SSH fingerprint to known_hosts"
+sudo su repo -c "ssh-keyscan ${masterRepo} >> ~/.ssh/known_hosts"
+
 agentSendLogMessage  "Waiting for SSH key to be registered with master.
 Trying every ${SLEEP_TIME} seconds. I'll wait forever..."
+
+SLEEP_TIME=30
 result=1
-until ${result}; do
+while [ "${result}" -ne "0" ]; do
     sudo su repo -c "ssh repo@${masterRepo} -q rsync --version"
     result=$?
     sleep ${SLEEP_TIME}
