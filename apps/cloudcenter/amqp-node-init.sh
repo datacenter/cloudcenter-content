@@ -64,9 +64,4 @@ sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/lo
 sudo /etc/init.d/guacd start
 sudo -E /etc/init.d/tomcatgua restart
 
-# Source profile to ensure pick up the JAVA_HOME env variable.
-# . /etc/profile
-# sudo -E /etc/init.d/rabbitmq-server restart
-
-
 sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/

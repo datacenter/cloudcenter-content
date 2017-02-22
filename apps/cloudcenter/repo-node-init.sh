@@ -26,7 +26,7 @@ dlFile () {
 agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
 
-defaultGitTag="cloudcenter-fullinstall"
+defaultGitTag="repo"
 if [ -n "$gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
 else
@@ -61,9 +61,6 @@ if [ -n "${privateKey}" ]; then
     sudo chown repo:repo /home/repo/.ssh/id_rsa
     sudo chown repo:repo /home/repo/.ssh/id_rsa.pub
 
-    agentSendLogMessage  "Syncing repo. This will take a while, maybe 15-60 minutes.
-     If you want to see what's going on, login and look at /tmp/repo_sync.log"
-    sudo su repo -c "/usr/bin/repo_sync.sh"
 else
      agentSendLogMessage  "No private key submitted. Generating one automatically."
      agentSendLogMessage $(sudo cat /home/repo/.ssh/id_rsa.pub)
@@ -72,12 +69,17 @@ else
      and login to this VM and run /usr/bin/sync_repo.sh to sync the repo."
 fi
 
-# SLEEP_TIME=30
-#agentSendLogMessage  "Waiting for SSH key to be registered with master.
-# Trying every ${SLEEP_TIME} seconds. I'll wait forever..."
-#
-#until $(sudo su repo -c "ssh repo@${masterRepo} -q rsync --version"); do
-#  sleep ${SLEEP_TIME}
-#done
-#
+SLEEP_TIME=30
+agentSendLogMessage  "Waiting for SSH key to be registered with master.
+Trying every ${SLEEP_TIME} seconds. I'll wait forever..."
+result=1
+until ${result}; do
+    sudo su repo -c "ssh repo@${masterRepo} -q rsync --version"
+    result=$?
+    sleep ${SLEEP_TIME}
+done
+
+agentSendLogMessage  "Syncing repo. This will take a while, maybe 15-60 minutes.
+ If you want to see what's going on, login and look at /tmp/repo_sync.log"
+sudo su repo -c "/usr/bin/repo_sync.sh"
 
