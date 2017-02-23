@@ -51,7 +51,7 @@ dlFile ${baseUrl}/appliance/ccm-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 amazon ccm
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} ccm
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar ccm-installer.jar ccm-response.xml
