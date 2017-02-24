@@ -23,10 +23,8 @@ dlFile () {
 sudo yum install python-pip -y
 sudo pip install --upgrade pip
 sudo pip install requests
-dlFile https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py -O ccm-config.py
-if [ $? -ne 0 ]; then
-    print_log  "Failed downloading https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/cloudcenter/ccm-config.py. You can still perform the post-install UI configuration manually."
-fi
+
+dlFile ${gitUrl}/${gitTag}/apps/cloudcenter/ccm-config.py
 
 python ccm-config.py
 
