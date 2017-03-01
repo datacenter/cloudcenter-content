@@ -32,7 +32,7 @@ case $CloudFamily in
 
         wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$gitTag/services/azureloadbal/azurelb.py --no-check-certificate
 
-        case $cmd in
+        case $cmd
             start)
                 print_log "Executing azurelb.py start"
                 python azurelb.py start
