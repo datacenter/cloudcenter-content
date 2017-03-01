@@ -30,7 +30,7 @@ case $CloudFamily in
         pip install --pre azure
         pip install pyhaikunator
 
-        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$gitTag/services/azureloadbal/azurelb.py
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$gitTag/services/azureloadbal/azurelb.py --no-check-certificate
 
         case $cmd in
             start)
