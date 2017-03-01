@@ -1,3 +1,3 @@
-# Cisco CloudCenter Application Profile
+# Docker Datacenter Application Profile
 
-Application profile to deploy the core components necessar for a CloudCenter deployment.
+Application profile to deploy Docker Datacenter components
