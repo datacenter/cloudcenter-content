@@ -1,0 +1,66 @@
+#!/bin/bash
+. /utils.sh
+
+# Required Service Parameters:
+# gitTag - The tag or branch of code that you want to pull from github
+# TODO
+
+# Print the env to the CCM UI for debugging. Remove this line for production.
+# print_log "$(env)"
+
+if [ -n $gitTag ]; then
+ tag=$gitTag
+else
+ tag="cloudformation"
+fi
+
+print_log "Tag/branch for code pull set to $tag"
+
+cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
+
+
+
+# Setup a bunch of prerequisits
+print_log "Installing pre-reqs"
+yum install -y gcc git python-pip python-devel
+pip install --upgrade pip
+pip install boto3
+pip install boto
+print_log "Done installing pre-reqs"
+
+
+print_log "Configuring AWS boto3"
+mkdir -p ~/.aws
+echo "[default]" > ~/.aws/config
+echo "region=$region" >> ~/.aws/config
+echo "output=json" >> ~/.aws/config
+echo "[default]" > ~/.aws/credentials
+echo "aws_access_key_id=$CliqrCloudAccountPwd" >> ~/.aws/credentials
+echo "aws_secret_access_key=$CliqrCloud_AccessSecretKey" >> ~/.aws/credentials
+
+
+case $cmd in
+    start)
+        print_log "Downloading template and python script."
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/cloudformation/createwp.py
+        wget $Templateurl -O /cf-template.json
+        if [ -n "$Paramsurl" ]
+        then
+            wget $Paramsurl -O /cf-params.json
+        fi
+
+        print_log "Executing createwp.py start"
+        python createwp.py
+        ;;
+    stop)
+        print_log "Executing deletewp.py stop"
+        wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/cloudformation/deletewp.py
+        python deletewp.py
+        rm -rf ~/.aws
+        ;;
+    *)
+        print_log "No Valid Script Argument. Ex start, stop"
+        exit 127
+        ;;
+esac
+       

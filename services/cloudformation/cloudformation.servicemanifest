@@ -1,0 +1,128 @@
+{
+    "visible": true,
+    "serviceParamSpecs": [
+        {
+            "type": "string",
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "scope": null,
+            "dataUnit": null,
+            "exampleValue": null,
+            "defaultValue": "",
+            "webserviceListParams": null,
+            "helpText": "Enter the URL to the Cloud Formation Template(json)",
+            "userEditable": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "step": 0,
+                "minValue": 0,
+                "allowSpaces": true,
+                "maxValue": 0,
+                "calloutWorkflowName": null,
+                "regex": null
+            },
+            "paramName": "Templateurl",
+            "displayName": "Cloud Formation Template URL",
+            "systemParam": true,
+            "valueList": null,
+            "confirmValue": "",
+            "collectionList": [],
+            "optional": false
+        },
+        {
+            "type": "string",
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "scope": null,
+            "dataUnit": null,
+            "exampleValue": null,
+            "defaultValue": "",
+            "webserviceListParams": null,
+            "helpText": "Enter the URL to the Cloud Formation Parameters(json)",
+            "userEditable": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "step": 0,
+                "minValue": 0,
+                "allowSpaces": true,
+                "maxValue": 0,
+                "calloutWorkflowName": null,
+                "regex": null
+            },
+            "paramName": "Paramsurl",
+            "displayName": "Cloud Formation Params URL",
+            "systemParam": true,
+            "valueList": null,
+            "confirmValue": "",
+            "collectionList": [],
+            "optional": true
+        },
+        {
+            "paramName": "gitTag",
+            "displayName": "gitTag",
+            "helpText": "",
+            "type": "string",
+            "valueList": null,
+            "defaultValue": "cloudformation",
+            "confirmValue": "",
+            "userVisible": true,
+            "userEditable": true,
+            "systemParam": true,
+            "exampleValue": null,
+            "dataUnit": null,
+            "optional": false,
+            "valueConstraint": {
+                "minValue": 0,
+                "maxValue": 0,
+                "maxLength": 255,
+                "regex": null,
+                "allowSpaces": true,
+                "sizeValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null
+            },
+            "scope": null,
+            "webserviceListParams": null,
+            "collectionList": []
+        }
+    ],
+    "defaultImageName": null,
+    "perms": [
+        "write",
+        "read",
+        "administration",
+        "delete"
+    ],
+    "egressRestrictions": [],
+    "name": "cloudformation",
+    "childServices": [],
+    "logoPath": "/assets/img/appTiers/cloudformation/logo.png",
+    "externalBundleLocation": "",
+    "images": [],
+    "externalActions": [
+        {
+            "actionType": "URL",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/cloudformation/service start",
+            "actionName": "START"
+        },
+        {
+            "actionType": "URL",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/cloudformation/service stop",
+            "actionName": "STOP"
+        }
+    ],
+    "description": "Deploy AWS Stack with Cloud Formation Template",
+    "servicePorts": [],
+    "displayName": "Cloud Formation Stack",
+    "serviceType": "EXTERNAL",
+    "costPerHour": 0.0,
+    "parentService": false,
+    "serviceActions": [],
+    "bundleLocation": "",
+    "externalService": false,
+    "parentServiceId": "110",
+    "systemService": false,
+    "repositories": []
+}
