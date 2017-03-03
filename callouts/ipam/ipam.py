@@ -3,27 +3,27 @@ import os
 import json
 
 # Provided inputs, among many others. See /usr/local/osmosix/callout/<ipam folder>/logs/<files> for more info.
-vpcId = os.getenv("vpcId", None)
-subnetId = os.getenv("subnetId", None)
-networkId = os.getenv("networkId", None)
-networkName = os.getenv("networkName", None)
+vpc_id = os.getenv("vpcId", None)
+subnet_id = os.getenv("subnetId", None)
+network_id = os.getenv("networkId", None)
+network_name = os.getenv("networkName", None)
 os_type = os.getenv("vmOSName")
-nicCount = int(os.getenv("numNICs"))
+nic_count = int(os.getenv("numNICs"))
 # nic_info = json.loads(os.getenv("nicInfo"))
 
-useDhcp = False  # VMware customization spec to use if you want.
+use_dhcp = False  # VMware customization spec to use if you want.
+windows_cust_spec = None
+linux_cust_spec = None
 
 # OpenStack Specific
 
 # VMWare Specific
-if os_type is "Windows":
-    custSpec = None  # VMware customization spec to use if you want.
-    if custSpec:
-        print("custSpec="+custSpec)
+if os_type == "Windows":
+    if windows_cust_spec:
+        print("custSpec=" + windows_cust_spec)
     else:
         joinDomain = False  # Or true if you want to join a Windows Domain. Then put domain admin creds below.
-        # OpenStack specific
-        print("portId=asdf")
+        print("portId=asdf")  # OpenStack specific
         # Windows Specific
         print("domainAdminName=asdf")
         print("domainAdminPassword=afd")
@@ -38,13 +38,12 @@ if os_type is "Windows":
         # print("changeSid=true")
         print("deleteAccounts=false")
         print("timeZoneId=004")
-elif os_type is "Linux":
-    if custSpec:
-        pass
+elif os_type == "Linux":
+    if linux_cust_spec:
+        print("custSpec=" + linux_cust_spec)
     else:
         print("DnsSuffixList=cisco.com")
-        print("nicDnsServerList=asdf")
-        print("domainName=sacliqr.local")
+        print("domainName=mdavis.local")
         print("hwClockUTC=true")
         print("timeZone=America/Los_Angeles")
         print("osHostname=asdf")
@@ -52,15 +51,22 @@ else:
     print("Unrecognized OS Type")
     exit(1)
 
-# Indexed to each NIC
-# Mock Up. In real life you have to get a valid IP from somewhere, or use DHCP.
-for i in range(0, nicCount):
-    print("nicUseDhcp_{}={}".format(i, useDhcp))
-    if not useDhcp:
-        print("nicIP_{nicNo}=192.100.0.9{nicNo}".format(nicNo=i))
-        print("nicNetmask_{}=255.255.255.0".format(i))
-        print("DnsServerList_{}=171.70.168.183".format(i))
-        print("nicGateway_{}=192.100.0.2".format(i))
 
+print("DnsServerList=192.100.0.84")  # Optional
+print("DnsSuffixList=mdavis.local")  # Optional
+print("nicCount=" + str(nic_count))  # Required
 
+# For IP settings, this script will be run for each NIC.
+# Always use _0 as output for the output of nic-specific settings.
 
+# Maybe set network and subnet programatically. Not sure.
+# print("networkId_{}=".format(i))
+# print("subnetId_{}=".format(i))
+
+print("nicUseDhcp_0={}".format(use_dhcp))
+if not use_dhcp:
+    # Mock Up. In real life you have to get a valid IP from somewhere, or use DHCP.
+    print("nicIP_0=192.100.0.90")
+    print("nicNetmask_0=255.255.0.0")
+    print("nicGateway_0=192.100.0.2")
+    print("nicDnsServerList_0=192.100.0.84")  # Optional
