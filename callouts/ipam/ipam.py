@@ -11,7 +11,11 @@ os_type = os.getenv("vmOSName")
 nic_count = int(os.getenv("numNICs"))
 # nic_info = json.loads(os.getenv("nicInfo"))
 
-use_dhcp = False  # VMware customization spec to use if you want.
+if subnet_id == "mdavis-200-no-dhcp (DVS-LAB164)":
+    use_dhcp = False  # VMware customization spec to use if you want.
+else:
+    use_dhcp = True  # VMware customization spec to use if you want.
+
 windows_cust_spec = None
 linux_cust_spec = None
 
