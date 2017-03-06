@@ -18,7 +18,7 @@ headers = {
     'content-type': "application/json"
 }
 
-#Create plan
+# Create plan
 url = baseUrl+"/v1/tenants/1/plans"
 data = {
     "name": "planUnl",
@@ -77,5 +77,22 @@ data = {
     "tenantId": 1
 }
 response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(apiUser, apiPass), verify=False)
+
+# Import Apps
+
+# Download app zip
+apps = os.getenv('loadApps', None)
+for app_url in apps.splitlines():
+    response = s.request("GET", app_url)
+    app_file = response.content
+
+    # Import App
+    url = baseUrl+"/apps_portation/import_apps"
+    headers = {
+        'accept': "*/*"
+    }
+    params = {}
+    files = {'file': app_file}
+    response = s.request("POST", url, files=files, headers=headers, auth=(apiUser, apiPass), verify=False)
 
 
