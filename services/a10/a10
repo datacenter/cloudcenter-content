@@ -7,17 +7,17 @@ a10IP = os.environ["a10IP"]
 a10mgmtPort = os.environ["a10mgmtPort"]
 a10proto = os.environ["a10mgmtProto"]
 
-#Create list of dependent service tiers
+# Create list of dependent service tiers
 dependencies = os.environ["CliqrDependencies"].split(",")
-###NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
+# NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
 
 
-#Set the new server list from the CliQr environment
+# Set the new server list from the CliQr environment
 serverIps = os.environ["CliqrTier_"+dependencies[0]+"_IP"].split(",")
 
 pool = 'pool'+os.environ['parentJobId']
 vip = 'vip'+os.environ['parentJobId']
-#healthMonitor = 'hm'+os.environ['parentJobId']
+# healthMonitor = 'hm'+os.environ['parentJobId']
 
 c = acos.Client(a10IP, acos.AXAPI_21, 'admin', 'welcome2cliqr', port=a10mgmtPort, protocol=a10proto)
 
