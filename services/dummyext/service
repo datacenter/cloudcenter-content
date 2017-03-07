@@ -4,13 +4,21 @@
 env
 print_log "$(env)"
 
+if [ -n $gitTag ]; then
+    tag=$gitTag
+else
+    tag="clean"
+fi
+
+print_log "Tag/branch for code pull set to $tag"
+
 cmd=$1
 serviceStatus=""
 
 print_log "Begining Service Script"
 
 print_log "Downloading dummyext.py"
-wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/dummyext/dummyext.py
+wget -N --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/dummyext/dummyext.py
 
 case $cmd in
     update)
