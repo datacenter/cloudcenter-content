@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-import acos_client as acos, sys, os
+import acos_client as acos
+import sys
+import os
 
 cmd = sys.argv[1]
 
