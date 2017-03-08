@@ -15,7 +15,7 @@ print_log "Tag/branch for code pull set to $tag"
 cmd=$1
 serviceStatus=""
 
-print_log "Begining Service Script"
+print_log "Beginning Service Script"
 
 # print_log "Downloading dummyext.py"
 # wget -N --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/dummyext/dummyext.py
