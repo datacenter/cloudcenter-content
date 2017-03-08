@@ -1,0 +1,202 @@
+{
+    "parentServiceId": "35",
+    "costPerHour": 0.0,
+    "logoPath": "/assets/img/appTiers/dummyext/logo.png",
+    "displayName": "Dummy",
+    "images": [],
+    "externalActions": [
+        {
+            "actionValue": ". /utils.sh; print_log \"Service: Suspend\"",
+            "actionName": "SUSPEND",
+            "actionType": "CMD"
+        },
+        {
+            "actionValue": ". /utils.sh; print_log \"Service: Resume\"",
+            "actionName": "RESUME",
+            "actionType": "CMD"
+        },
+        {
+            "actionValue": ". /utils.sh; print_log \"Service: Stop\"",
+            "actionName": "STOP",
+            "actionType": "CMD"
+        },
+        {
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/dummyext/service start",
+            "actionName": "START",
+            "actionType": "URL"
+        },
+        {
+            "actionValue": ". /utils.sh; print_log \"Service: Update\"",
+            "actionName": "UPDATE",
+            "actionType": "CMD"
+        }
+    ],
+    "childServices": [],
+    "visible": true,
+    "systemService": false,
+    "serviceType": "EXTERNAL",
+    "perms": [
+        "read",
+        "administration",
+        "write",
+        "delete"
+    ],
+    "egressRestrictions": [],
+    "parentService": false,
+    "externalBundleLocation": "",
+    "serviceParamSpecs": [
+        {
+            "pathSuffixValue": "",
+            "helpText": "param1",
+            "exampleValue": null,
+            "type": "string",
+            "displayName": "param1",
+            "webserviceListParams": null,
+            "collectionList": [],
+            "scope": null,
+            "paramName": "param1",
+            "systemParam": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "regex": null,
+                "allowSpaces": true,
+                "calloutWorkflowName": null
+            },
+            "confirmValue": null,
+            "defaultValue": "value1",
+            "optional": false,
+            "valueList": null,
+            "userVisible": true,
+            "dataUnit": null,
+            "userEditable": true
+        },
+        {
+            "pathSuffixValue": "",
+            "helpText": "param2",
+            "exampleValue": null,
+            "type": "string",
+            "displayName": "param2",
+            "webserviceListParams": null,
+            "collectionList": [],
+            "scope": null,
+            "paramName": "param2",
+            "systemParam": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "regex": null,
+                "allowSpaces": true,
+                "calloutWorkflowName": null
+            },
+            "confirmValue": null,
+            "defaultValue": "value2",
+            "optional": false,
+            "valueList": null,
+            "userVisible": true,
+            "dataUnit": null,
+            "userEditable": true
+        },
+        {
+            "pathSuffixValue": "",
+            "helpText": "param3",
+            "exampleValue": null,
+            "type": "string",
+            "displayName": "param3",
+            "webserviceListParams": null,
+            "collectionList": [],
+            "scope": null,
+            "paramName": "param3",
+            "systemParam": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "regex": null,
+                "allowSpaces": true,
+                "calloutWorkflowName": null
+            },
+            "confirmValue": null,
+            "defaultValue": "value3",
+            "optional": false,
+            "valueList": null,
+            "userVisible": true,
+            "dataUnit": null,
+            "userEditable": true
+        },
+        {
+            "pathSuffixValue": "pathv1",
+            "helpText": "path1",
+            "exampleValue": null,
+            "type": "path",
+            "displayName": "path1",
+            "webserviceListParams": null,
+            "collectionList": [],
+            "scope": null,
+            "paramName": "path1",
+            "systemParam": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "regex": null,
+                "allowSpaces": true,
+                "calloutWorkflowName": null
+            },
+            "confirmValue": null,
+            "defaultValue": "pathv1",
+            "optional": false,
+            "valueList": null,
+            "userVisible": true,
+            "dataUnit": null,
+            "userEditable": true
+        },
+        {
+            "pathSuffixValue": "",
+            "helpText": "gitTag",
+            "exampleValue": null,
+            "type": "string",
+            "displayName": "gitTag",
+            "webserviceListParams": null,
+            "collectionList": [],
+            "scope": null,
+            "paramName": "gitTag",
+            "systemParam": true,
+            "valueConstraint": {
+                "maxLength": 255,
+                "sizeValue": 0,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "regex": null,
+                "allowSpaces": true,
+                "calloutWorkflowName": null
+            },
+            "confirmValue": null,
+            "defaultValue": "dummyext",
+            "optional": false,
+            "valueList": null,
+            "userVisible": true,
+            "dataUnit": null,
+            "userEditable": true
+        }
+    ],
+    "externalService": false,
+    "servicePorts": [],
+    "defaultImageName": null,
+    "repositories": [],
+    "description": "",
+    "bundleLocation": "",
+    "serviceActions": [],
+    "name": "dummyext"
+}

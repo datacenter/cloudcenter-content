@@ -17,8 +17,8 @@ serviceStatus=""
 
 print_log "Begining Service Script"
 
-print_log "Downloading dummyext.py"
-wget -N --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/dummyext/dummyext.py
+# print_log "Downloading dummyext.py"
+# wget -N --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/dummyext/dummyext.py
 
 case $cmd in
     update)
@@ -26,7 +26,7 @@ case $cmd in
     start)
         print_log "Begining Start"
         print_log "Executing dummyext.py"
-        python dummyext.py start
+        # python dummyext.py start
         print_log "Start Complete"
         ;;
     stop)
