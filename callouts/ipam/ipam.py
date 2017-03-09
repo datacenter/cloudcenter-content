@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-import json
 
 # Provided inputs, among many others. See /usr/local/osmosix/callout/<ipam folder>/logs/<files> for more info.
 vpc_id = os.getenv("vpcId", None)
@@ -9,7 +8,6 @@ network_id = os.getenv("networkId", None)
 network_name = os.getenv("networkName", None)
 os_type = os.getenv("vmOSName")
 nic_count = int(os.getenv("numNICs"))
-# nic_info = json.loads(os.getenv("nicInfo"))
 
 if subnet_id == "mdavis-200-no-dhcp (DVS-LAB164)":
     use_dhcp = False  # VMware customization spec to use if you want.
@@ -62,10 +60,6 @@ print("nicCount=" + str(nic_count))  # Required
 
 # For IP settings, this script will be run for each NIC.
 # Always use _0 as output for the output of nic-specific settings.
-
-# Maybe set network and subnet programatically. Not sure.
-# print("networkId_{}=".format(i))
-# print("subnetId_{}=".format(i))
 
 print("nicUseDhcp_0={}".format(use_dhcp))
 if not use_dhcp:
