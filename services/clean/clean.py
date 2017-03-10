@@ -56,7 +56,7 @@ for job in response.json()['jobs']:
         logging.info("Terminating and hiding Job {}".format(job['id']))
         response = requests.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
         logging.debug(json.dumps(response.json(), indent=2))
-    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated']:
+    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated', 'Finished', 'Rejected']:
         deploymentId = job['deploymentInfo']['deploymentId']
 
         url = "https://"+ccm+"/v1/jobs/"+job['id']
