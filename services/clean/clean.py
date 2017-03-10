@@ -67,7 +67,7 @@ for job in response.json()['jobs']:
 
         headers = {
             'cache-control': "no-cache"
-            }
+        }
 
         logging.info("Hiding Job {}".format(job['id']))
         response = session.request("PUT", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
