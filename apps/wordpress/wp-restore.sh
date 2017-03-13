@@ -27,7 +27,6 @@ echo "[default]" | sudo tee --append /root/.aws/credentials
 echo "aws_access_key_id=$aws_access_key_id" | sudo tee --append /root/.aws/credentials
 echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.aws/credentials
 
-#cd /var/www
 sudo cp /var/www/wordpress/wp-config.php /tmp
 sudo rm -rf /var/www/wordpress/*
 
