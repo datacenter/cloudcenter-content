@@ -35,9 +35,6 @@ echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.a
 sudo /root/bin/aws s3 cp s3://$s3path/$migrateFromDepId/dbbak.sql dbbak.sql
 sudo su -c "mysql -u root -pwelcome2cliqr < dbbak.sql"
 
-#Use simple DB script to replace old front-end IP with new front-end IP in database
-# TODO: Could just use '-e' on mysql to just execute this directly from command line without needing separate script.
-# TODO: Maybe this isn't required since mysqlSvcPostStart already has it.
-wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/apps/wordpress/wp_migration.sql
-replaceToken wp_migration.sql '%APP_SERVER_IP%' $CliqrTier_haproxy_2_PUBLIC_IP
-sudo su -c "mysql -u root -pwelcome2cliqr < wp_migration.sql"
+#Use simple DB commands to replace old front-end IP with new front-end IP in database
+sudo mysql -u root -pwelcome2cliqr -e "update wordpress.wp_options set option_value = 'http://${CliqrTier_haproxy_2_PUBLIC_IP}/wordpress' where option_name = 'siteurl';"
+sudo mysql -u root -pwelcome2cliqr -e "update wordpress.wp_options set option_value = 'http://${CliqrTier_haproxy_2_PUBLIC_IP}' where option_name = 'home';"
