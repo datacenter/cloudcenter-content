@@ -33,5 +33,4 @@ sudo chown -R apache:apache /var/www/wordpress
 
 sudo rm ~/wordpressbkup.zip
 
-# TODO Fix cleanup for multiple nodes
-# sudo /root/bin/aws s3 rm --recursive s3://$s3path/$migrateFromDepId
+sudo /root/bin/aws s3 rm --recursive s3://$s3path/$migrateFromDepId
