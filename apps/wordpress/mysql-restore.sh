@@ -38,3 +38,4 @@ sudo su -c "mysql -u root -pwelcome2cliqr < dbbak.sql"
 #Use simple DB commands to replace old front-end IP with new front-end IP in database
 sudo mysql -u root -pwelcome2cliqr -e "update wordpress.wp_options set option_value = 'http://${CliqrTier_haproxy_2_PUBLIC_IP}/wordpress' where option_name = 'siteurl';"
 sudo mysql -u root -pwelcome2cliqr -e "update wordpress.wp_options set option_value = 'http://${CliqrTier_haproxy_2_PUBLIC_IP}/wordpress' where option_name = 'home';"
+sudo mysql -u root -pwelcome2cliqr -e "FLUSH PRIVILEGES;"
