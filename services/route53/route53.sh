@@ -6,13 +6,13 @@
 # TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
-# print_log "$(env)"
+print_log "$(env)"
 
 defaultGitTag="route53"
 if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
+    print_log  "Found gitTag parameter gitTag = ${gitTag}"
 else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
+     print_log  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
      gitTag=${defaultGitTag}
 fi
 
