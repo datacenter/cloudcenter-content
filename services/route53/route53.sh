@@ -12,10 +12,34 @@ defaultGitTag="route53"
 if [ -n "$gitTag" ]; then
     print_log  "Found gitTag parameter gitTag = ${gitTag}"
 else
-     print_log  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
+     print_log  "Didn't find custom parameter gitTag. Using default gitTag = ${defaultGitTag}"
      gitTag=${defaultGitTag}
 fi
 
-print_log "Tag/branch for code pull set to $tag"
+if [ -n "$aws_access_key_id" ]; then
+    print_log  "AWS Access Key provided."
+else
+     print_log  "Didn't find custom parameter gitTag. Using default gitTag = ${defaultGitTag}"
+     # gitTag=${defaultGitTag}
+fi
+
+print_log "Tag/branch for code pull set to $gitTag"
+
+# Setup a bunch of prerequisits
+print_log "Installing pre-reqs"
+# yum install -y gcc git python-pip python-devel
+pip install --upgrade pip
+pip install boto3
+# pip install boto
+print_log "Done installing pre-reqs"
+
+print_log "Configuring AWS boto3"
+mkdir -p ~/.aws
+echo "[default]" > ~/.aws/config
+echo "region=$region" >> ~/.aws/config
+echo "output=json" >> ~/.aws/config
+echo "[default]" > ~/.aws/credentials
+echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
+echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
