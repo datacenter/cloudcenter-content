@@ -4,6 +4,8 @@ import boto3
 import json
 import sys
 
+client = boto3.client('route53')
+
 
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
@@ -43,7 +45,6 @@ def get_dependent_tier():
 
 
 def get_dependent_ips(dependent_tier):
-
     # Set the new server list from the CliQr environment
     dependent_addresses = os.environ["CliqrTier_" + dependent_tier + "_PUBLIC_IP"]
     print_log("Dependent Addresses: {}".format(dependent_addresses))
@@ -64,8 +65,6 @@ try:
 
     fqdn = "{}.{}.{}".format(dependent_tier, app_hostname, app_domain)
     print_log("FQDN: {}".format(fqdn))
-
-    client = boto3.client('route53')
 
     cmd = sys.argv[1]
     # Map the CloudCenter actions to the route53 DNS actions.
@@ -95,7 +94,7 @@ try:
             ChangeBatch=change_batch
         )
     except Exception as err:
-        print_error("Error while trying to update the record set: {}".format(err))
+        print_log("Error while trying to update the record set: {}".format(err))
         exit(1)
 
     result = {
@@ -106,6 +105,6 @@ try:
     }
     print_ext_service_result(json.dumps(result))
 except Exception as err:
-    print_error("Something went wrong: {}".format(err))
+    print_log("Something went wrong: {}".format(err))
     exit(1)
 
