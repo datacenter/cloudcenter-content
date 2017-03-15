@@ -404,12 +404,12 @@ def import_service(service):
         url = baseUrl+"/v1/tenants/"+tenant_id+"/services/"
         response = s.request("POST", url, headers=headers, data=json.dumps(service),
                              verify=False, auth=HTTPBasicAuth(username, apiKey))
-        if response.status_code != 200:
-            logging.critical("Failed to create service.")
-            logging.critical(json.dumps(response.json(), indent=2))
-            exit(1)
         logging.debug(json.dumps(response.json(), indent=2))
-        logging.info("Service {} created with Id {}".format(service_name, response.json()['id']))
+        if response.status_code == 201:
+            logging.info("Service {} created with Id {}".format(service_name, response.json()['id']))
+        else:
+            logging.critical("Failed to create service.")
+            exit(1)
 
 # TODO: Check for existing file and properly use the overwrite flag.
 if args.debug:

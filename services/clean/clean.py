@@ -23,6 +23,8 @@ username = args.username
 apiKey = args.apiKey
 ccm = args.ccm
 
+session = requests.Session()
+
 if args.debug:
     logging.basicConfig(level=args.debug)
 
@@ -38,7 +40,7 @@ headers = {
     'cache-control': "no-cache"
     }
 
-response = requests.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+response = session.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
 logging.debug(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
@@ -54,9 +56,9 @@ for job in response.json()['jobs']:
         }
 
         logging.info("Terminating and hiding Job {}".format(job['id']))
-        response = requests.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+        response = session.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
         logging.debug(json.dumps(response.json(), indent=2))
-    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated']:
+    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated', 'Finished', 'Rejected']:
         deploymentId = job['deploymentInfo']['deploymentId']
 
         url = "https://"+ccm+"/v1/jobs/"+job['id']
@@ -65,9 +67,9 @@ for job in response.json()['jobs']:
 
         headers = {
             'cache-control': "no-cache"
-            }
+        }
 
         logging.info("Hiding Job {}".format(job['id']))
-        response = requests.request("PUT", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+        response = session.request("PUT", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
         logging.info(job['id'])
         logging.debug(json.dumps(response.json(), indent=2))
