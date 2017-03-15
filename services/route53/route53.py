@@ -36,18 +36,24 @@ app_hostname = os.getenv("appHostname", None)
 if not app_hostname:
     app_hostname = os.getenv('parentJobName')
 
-fqdn = "{}.{}".format(app_hostname, app_domain)
 
+
+client = boto3.client('route53')
 # Create list of dependent service tiers
 dependencies = os.environ["CliqrDependencies"].split(",")
 # NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
-
+if len(dependencies) != 1:
+    print_error("This Route53 service supports only exactly one dependent (lower) tier. If you want multiple"
+                "add another Route53 service to the other service tier.")
+    exit(1)
 
 # Set the new server list from the CliQr environment
-serverIps = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"].split(",")
-ip_address = serverIps[0]
+server_addresses = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"].split(",")
+ip_address_rr = [{'Value': ip} for ip in server_addresses]
 
-client = boto3.client('route53')
+
+fqdn = "{}.{}.{}".format(dependencies[0], app_hostname, app_domain)
+
 cmd = sys.argv[1]
 if cmd == "start":
     response = client.change_resource_record_sets(
@@ -61,16 +67,19 @@ if cmd == "start":
                         'Name': fqdn,
                         'Type': 'A',
                         'TTL': 1,
-                        'ResourceRecords': [
-                            {
-                                'Value': ip_address
-                            },
-                        ]
+                        'ResourceRecords': ip_address_rr
                     }
-                },
+                }
             ]
         }
     )
+    result = {
+        'hostName': fqdn,
+        'ipAddress': fqdn,
+        'environment': {
+        }
+    }
+    print_ext_service_result(json.dumps(result))
 
 elif cmd == "stop":
     response = client.change_resource_record_sets(
@@ -81,9 +90,12 @@ elif cmd == "stop":
                 {
                     'Action': 'DELETE',
                     'ResourceRecordSet': {
-                        'Name': fqdn
+                        'Name': fqdn,
+                        'Type': 'A',
+                        'TTL': 1,
+                        'ResourceRecords': ip_address_rr
                     }
-                },
+                }
             ]
         }
     )
@@ -94,11 +106,3 @@ elif cmd == "update":
 else:
     print_log("No valid action specified (start, stop or update).")
 
-result = {
-    'hostName': fqdn,
-    'ipAddress': ip_address,
-    'environment': {
-    }
-}
-
-print_ext_service_result(json.dumps(result))
