@@ -72,12 +72,33 @@ if cmd == "start":
         }
     )
 
-    result = {
-        'hostName': fqdn,
-        'ipAddress': ip_address,
-        'environment': {
-            'myEnv': "testEnv"
+elif cmd == "stop":
+    response = client.change_resource_record_sets(
+        HostedZoneId=get_hosted_zone_id(app_domain),
+        ChangeBatch={
+            'Comment': 'string',
+            'Changes': [
+                {
+                    'Action': 'DELETE',
+                    'ResourceRecordSet': {
+                        'Name': fqdn
+                    }
+                },
+            ]
         }
+    )
+
+elif cmd == "update":
+    print_log("No action defined for UPDATE")
+
+else:
+    print_log("No valid action specified (start, stop or update).")
+
+result = {
+    'hostName': fqdn,
+    'ipAddress': ip_address,
+    'environment': {
     }
+}
 
 print_ext_service_result(json.dumps(result))
