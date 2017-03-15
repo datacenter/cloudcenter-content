@@ -24,8 +24,8 @@ def print_ext_service_result(msg):
 
 
 def get_hosted_zone_id(domain):
-    response = client.list_hosted_zones()
-    for hosted_zone in response['HostedZones']:
+    response_hz = client.list_hosted_zones()
+    for hosted_zone in response_hz['HostedZones']:
         if hosted_zone['Name'] in [domain, domain+'.']:
             return hosted_zone['Id']
     return False
@@ -37,8 +37,6 @@ if not app_hostname:
     app_hostname = os.getenv('parentJobName')
 
 
-
-client = boto3.client('route53')
 # Create list of dependent service tiers
 dependencies = os.environ["CliqrDependencies"].split(",")
 # NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
@@ -51,58 +49,38 @@ if len(dependencies) != 1:
 server_addresses = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"].split(",")
 ip_address_rr = [{'Value': ip} for ip in server_addresses]
 
-
 fqdn = "{}.{}.{}".format(dependencies[0], app_hostname, app_domain)
 
+client = boto3.client('route53')
+
 cmd = sys.argv[1]
-if cmd == "start":
-    response = client.change_resource_record_sets(
-        HostedZoneId=get_hosted_zone_id(app_domain),
-        ChangeBatch={
-            'Comment': 'string',
-            'Changes': [
-                {
-                    'Action': 'CREATE',
-                    'ResourceRecordSet': {
-                        'Name': fqdn,
-                        'Type': 'A',
-                        'TTL': 1,
-                        'ResourceRecords': ip_address_rr
-                    }
+# Map the CloudCenter actions to the route53 DNS actions.
+crud_map = {
+    'start': 'CREATE',
+    'stop': 'DELETE',
+    'update': 'UPSERT'
+}
+response = client.change_resource_record_sets(
+    HostedZoneId=get_hosted_zone_id(app_domain),
+    ChangeBatch={
+        'Comment': 'string',
+        'Changes': [
+            {
+                'Action': crud_map[cmd],  # Request is the same but for the action.
+                'ResourceRecordSet': {
+                    'Name': fqdn,
+                    'Type': 'A',
+                    'TTL': 1,
+                    'ResourceRecords': ip_address_rr
                 }
-            ]
-        }
-    )
-    result = {
-        'hostName': fqdn,
-        'ipAddress': fqdn,
-        'environment': {
-        }
+            }
+        ]
     }
-    print_ext_service_result(json.dumps(result))
-
-elif cmd == "stop":
-    response = client.change_resource_record_sets(
-        HostedZoneId=get_hosted_zone_id(app_domain),
-        ChangeBatch={
-            'Comment': 'string',
-            'Changes': [
-                {
-                    'Action': 'DELETE',
-                    'ResourceRecordSet': {
-                        'Name': fqdn,
-                        'Type': 'A',
-                        'TTL': 1,
-                        'ResourceRecords': ip_address_rr
-                    }
-                }
-            ]
-        }
-    )
-
-elif cmd == "update":
-    print_log("No action defined for UPDATE")
-
-else:
-    print_log("No valid action specified (start, stop or update).")
-
+)
+result = {
+    'hostName': fqdn,
+    'ipAddress': fqdn,
+    'environment': {
+    }
+}
+print_ext_service_result(json.dumps(result))
