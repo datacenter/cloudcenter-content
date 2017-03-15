@@ -2,29 +2,29 @@
 . /utils.sh
 
 # Required Service Parameters:
-# serviceGitTag - The tag or branch of code that you want to pull from github
+# route53_gitTag - The tag or branch of code that you want to pull from github
 # TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
 # print_log "$(env)"
 
 defaultGitTag="route53"
-if [ -n "$serviceGitTag" ]; then
-    print_log  "Found serviceGitTag parameter serviceGitTag = ${serviceGitTag}"
+if [ -n "$route53_gitTag" ]; then
+    print_log  "Found route53_gitTag parameter route53_gitTag = ${route53_gitTag}"
 else
-     print_log  "Didn't find custom parameter serviceGitTag. Using default serviceGitTag = ${defaultGitTag}"
-     serviceGitTag=${defaultGitTag}
+     print_log  "Didn't find custom parameter route53_gitTag. Using default route53_gitTag = ${defaultGitTag}"
+     route53_gitTag=${defaultGitTag}
 fi
 
-if [ -n "$aws_access_key_id" ]; then
+if [ -n "$route53_aws_access_key_id" ]; then
     print_log  "AWS Access Key provided."
 else
      print_log  "No AWS access key specified in custom parameter. Trying configured cloud account."
-     aws_access_key_id=${CliqrCloudAccountPwd}
-     aws_secret_access_key=${CliqrCloud_AccessSecretKey}
+     route53_aws_access_key_id=${CliqrCloudAccountPwd}
+     route53_aws_secret_access_key=${CliqrCloud_AccessSecretKey}
 fi
 
-print_log "Tag/branch for code pull set to $serviceGitTag"
+print_log "Tag/branch for code pull set to $route53_gitTag"
 
 # Setup a bunch of prerequisits
 print_log "Installing pip and boto3"
@@ -39,10 +39,10 @@ echo "[default]" > ~/.aws/config
 echo "region=$region" >> ~/.aws/config
 echo "output=json" >> ~/.aws/config
 echo "[default]" > ~/.aws/credentials
-echo "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
-echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
+echo "aws_access_key_id=$route53_aws_access_key_id" >> ~/.aws/credentials
+echo "aws_secret_access_key=$route53_aws_secret_access_key" >> ~/.aws/credentials
 
 cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
 
-wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${serviceGitTag}/services/route53/route53.py
+wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${route53_gitTag}/services/route53/route53.py
 python route53.py ${cmd}

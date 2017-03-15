@@ -52,8 +52,8 @@ def get_dependent_ips(dependent_tier):
     return dependent_addresses.split(",")
 
 try:
-    app_domain = os.getenv("appDomain")
-    app_hostname = os.getenv("appHostname", None)
+    app_domain = os.getenv("route53_appDomain")
+    app_hostname = os.getenv("route53_appHostname", None)
     if not app_hostname:
         app_hostname = os.getenv('parentJobName')
     dependent_tier = get_dependent_tier()
@@ -71,7 +71,8 @@ try:
     crud_map = {
         'start': 'CREATE',
         'stop': 'DELETE',
-        'update': 'UPSERT'
+        'update': 'UPSERT',
+        'post_migrate': 'UPSERT'
     }
     change_batch = {
         'Comment': 'string',
