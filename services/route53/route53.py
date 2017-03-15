@@ -2,6 +2,7 @@
 import os
 import boto3
 import json
+import sys
 
 
 def print_log(msg):
@@ -47,35 +48,36 @@ serverIps = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"].split(",")
 ip_address = serverIps[0]
 
 client = boto3.client('route53')
+cmd = sys.argv[1]
+if cmd == "start":
+    response = client.change_resource_record_sets(
+        HostedZoneId=get_hosted_zone_id(app_domain),
+        ChangeBatch={
+            'Comment': 'string',
+            'Changes': [
+                {
+                    'Action': 'CREATE',
+                    'ResourceRecordSet': {
+                        'Name': fqdn,
+                        'Type': 'A',
+                        'TTL': 1,
+                        'ResourceRecords': [
+                            {
+                                'Value': ip_address
+                            },
+                        ]
+                    }
+                },
+            ]
+        }
+    )
 
-response = client.change_resource_record_sets(
-    HostedZoneId=get_hosted_zone_id(app_domain),
-    ChangeBatch={
-        'Comment': 'string',
-        'Changes': [
-            {
-                'Action': 'CREATE',
-                'ResourceRecordSet': {
-                    'Name': fqdn,
-                    'Type': 'A',
-                    'TTL': 1,
-                    'ResourceRecords': [
-                        {
-                            'Value': ip_address
-                        },
-                    ]
-                }
-            },
-        ]
+    result = {
+        'hostName': fqdn,
+        'ipAddress': ip_address,
+        'environment': {
+            'myEnv': "testEnv"
+        }
     }
-)
-
-result = {
-    'hostName': fqdn,
-    'ipAddress': ip_address,
-    'environment': {
-        'myEnv': "testEnv"
-    }
-}
 
 print_ext_service_result(json.dumps(result))
