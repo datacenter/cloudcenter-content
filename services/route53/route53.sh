@@ -2,18 +2,18 @@
 . /utils.sh
 
 # Required Service Parameters:
-# gitTag - The tag or branch of code that you want to pull from github
+# serviceGitTag - The tag or branch of code that you want to pull from github
 # TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
 # print_log "$(env)"
 
 defaultGitTag="route53"
-if [ -n "$gitTag" ]; then
-    print_log  "Found gitTag parameter gitTag = ${gitTag}"
+if [ -n "$serviceGitTag" ]; then
+    print_log  "Found serviceGitTag parameter serviceGitTag = ${serviceGitTag}"
 else
-     print_log  "Didn't find custom parameter gitTag. Using default gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
+     print_log  "Didn't find custom parameter serviceGitTag. Using default serviceGitTag = ${defaultGitTag}"
+     serviceGitTag=${defaultGitTag}
 fi
 
 if [ -n "$aws_access_key_id" ]; then
@@ -24,7 +24,7 @@ else
      aws_secret_access_key=${CliqrCloud_AccessSecretKey}
 fi
 
-print_log "Tag/branch for code pull set to $gitTag"
+print_log "Tag/branch for code pull set to $serviceGitTag"
 
 # Setup a bunch of prerequisits
 print_log "Installing pip and boto3"
@@ -44,5 +44,5 @@ echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 
 cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
 
-wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/services/route53/route53.py
+wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${serviceGitTag}/services/route53/route53.py
 python route53.py ${cmd}
