@@ -46,4 +46,4 @@ echo "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
 cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
 
 wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/services/route53/route53.py
-python route53.py start
+python route53.py ${cmd}
