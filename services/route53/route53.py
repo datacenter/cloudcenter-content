@@ -46,7 +46,10 @@ if len(dependencies) != 1:
     exit(1)
 
 # Set the new server list from the CliQr environment
-server_addresses = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"].split(",")
+dependent_addresses = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"]
+print_log("Dependent Addressed: {}".format(dependent_addresses))
+
+server_addresses = dependent_addresses.split(",")
 ip_address_rr = [{'Value': ip} for ip in server_addresses]
 
 fqdn = "{}.{}.{}".format(dependencies[0], app_hostname, app_domain)
@@ -60,22 +63,24 @@ crud_map = {
     'stop': 'DELETE',
     'update': 'UPSERT'
 }
+change_batch = {
+    'Comment': 'string',
+    'Changes': [
+        {
+            'Action': crud_map[cmd],  # Request is the same but for the action.
+            'ResourceRecordSet': {
+                'Name': fqdn,
+                'Type': 'A',
+                'TTL': 1,
+                'ResourceRecords': ip_address_rr
+            }
+        }
+    ]
+}
+print_log("Change Batch: {}".format(change_batch))
 response = client.change_resource_record_sets(
     HostedZoneId=get_hosted_zone_id(app_domain),
-    ChangeBatch={
-        'Comment': 'string',
-        'Changes': [
-            {
-                'Action': crud_map[cmd],  # Request is the same but for the action.
-                'ResourceRecordSet': {
-                    'Name': fqdn,
-                    'Type': 'A',
-                    'TTL': 1,
-                    'ResourceRecords': ip_address_rr
-                }
-            }
-        ]
-    }
+    ChangeBatch=change_batch
 )
 result = {
     'hostName': fqdn,
