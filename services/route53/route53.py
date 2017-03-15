@@ -69,7 +69,7 @@ try:
     cmd = sys.argv[1]
     # Map the CloudCenter actions to the route53 DNS actions.
     crud_map = {
-        'start': 'CREATE',
+        'start': 'UPSERT',
         'stop': 'DELETE',
         'update': 'UPSERT',
         'post_migrate': 'UPSERT'
