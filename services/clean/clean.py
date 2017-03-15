@@ -3,18 +3,31 @@
 
 # Deployment cleanup script
 
-import requests, pdb, sys
+import requests
+import json
+import argparse
+import logging
 from requests.auth import HTTPBasicAuth
 
 requests.packages.urllib3.disable_warnings()
 
-if len(sys.argv) != 4:
-    print("Requires 3 arguments. Usage python clean.py <api username> <api key> <ccm address/hostname>")
-    sys.exit(1)
+parser = argparse.ArgumentParser()
+parser.add_argument("username", help="Your API username. Not the same as your UI Login. See your CloudCenter admin for help.")
+parser.add_argument("apiKey", help="Your API key.")
+parser.add_argument("ccm", help="CCM hostname or IP.")
+parser.add_argument("-d", "--debug", help="Set debug logging", action='store_const', const=logging.DEBUG)
 
-username = sys.argv[1]
-apiKey = sys.argv[2]
-ccm = sys.argv[3]
+
+args = parser.parse_args()
+username = args.username
+apiKey = args.apiKey
+ccm = args.ccm
+
+session = requests.Session()
+
+if args.debug:
+    logging.basicConfig(level=args.debug)
+
 
 url = "https://"+ccm+"/v1/jobs"
 
@@ -27,37 +40,36 @@ headers = {
     'cache-control': "no-cache"
     }
 
-response = requests.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-print(response.text.encode('utf-8'))
+response = session.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+logging.debug(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
-    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Error']:
+    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Error', 'Stopped', 'Suspended']:
         deploymentId = job['deploymentInfo']['deploymentId']
-
 
         url = "https://"+ccm+"/v1/jobs/"+job['id']
 
-        querystring = {"hide":"true"}
+        querystring = {"hide": "true"}
 
         headers = {
             'cache-control': "no-cache"
-            }
+        }
 
-        response = requests.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-        print(job['id'])
-        print(response.text)
-    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated']:
+        logging.info("Terminating and hiding Job {}".format(job['id']))
+        response = session.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+        logging.debug(json.dumps(response.json(), indent=2))
+    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated', 'Finished', 'Rejected']:
         deploymentId = job['deploymentInfo']['deploymentId']
-
 
         url = "https://"+ccm+"/v1/jobs/"+job['id']
 
-        querystring = {"action":"hide"}
+        querystring = {"action": "hide"}
 
         headers = {
             'cache-control': "no-cache"
-            }
+        }
 
-        response = requests.request("PUT", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-        print(job['id'])
-        print(response.text)
+        logging.info("Hiding Job {}".format(job['id']))
+        response = session.request("PUT", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
+        logging.info(job['id'])
+        logging.debug(json.dumps(response.json(), indent=2))
