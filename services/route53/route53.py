@@ -53,6 +53,7 @@ server_addresses = dependent_addresses.split(",")
 ip_address_rr = [{'Value': ip} for ip in server_addresses]
 
 fqdn = "{}.{}.{}".format(dependencies[0], app_hostname, app_domain)
+print_log("FQDN: {}".format(fqdn))
 
 client = boto3.client('route53')
 

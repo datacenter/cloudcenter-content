@@ -6,7 +6,7 @@
 # TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
-print_log "$(env)"
+# print_log "$(env)"
 
 defaultGitTag="route53"
 if [ -n "$gitTag" ]; then
@@ -22,17 +22,16 @@ else
      print_log  "No AWS access key specified in custom parameter. Trying configured cloud account."
      aws_access_key_id=${CliqrCloudAccountPwd}
      aws_secret_access_key=${CliqrCloud_AccessSecretKey}
-     # gitTag=${defaultGitTag}
 fi
 
 print_log "Tag/branch for code pull set to $gitTag"
 
 # Setup a bunch of prerequisits
-print_log "Installing pre-reqs"
+print_log "Installing pip and boto3"
 yum install -y python-pip
 pip install --upgrade pip
 pip install boto3
-print_log "Done installing pre-reqs"
+print_log "Done installing pip and boto3"
 
 print_log "Configuring AWS boto3"
 mkdir -p ~/.aws
