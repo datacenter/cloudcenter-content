@@ -9,10 +9,6 @@ cd ~
 echo "Username: $(whoami)"
 echo "Working Directory: $(pwd)"
 
-env
-
-
-
  #Install S3
 sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
@@ -27,14 +23,14 @@ echo "[default]" | sudo tee --append /root/.aws/credentials
 echo "aws_access_key_id=$aws_access_key_id" | sudo tee --append /root/.aws/credentials
 echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.aws/credentials
 
-#cd /var/www
-sudo cp /var/www/wp-config.php /tmp
-sudo rm -rf /var/www/*
+sudo cp /var/www/wordpress/wp-config.php /tmp
+sudo rm -rf /var/www/wordpress/*
 
 sudo /root/bin/aws s3 cp s3://$s3path/$migrateFromDepId/wordpressbkup.zip ~/wordpressbkup.zip
-sudo unzip -o ~/wordpressbkup.zip -d /var/www
-sudo cp /tmp/wp-config.php /var/www
-sudo chown -R apache:apache /var/www
+sudo unzip -o ~/wordpressbkup.zip -d /var/www/wordpress
+sudo cp /tmp/wp-config.php /var/www/wordpress
+sudo chown -R apache:apache /var/www/wordpress
 
 sudo rm ~/wordpressbkup.zip
+
 sudo /root/bin/aws s3 rm --recursive s3://$s3path/$migrateFromDepId
