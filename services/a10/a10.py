@@ -45,7 +45,7 @@ if cmd == "start":
     # Create a VIP
     c.slb.virtual_server.create(vip, a10IP)
 
-elif cmd == "reload":
+elif cmd == "update":
     # All these next ten lines just to get the current running LB pool
 
     # Initialize an empty list as the current pool

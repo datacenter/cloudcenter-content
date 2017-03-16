@@ -19,8 +19,8 @@ fi
 print_log "Installing pip and acos_client"
 yum install -y python-pip
 pip install pip --upgrade
-pip install acos_client
+pip install a10sdk
 print_log "Done installing pip and acos_client"
 
-wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${a10_gitTag}/services/a10/a10.py
+wget --no-check-certificate https://raw.githubusercontent.com/datacenter/cloudcenter-content/${a10_git_tag}/services/a10/a10.py
 python a10.py ${cmd}
