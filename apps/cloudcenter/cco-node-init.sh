@@ -60,6 +60,9 @@ sudo sed -i -e "s?host=?host=${CliqrTier_amqp_PUBLIC_IP}?g" /usr/local/osmosix/e
 sudo sed -i -e "s?brokerHost=?brokerHost=${CliqrTier_amqp_PUBLIC_IP}?g" \
  -e "s?gateway.cluster.addresses=?gateway.cluster.addresses=${CliqrTier_amqp_PUBLIC_IP}:5671?g" \
  /usr/local/tomcat/webapps/ROOT/WEB-INF/rabbit-gateway.properties
+sed -i -e "s?cco.log.elkHost=?cco.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
+/usr/local/tomcat/webapps/ROOT/WEB-INF/gateway.properties
+
 
 agentSendLogMessage  "Waiting for AMQP to start."
 COUNT=0

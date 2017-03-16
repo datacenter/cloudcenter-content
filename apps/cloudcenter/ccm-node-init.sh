@@ -58,7 +58,10 @@ sudo java -jar ccm-installer.jar ccm-response.xml
 
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
-sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
+sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" \
+-e "s?ccm.log.elkHost=?ccm.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
+/usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
+
 
 sudo /etc/init.d/tomcat stop
 sudo rm -f /usr/local/tomcat/catalina.pid
