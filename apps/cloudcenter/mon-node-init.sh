@@ -1,5 +1,5 @@
 #!/bin/bash -x
-exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
+exec > >(tee -a /var/tmp/mon-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
@@ -27,16 +27,6 @@ dlFile () {
 
 echo "Username: $(whoami)" # Should execute as cliqruser
 echo "Working Directory: $(pwd)"
-
-defaultGitTag="cc-full-4.7.1.1"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
