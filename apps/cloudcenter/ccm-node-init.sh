@@ -8,7 +8,6 @@ exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 
 dlFile () {
     agentSendLogMessage  "Attempting to download $1"
-
     if [ -n "$dlUser" ]; then
         agentSendLogMessage  "Found user ${dlUser} specified. Using that and specified password for download auth."
         wget --no-check-certificate --user $dlUser --password $dlPass $1
@@ -16,7 +15,6 @@ dlFile () {
         agentSendLogMessage  "Didn't find username specified. Downloading with no auth."
         wget --no-check-certificate $1
     fi
-
     if [ "$?" = "0" ]; then
         agentSendLogMessage  "$1 downloaded"
     else
@@ -25,18 +23,8 @@ dlFile () {
     fi
 }
 
-echo "Username: $(whoami)" # Should execute as cliqruser
-echo "Working Directory: $(pwd)"
-
-defaultGitTag="cc-full-4.7.1.1"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
+agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
+agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~

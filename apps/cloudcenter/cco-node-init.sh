@@ -23,18 +23,8 @@ dlFile () {
     fi
 }
 
-echo "Username: $(whoami)" # Should execute as cliqruser
-echo "Working Directory: $(pwd)"
-
-defaultGitTag="cc-full-4.7.1.1"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
+agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
+agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
@@ -49,7 +39,7 @@ dlFile ${baseUrl}/appliance/cco-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} cco
+sudo ./core_installer.bin centos7 ${ccoCloudType} cco
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar cco-installer.jar cco-response.xml
