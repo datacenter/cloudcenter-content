@@ -25,3 +25,9 @@ into either the same instance to update it or into another instance.
     - `pip install pip --upgrade`
     - `pip install <module>`
 
+### Known Issues:
+You may see that your service was created and the ID is provided,
+but it still doesn't show up in the list. This could be due to a bug
+regarding parent services. To workaround until that is fixed,
+just edit/view a different service and change the ID in the URL
+to the ID of your new service, then resave your service.
