@@ -46,3 +46,4 @@ sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} monitor
 agentSendLogMessage  "Running jar installer"
 sudo java -jar monitor-installer.jar monitor-response.xml
 
+agentSendLogMessage  "Kibana URL: http://${CliqrTier_monitor_PUBLIC_IP}:8882"
