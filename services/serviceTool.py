@@ -18,7 +18,14 @@ parser.add_argument("username", help="Your API username. Not the same as your UI
                                      " See your CloudCenter admin for help.")
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
-parser.add_argument("-d", "--debug", help="Set debug logging", action='store_const', const=logging.DEBUG)
+log_choices = {
+    'critical': logging.CRITICAL,
+    'error': logging.ERROR,
+    'warning': logging.WARNING,
+    'info': logging.INFO,
+    'debug': logging.DEBUG
+}
+parser.add_argument("-d", "--debug", help="Set logging level.", choices=log_choices)
 parser.add_argument("-o", "--overwrite", action='store_true',
                     help="When importing, overwrite existing service in CloudCenter. When exporting,"
                          " overwrite existing file.")
@@ -39,6 +46,9 @@ username = args.username
 apiKey = args.apiKey
 ccm = args.ccm
 baseUrl = "https://"+args.ccm
+
+if args.debug:
+    logging.basicConfig(level=log_choices[args.debug])
 
 s = requests.Session()
 
@@ -412,8 +422,6 @@ def import_service(service):
             exit(1)
 
 # TODO: Check for existing file and properly use the overwrite flag.
-if args.debug:
-    logging.basicConfig(level=args.debug)
 
 if args.e:
     serviceName = args.e
