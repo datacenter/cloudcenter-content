@@ -6,6 +6,7 @@ import json
 
 
 ccmIp = os.getenv('CliqrTier_ccm_PUBLIC_IP')
+cloudType = os.getenv('OSMOSIX_CLOUD')
 baseUrl = "https://{ccmIp}".format(ccmIp=ccmIp)
 apiUser = "admin@cliqrtech.com,1"
 apiPass = "cliqr"
@@ -67,12 +68,12 @@ url = baseUrl+"/acctmgmt/service/agree_term"
 data = {}
 response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(apiUser, apiPass), verify=False)
 
-# Add Amazon cloud
+# Add cloud
 url = baseUrl+"/v1/tenants/1/clouds"
 data = {
-    "name": "Amazon",
+    "name": cloudType,
     "description": "",
-    "cloudFamily": "Amazon",
+    "cloudFamily": cloudType,
     "publicCloud": True,
     "tenantId": 1
 }
