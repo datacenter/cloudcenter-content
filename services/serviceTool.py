@@ -349,6 +349,7 @@ def import_service(service):
     logging.debug(json.dumps(service, indent=2))
 
     if service_id:
+        # Service exists. If overwrite flag, then update it.
         logging.info("Service ID: {} for service {} found in the CloudCenter"
                      " instance.".format(service_id, service_name))
         if not args.overwrite:
@@ -362,10 +363,16 @@ def import_service(service):
             logging.debug(json.dumps(response.json(), indent=2))
 
     else:
+        # Service doesn't exist, create it.
         if not args.logo:
             logging.critical("You must specify a logo file for new services. Use the -l switch.")
             exit(1)
         logging.info("Service ID for service {} not found. Creating".format(service_name))
+
+        # Set system service to false only for newly created services. Don't want to change this
+        # value for existing services.
+        service['systemService'] = False
+
         url = baseUrl+"/v1/tenants/"+tenant_id+"/services/"
         response = api_call("POST", url, data=json.dumps(service))
         logging.debug(json.dumps(response.json(), indent=2))
