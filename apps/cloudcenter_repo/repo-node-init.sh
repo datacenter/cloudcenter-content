@@ -43,7 +43,7 @@ sudo yum install -y wget rsync
 # Download necessary files
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
-dlFile http://download.cliqr.com/release-4.7.1.1-20170206.2/installer/repo_installer.bin
+dlFile https://download.cliqr.com/release-4.7.1.1-20170206.2/installer/repo_installer.bin
 
 sudo chmod +x repo_installer.bin
 agentSendLogMessage  "Running repo installer"
