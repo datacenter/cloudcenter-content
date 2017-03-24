@@ -90,7 +90,7 @@ def api_call(method, url, headers=None, params=None, data=None, files=None):
     if response.status_code in [200, 201]:
         return response
     else:
-        if response.status_code in [400, 401]:
+        if response.status_code in [401]:
             msg = "API call failed, probably due to bad credentials."
         else:
             msg = "API call failed."
@@ -266,6 +266,7 @@ def import_service(service):
     service.pop("id", None)
     service.pop("ownerUserId", None)
     service.pop("resource", None)
+    service.pop("systemService", None)
     for port in service['servicePorts']:
         port.pop("id", None)
         port.pop("resource", None)
@@ -368,10 +369,6 @@ def import_service(service):
             logging.critical("You must specify a logo file for new services. Use the -l switch.")
             exit(1)
         logging.info("Service ID for service {} not found. Creating".format(service_name))
-
-        # Set system service to false only for newly created services. Don't want to change this
-        # value for existing services.
-        service['systemService'] = False
 
         url = baseUrl+"/v1/tenants/"+tenant_id+"/services/"
         response = api_call("POST", url, data=json.dumps(service))
