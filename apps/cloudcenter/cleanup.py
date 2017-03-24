@@ -12,11 +12,29 @@ from requests.auth import HTTPBasicAuth
 requests.packages.urllib3.disable_warnings()
 
 
+def print_log(msg):
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
+
+
+def print_error(msg):
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
+
+
+def print_ext_service_result(msg):
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
+
+
 parser = argparse.ArgumentParser()
-parser.add_argument("username", help="Your API username. Not the same as your UI Login. See your CloudCenter admin for help.")
+parser.add_argument("username", help="Your API username. Not the same as your UI Login."
+                                     "See your CloudCenter admin for help.")
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
-parser.add_argument("-d", "--debug", help="Set debug logging", action='store_const', const=logging.DEBUG)
 
 
 args = parser.parse_args()
@@ -25,14 +43,6 @@ apiKey = args.apiKey
 ccm = args.ccm
 
 session = requests.Session()
-
-def agentSendLogMessage(msg):
-    url = "https://"+ccm+":5810/v1/jobs"
-    session.request("POST", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-
-if args.debug:
-    logging.basicConfig(level=args.debug)
-
 
 url = "https://"+ccm+"/v1/jobs"
 
@@ -45,11 +55,13 @@ headers = {
     'cache-control': "no-cache"
 }
 
-response = session.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-logging.debug(response.text.encode('utf-8'))
+response = session.request("GET", url, headers=headers, params=querystring, verify=False,
+                           auth=HTTPBasicAuth(username, apiKey))
+# logging.debug(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
-    if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] not in ['Terminated', 'Finished', 'Rejected']:
+    dep_status = job['deploymentInfo']['deploymentStatus']
+    if job['deploymentInfo'] and dep_status not in ['Terminated', 'Finished', 'Rejected']:
         deploymentId = job['deploymentInfo']['deploymentId']
 
         url = "https://"+ccm+"/v1/jobs/"+job['id']
@@ -60,6 +72,7 @@ for job in response.json()['jobs']:
             'cache-control': "no-cache"
         }
 
-        logging.info("Terminating and hiding Job {}".format(job['id']))
-        response = session.request("DELETE", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-        logging.debug(json.dumps(response.json(), indent=2))
+        print_log("Terminating and hiding Job {}".format(job['id']))
+        response = session.request("DELETE", url, headers=headers, params=querystring, verify=False,
+                                   auth=HTTPBasicAuth(username, apiKey))
+        # print_log(json.dumps(response.json(), indent=2))

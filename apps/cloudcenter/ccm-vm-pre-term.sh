@@ -1,11 +1,5 @@
-#!/bin/bash -x
-exec > >(tee -a /var/tmp/cleanup_$$.log) 2>&1
-
-. /usr/local/osmosix/etc/.osmosix.sh
-. /usr/local/osmosix/etc/userenv
-. /usr/local/osmosix/service/utils/cfgutil.sh
-. /usr/local/osmosix/service/utils/agent_util.sh
-
+#!/bin/bash
+. /utils.sh
 
 clean_url="${gitUrl}/${gitTag}/apps/cloudcenter/cleanup.py"
 
@@ -16,7 +10,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-yum install -y python-pip
-pip install --upgrade pip requests
+sudo yum install python-pip -y
+sudo pip install --upgrade pip
+sudo pip install requests
 
 python cleanup.py admin@cliqrtech.com,1 cliqr ${CliqrTier_ccm_PUBLIC_IP}
