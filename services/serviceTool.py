@@ -18,7 +18,14 @@ parser.add_argument("username", help="Your API username. Not the same as your UI
                                      " See your CloudCenter admin for help.")
 parser.add_argument("apiKey", help="Your API key.")
 parser.add_argument("ccm", help="CCM hostname or IP.")
-parser.add_argument("-d", "--debug", help="Set debug logging", action='store_const', const=logging.DEBUG)
+log_choices = {
+    'critical': logging.CRITICAL,
+    'error': logging.ERROR,
+    'warning': logging.WARNING,
+    'info': logging.INFO,
+    'debug': logging.DEBUG
+}
+parser.add_argument("-d", "--debug", help="Set logging level.", choices=log_choices)
 parser.add_argument("-o", "--overwrite", action='store_true',
                     help="When importing, overwrite existing service in CloudCenter. When exporting,"
                          " overwrite existing file.")
@@ -40,23 +47,60 @@ apiKey = args.apiKey
 ccm = args.ccm
 baseUrl = "https://"+args.ccm
 
+if args.debug:
+    logging.basicConfig(level=log_choices[args.debug])
+
 s = requests.Session()
 
 
-def get_tenant_id():
-    url = baseUrl+"/v1/users"
+# Simple function to merge two dicts, with dict2 values overwriting dict1
+def dict_merge(dict1=None, dict2=None):
+    if dict1 and dict2:
+        new_dict = dict1.copy()
+        new_dict.update(dict2)
+        return new_dict
+    elif dict1:
+        return dict1
+    else:
+        return dict2
 
-    querystring = {}
 
-    headers = {
+def api_call(method, url, headers=None, params=None, data=None, files=None):
+
+    if method == "GET":
+        my_params = {
+            "size": 0
+        }
+        params = dict_merge(my_params, params)
+
+    my_headers = {
         'x-cliqr-api-key-auth': "true",
         'accept': "application/json",
         'content-type': "application/json",
         'cache-control': "no-cache"
     }
-    response = s.request("GET", url, headers=headers, params=querystring, verify=False,
+    headers = dict_merge(my_headers, headers)
+    response = s.request(method, url, headers=headers, params=params, data=data, files=files, verify=False,
                          auth=HTTPBasicAuth(username, apiKey))
+    logging.debug("URL: {}".format(response.request.url))
+    logging.debug("Request Body: {}".format(response.request.body))
+    logging.debug("Request Headers: {}".format(response.request.headers))
+    logging.debug("Status Code: {}".format(response.status_code))
+    logging.debug("Response: {}".format(response.text))
+    if response.status_code in [200, 201]:
+        return response
+    else:
+        if response.status_code in [401]:
+            msg = "API call failed, probably due to bad credentials."
+        else:
+            msg = "API call failed."
+        raise Exception(msg)
 
+
+def get_tenant_id():
+    url = baseUrl+"/v1/users"
+
+    response = api_call(method="GET", url=url)
     j = response.json()
     tenant_id = None
     for user in j['users']:
@@ -70,26 +114,19 @@ def get_tenant_id():
 
 
 def get_service_id(tenant_id, service_name):
+    params = {
+        'parentService': True
+    }
     url = baseUrl+"/v1/tenants/" + tenant_id + "/services/"
 
-    querystring = {
-        "size": 0
-    }
-
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = s.request("GET", url, headers=headers, params=querystring, verify=False,
-                         auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("GET", url, params=params)
 
     j = response.json()
     service_id = None
-    for service in j['services']:
-        if service['name'] == service_name:
-            service_id = service['id']
+    for parent_service in j['services']:
+        for service in parent_service['childServices']:
+            if service['name'] == service_name:
+                service_id = service['id']
 
     return service_id
 
@@ -97,18 +134,7 @@ def get_service_id(tenant_id, service_name):
 def get_image_id(tenant_id, image_name):
     url = baseUrl+"/v1/tenants/" + tenant_id + "/images/"
 
-    querystring = {
-        "size": 0
-    }
-
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = s.request("GET", url, headers=headers, params=querystring, verify=False,
-                         auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("GET", url)
 
     j = response.json()
     image_id = None
@@ -122,18 +148,7 @@ def get_image_id(tenant_id, image_name):
 def get_repo_id(repo_name):
     url = baseUrl+"/repositories/"
 
-    querystring = {
-        "size": 0
-    }
-
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = s.request("GET", url, headers=headers, params=querystring, verify=False,
-                         auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("GET", url)
 
     j = response.json()
     repo_id = None
@@ -147,18 +162,7 @@ def get_repo_id(repo_name):
 def get_image_name(tenant_id, image_id):
     url = baseUrl+"/v1/tenants/" + tenant_id + "/images/"
 
-    querystring = {
-        "size": 0
-    }
-
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = s.request("GET", url, headers=headers, params=querystring, verify=False,
-                         auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("GET", url)
 
     j = response.json()
     image_name = None
@@ -180,16 +184,7 @@ def get_service_manifest(service_name):
 
     url = baseUrl+"/v1/tenants/"+tenant_id+"/services/"+service_id
 
-    querystring = {}
-
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = s.request("GET", url, headers=headers, params=querystring,
-                         verify=False, auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("GET", url)
     logging.debug(json.dumps(response.json(), indent=2))
     j = response.json()
 
@@ -228,16 +223,7 @@ def get_images():
     tenant_id = get_tenant_id()
     url = baseUrl+"/v1/tenants/"+tenant_id+"/images"
 
-    querystring = {}
-
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = s.request("GET", url, headers=headers, params=querystring,
-                         verify=False, auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("GET", url)
 
     j = response.json()
 
@@ -250,18 +236,11 @@ def get_images():
 def create_image(image, tenant_id):
     url = baseUrl+"/v1/tenants/" + tenant_id + "/images"
 
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
     image.pop('id', None)
     image.pop('resource', None)
     image.pop('systemImage', None)
 
-    response = s.request("POST", url, headers=headers, data=json.dumps(image),
-                         verify=False, auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("POST", url, data=json.dumps(image))
     new_image = response.json()
     logging.info("Image {} created with ID {}".format(new_image['name'], int(new_image['id'])))
     return int(new_image['id'])
@@ -270,17 +249,10 @@ def create_image(image, tenant_id):
 def create_repo(repo):
     url = baseUrl+"/repositories/"
 
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
     repo.pop('id', None)
     repo.pop('resource', None)
 
-    response = s.request("POST", url, headers=headers, data=json.dumps(repo),
-                         verify=False, auth=HTTPBasicAuth(username, apiKey))
+    response = api_call("POST", url, data=json.dumps(repo))
     new_repo = response.json()
     logging.info("Repo {} created with ID {}".format(new_repo['displayName'], int(new_repo['id'])))
     return int(new_repo['id'])
@@ -294,6 +266,7 @@ def import_service(service):
     service.pop("id", None)
     service.pop("ownerUserId", None)
     service.pop("resource", None)
+    service.pop("systemService", None)
     for port in service['servicePorts']:
         port.pop("id", None)
         port.pop("resource", None)
@@ -356,15 +329,15 @@ def import_service(service):
     if args.logo:
         logo_file = args.logo
         headers = {
-            'accept': "*/*"
+            'accept': "*/*",
+            'content-type': None
         }
         params = {
             "type": "logo"
         }
         url = baseUrl+"/v1/file"
         files = {'file': logo_file}
-        response = s.request("POST", url, files=files, params=params, headers=headers,
-                             verify=False, auth=HTTPBasicAuth(username, apiKey))
+        response = api_call("POST", url, files=files, headers=headers, params=params)
 
         # After uploading the image the response contains a temporary location for the logo which
         # has to be placed into the logo_path for the service. This gets changed behind the scenes
@@ -376,13 +349,8 @@ def import_service(service):
 
     logging.debug(json.dumps(service, indent=2))
 
-    headers = {
-        'x-cliqr-api-key-auth': "true",
-        'accept': "application/json",
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
     if service_id:
+        # Service exists. If overwrite flag, then update it.
         logging.info("Service ID: {} for service {} found in the CloudCenter"
                      " instance.".format(service_id, service_name))
         if not args.overwrite:
@@ -392,18 +360,18 @@ def import_service(service):
             logging.info("--overwrite specified. Updating existing service.")
             url = baseUrl+"/v1/tenants/"+tenant_id+"/services/"+service_id
             service['id'] = service_id
-            response = s.request("PUT", url, headers=headers, data=json.dumps(service), verify=False,
-                                 auth=HTTPBasicAuth(username, apiKey))
+            response = api_call("PUT", url, data=json.dumps(service))
             logging.debug(json.dumps(response.json(), indent=2))
 
     else:
+        # Service doesn't exist, create it.
         if not args.logo:
             logging.critical("You must specify a logo file for new services. Use the -l switch.")
             exit(1)
         logging.info("Service ID for service {} not found. Creating".format(service_name))
+
         url = baseUrl+"/v1/tenants/"+tenant_id+"/services/"
-        response = s.request("POST", url, headers=headers, data=json.dumps(service),
-                             verify=False, auth=HTTPBasicAuth(username, apiKey))
+        response = api_call("POST", url, data=json.dumps(service))
         logging.debug(json.dumps(response.json(), indent=2))
         if response.status_code == 201:
             logging.info("Service {} created with Id {}".format(service_name, response.json()['id']))
@@ -412,13 +380,9 @@ def import_service(service):
             exit(1)
 
 # TODO: Check for existing file and properly use the overwrite flag.
-if args.debug:
-    logging.basicConfig(level=args.debug)
 
 if args.e:
     serviceName = args.e
-    logoPath = "{}/assets/img/appTiers/{}/logo.png".format(baseUrl, serviceName)
-    logoFile = "{}.png".format(serviceName)
     filename = "{serviceName}.servicemanifest".format(serviceName=serviceName)
 
     logging.info("Exporting service: {}".format(serviceName))
@@ -428,14 +392,16 @@ if args.e:
     logging.info("Service {} exported to {}".format(serviceName, filename))
 
     # Download logo too
+    logo_path = baseUrl + svc_manifest['logoPath']
+    logo_file = "{}.png".format(serviceName)
     try:
-        logo_response = s.request("GET", logoPath)
-        with open(logoFile, 'wb') as out_file:
+        logo_response = api_call(method="GET", url=logo_path)
+        with open(logo_file, 'wb') as out_file:
             out_file.write(logo_response.content)
-        logging.info("Logo downloaded to {}".format(logoFile))
+        logging.info("Logo downloaded to {}".format(logo_file))
 
     except Exception as err:
-        logging.error("Unable to download logo from {}: {}".format(logoPath, err))
+        logging.error("Unable to download logo from {}: {}".format(logo_path, err))
 
 if args.i:
     import_service_json = json.load(args.i)
