@@ -8,9 +8,9 @@ if [ $? -ne 0 ]; then
     print_log  "Failed downloading ${config_url}. You can still perform the post-install UI configuration manually."
 fi
 
-sudo yum install python-pip -y
-sudo pip install --upgrade pip
-sudo pip install requests
+yum install python-pip -y
+pip install --upgrade pip
+pip install requests
 
 python ccm-config.py
 

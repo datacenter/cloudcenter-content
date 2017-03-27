@@ -6,7 +6,7 @@ import json
 
 
 ccmIp = os.getenv('CliqrTier_ccm_PUBLIC_IP')
-cloudType = os.getenv('OSMOSIX_CLOUD')
+cloudType = os.getenv('ccoCloudType')
 baseUrl = "https://{ccmIp}".format(ccmIp=ccmIp)
 apiUser = "admin@cliqrtech.com,1"
 apiPass = "cliqr"
