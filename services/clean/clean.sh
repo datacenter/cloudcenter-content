@@ -21,4 +21,4 @@ pip install --upgrade pip requests
 
 wget -N --no-check-certificate --no-cache https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/clean/clean.py
 
-python clean.py $apiUN $apiPW $ccm
+python clean.py ${apiUN} ${apiPW} ${ccm}
