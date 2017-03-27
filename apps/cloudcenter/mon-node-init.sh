@@ -1,5 +1,5 @@
 #!/bin/bash -x
-exec > >(tee -a /var/tmp/amqp-node-init_$$.log) 2>&1
+exec > >(tee -a /var/tmp/mon-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
@@ -34,24 +34,14 @@ sudo yum install -y wget vim java-1.8.0-openjdk nmap
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
 dlFile ${baseUrl}/installer/core_installer.bin
-dlFile ${baseUrl}/appliance/cco-installer.jar
-dlFile ${baseUrl}/appliance/conn_broker-response.xml
+dlFile ${baseUrl}/appliance/monitor-installer.jar
+dlFile ${baseUrl}/appliance/monitor-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 ${ccoCloudType} rabbit
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} monitor
 
 agentSendLogMessage  "Running jar installer"
-sudo java -jar cco-installer.jar conn_broker-response.xml
+sudo java -jar monitor-installer.jar monitor-response.xml
 
-agentSendLogMessage  "Running rabbit_config.sh"
-sudo /usr/local/osmosix/bin/rabbit_config.sh
-
-# Use "?" as sed delimiter to avoid escaping all the slashes
-sudo sed -i -e "s?dnsName=?dnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/osmosix/etc/gateway_config.properties
-sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/local/tomcatgua/webapps/access/WEB-INF/gua.properties
-
-sudo /etc/init.d/guacd start
-sudo -E /etc/init.d/tomcatgua restart
-
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
+agentSendLogMessage  "Kibana URL: http://${CliqrTier_monitor_PUBLIC_IP}:8882"

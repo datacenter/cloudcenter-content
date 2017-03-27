@@ -8,7 +8,6 @@ exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 
 dlFile () {
     agentSendLogMessage  "Attempting to download $1"
-
     if [ -n "$dlUser" ]; then
         agentSendLogMessage  "Found user ${dlUser} specified. Using that and specified password for download auth."
         wget --no-check-certificate --user $dlUser --password $dlPass $1
@@ -16,7 +15,6 @@ dlFile () {
         agentSendLogMessage  "Didn't find username specified. Downloading with no auth."
         wget --no-check-certificate $1
     fi
-
     if [ "$?" = "0" ]; then
         agentSendLogMessage  "$1 downloaded"
     else
@@ -25,18 +23,8 @@ dlFile () {
     fi
 }
 
-echo "Username: $(whoami)" # Should execute as cliqruser
-echo "Working Directory: $(pwd)"
-
-defaultGitTag="cc-full-4.7.1.1"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
+agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
+agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
@@ -51,14 +39,17 @@ dlFile ${baseUrl}/appliance/ccm-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 amazon ccm
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} ccm
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar ccm-installer.jar ccm-response.xml
 
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
-sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
+sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTier_ccm_PUBLIC_IP}?g" \
+-e "s?ccm.log.elkHost=?ccm.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
+/usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
+
 
 sudo /etc/init.d/tomcat stop
 sudo rm -f /usr/local/tomcat/catalina.pid
