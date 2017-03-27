@@ -91,7 +91,7 @@
             "displayName": "API Password",
             "confirmValue": "",
             "helpText": "",
-            "type": "password_input",
+            "type": "string",
             "userEditable": true,
             "userVisible": true,
             "optional": false,

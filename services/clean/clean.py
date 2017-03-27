@@ -4,7 +4,7 @@
 # Deployment cleanup script
 
 import requests
-import json
+# import json
 import argparse
 # import logging
 from requests.auth import HTTPBasicAuth
@@ -59,8 +59,9 @@ headers = {
     'cache-control': "no-cache"
 }
 
-response = session.request("GET", url, headers=headers, params=querystring, verify=False, auth=HTTPBasicAuth(username, apiKey))
-print_log(response.text.encode('utf-8'))
+response = session.request("GET", url, headers=headers, params=querystring, verify=False,
+                           auth=HTTPBasicAuth(username, apiKey))
+# print_log(response.text.encode('utf-8'))
 
 for job in response.json()['jobs']:
     if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Error', 'Stopped', 'Suspended']:
@@ -77,7 +78,7 @@ for job in response.json()['jobs']:
         print_log("Terminating and hiding Job {}".format(job['id']))
         response = session.request("DELETE", url, headers=headers, params=querystring, verify=False,
                                    auth=HTTPBasicAuth(username, apiKey))
-        print_log(json.dumps(response.json(), indent=2))
+        # print_log(json.dumps(response.json(), indent=2))
     if job['deploymentInfo'] and job['deploymentInfo']['deploymentStatus'] in ['Terminated', 'Finished', 'Rejected']:
         deploymentId = job['deploymentInfo']['deploymentId']
 
@@ -92,5 +93,5 @@ for job in response.json()['jobs']:
         print_log("Hiding Job {}".format(job['id']))
         response = session.request("PUT", url, headers=headers, params=querystring, verify=False,
                                    auth=HTTPBasicAuth(username, apiKey))
-        print_log(job['id'])
+        # print_log(job['id'])
         # print_log(json.dumps(response.json(), indent=2))
