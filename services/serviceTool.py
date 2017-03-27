@@ -114,6 +114,7 @@ def get_tenant_id():
 
 
 def get_service_id(tenant_id, service_name):
+    logging.info("Getting ID for service {}".format(service_name))
     params = {
         'parentService': True
     }
@@ -125,8 +126,11 @@ def get_service_id(tenant_id, service_name):
     service_id = None
     for parent_service in j['services']:
         for service in parent_service['childServices']:
+            logging.debug(service['name'])
             if service['name'] == service_name:
                 service_id = service['id']
+
+    logging.info("Found ID {} for service {}".format(service_id, service_name))
 
     return service_id
 
