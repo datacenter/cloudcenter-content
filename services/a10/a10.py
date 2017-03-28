@@ -1,7 +1,14 @@
 #!/usr/bin/env python
-import acos_client as acos
+# import acos_client as acos
 import sys
 import os
+from a10sdk.common.device_proxy import DeviceProxy
+from a10sdk.core.slb.slb_virtual_server import VirtualServer
+from a10sdk.core.slb.slb_virtual_server_port import Port
+from a10sdk.core.slb.slb_service_group import ServiceGroup
+from a10sdk.core.slb.slb_service_group_member import Member
+from a10sdk.core.slb.slb_server import Server
+
 
 cmd = sys.argv[1]
 
