@@ -9,32 +9,21 @@ from a10sdk.core.slb.slb_service_group import ServiceGroup
 from a10sdk.core.slb.slb_service_group_member import Member
 from a10sdk.core.slb.slb_server import Server
 
-
 cmd = sys.argv[1]
 
-a10mgmtIP = os.getenv("a10_lb_ip_address")
-a10mgmt_port = os.getenv("a10mgmt_port")
-a10proto = os.getenv("a10proto")
-a10mgmt_login = os.getenv("a10_username")
-a10mgmt_passwd = os.getenv("a10_password")
+A10_MGMT_IP = os.getenv("a10_lb_ip_address")
+A10_MGMT_PORT = os.getenv("a10mgmt_port")
+# A10_MGMT_PROTOCOL = os.getenv("a10proto")
+A10_MGMT_USER = os.getenv("a10_username")
+A10_MGMT_PASSWD = os.getenv("a10_password")
 a10_lb_method = os.getenv("a10_lb_method")
-a10_vip_address = os.getenv("a10_vip_address")
-a10_vs_port = os.getenv("a10_vs_port")
-a10_rs_port = os.getenv("a10_rs_port")
-
-# Create list of dependent service tiers
-dependencies = os.environ["CliqrDependencies"].split(",")
-# NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
-
-
-# Set the new server list from the CliQr environment
-serverIps = os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
-
-pool = 'pool' + os.environ['parentJobId']
-vip = 'vip' + os.environ['parentJobId']
-# healthMonitor = 'hm'+os.environ['parentJobId']
-
-dp = DeviceProxy(host=a10mgmtIP, port=a10mgmt_port, username=a10mgmt_login, password=a10mgmt_passwd, use_https=False)
+A10_VIP = os.getenv("a10_vip_address")
+A10_SERVICE_PORT = os.getenv("a10_vs_port")
+A10_REAL_SERVER_PORT = os.getenv("a10_rs_port")
+PORT_TEMPLATE = "GRACEFUL_SHUTDOWN_10MIN"  #Can pull a list from the ADC to make a drop down menu to apply to port
+A10_SERVICE_PROTOCOL = "http"  # A10_SERVICE_PROTOCOL = os.environ["virtual_service_protocol"]
+A10_REAL_PROTOCOL = "tcp"      # A10_REAL_PROTOCOL (tcp or udp only)
+HEALTH_CHECK = "HM-HTTP"       # Can pull a list from the ADC to make a drop down menu to apply to port
 
 
 def print_log(msg):
@@ -55,86 +44,154 @@ def print_ext_service_result(msg):
     print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
 
+def __get_reals():
+    # Create list of dependent service tiers
+    dependencies = os.environ["CliqrDependencies"].split(",")
+    # NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
+    dep_tier_count = len(dependencies)
+    if dep_tier_count != 1:
+        raise Exception("This service supports exactly one dependent tier. You have {}: {}".format(dep_tier_count,
+                                                                                                   dependencies))
+    # Set the new server list from the CliQr environment
+    # Return list like ['1.2.3.4', '1.2.3.5']
+    return os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
+
+SERVICE_GROUP_NAME = 'pool' + os.environ['parentJobId']
+
+# Need to update to add cert to allow for https call
+dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
+                 use_https=False)
+
 if cmd == "start":
-    # Make a list out of the IP addresses of the web server tier.
-    print_log(serverIps)
 
-    # Create pool and add to VIP.
-    # c.slb.service_group.create(pool, c.slb.service_group.TCP, c.slb.service_group.ROUND_ROBIN)
+    '''
+    This section of code will instantiate a new VIP service. All input will be pulled from Cliqr lists
+    '''
+    # Need to update to add cert to allow for https call
+    dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
+                     use_https=False)
 
-    # Create and apply a health check for the pool
-    # c.slb.hm.create(healthMonitor, c.slb.hm.HTTP, 5, 5, 5, 'GET', '/', '200', 80)
+    # Can delete and replace with Cliqr provided list. List name is VIP_SG_SLB_SERVER_IP_W_IPS. Need to ensure
+    # how list is presented by Cliqr matches planned list (2d list - [ [ A,ip1], [B,ip2] ] ) else code needs to be
+    # updated to accomodate the type of struct provided.
 
-    # Apply a ping health-check to pool
-    # c.slb.service_group.update(pool, health_monitor=ping)
+    # for i in range(1,6):
+    #     for j in range (0,1):
+    #         new=[]
+    #         new.append("s_NEW_PYTHON_SRVR0"+str(i))
+    #         NEW_REAL_SERVER_NAMES.append("s_NEW_PYTHON_SRVR0"+str(i))
+    #         new.append("10.1.31.3"+str(i))
+    #     VIP_SG_SLB_SERVER_IP_W_IPS.append(new)
 
-    # Add each web server IP as a real server, then add it to the pool.
-    for server_ip in serverIps:
-        serverName = 's' + server_ip
-        # c.slb.server.create(serverName, server_ip)
-        # c.slb.service_group.member.create(pool, serverName, 80)
-
-        rs = Server(name=serverName, host=server_ip, DeviceProxy=dp)
-        rs.create()
-
-        port_name = "http_port"
-        rp = Port(port_number=a10_rs_port, protocol="tcp", DeviceProxy=dp)
-        rp.create(name=port_name)
-
-    # Create a new service group
-    sg = ServiceGroup(name=pool, protocol="tcp", DeviceProxy=dp)
+    # Create Service Group to be used and add members
+    sg = ServiceGroup(name=SERVICE_GROUP_NAME, protocol=A10_REAL_PROTOCOL, DeviceProxy=dp)
     sg.create()
 
-    # Create new VIP with new sg
-    vs = VirtualServer(name="NEW_PYTHON_VIP_01", ip_address="1.1.1.1", DeviceProxy=dp)
+    # Get list of Real Servers already configured on the ADC
+    # ADC_REAL_SERVERS = Server(DeviceProxy=dp).get()
+    # for item in NEW_REAL_SERVER_NAMES:
+    #     if item not in ADC_REAL_SERVERS:
+    #         # Add new servers from Cliqr list to the ADC (slb servers)
+    #         for lst in VIP_SG_SLB_SERVER_IP_W_IPS:
+    #             if item == lst[0]:
+    #                 rs = Server(name=item, host=lst[1], DeviceProxy=dp)
+    #                 rs.create()
+    #
+
+    # Just a simple list of IPs like ['1.2.3.4', '1,2,3,5']
+    VIP_SG_SLB_SERVER_IP_W_IPS = __get_reals()
+    for rs_ip in VIP_SG_SLB_SERVER_IP_W_IPS:
+        # Just put an 's' in front of the IP to get the name.
+        rs = Server(name="s"+rs_ip, host=rs_ip, DeviceProxy=dp)
+        rs.create()
+
+        # Add the real port listener with the appropriate health check and port template (if needed).
+        # TJ - Need to test none use case
+        rp = Port(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
+                  template_port=PORT_TEMPLATE, DeviceProxy=dp)
+        rp.create(name=rs_ip)
+
+        # Add new member to new service group
+        # a10_url must use static service-group. a10sdk being updated to fix issue - Dated 28MAR2017 issue #7.
+        a10_url = "/axapi/v3/slb/service-group/" + SERVICE_GROUP_NAME + "/member/{name}+{port}"
+        sg_mem = Member(name=rs_ip, port=A10_REAL_SERVER_PORT, DeviceProxy=dp).update(name=SERVICE_GROUP_NAME)
+
+    # Create new VIP using the newly created service_group
+    vs = VirtualServer(name=A10_VIP, ip_address=A10_VIP_IP, DeviceProxy=dp)
     vs.create()
 
-    # Create a VIP
-    # c.slb.virtual_server.create(vip, a10mgmtIP)
-    # Add a vport to the new VIP
-    vs_port = Port(protocol="http", port_number=a10_vs_port, service_group="sg_NEW_PYTHON_SERVICE_GROUP", DeviceProxy=dp)
-    vs_port.create(name="NEW_PYTHON_VIP_01")
+    # Add a vport to the new VIP with the new service_group
+    # We can easily add health monitor or other templates here. Enabling snat_on_vip. Snat pool not available
+    # Entering fix issue on github for a10sdk - 29MAR2017
+
+    vs_port = Port(protocol=A10_SERVICE_PROTOCOL, port_number=A10_SERVICE_PORT, service_group=SERVICE_GROUP_NAME,
+                   snat_on_vip=1, DeviceProxy=dp)
+    vs_port.create(name=A10_VIP)
 
 
 elif cmd == "update":
-    # All these next ten lines just to get the current running LB pool
+    '''
+    This section is meant to read in the list of servers configured on Cliqr and ensure the A10 ADC add/removes the
+    real servers to match. 
+    '''
 
-    # Initialize an empty list as the current pool
-    currPool = {}
-    # Get all the members in the current pool from API
-    r = c.slb.service_group.get(pool)
+    # Get the service_group member_list for the virtual server requested
+    vp = Port(DeviceProxy=dp).get(name=A10_VIP, port_number=A10_SERVICE_PORT, protocol=A10_SERVICE_PROTOCOL)
+    sg_ml = ServiceGroup(DeviceProxy=dp).get(name=vp.service_group).member_list
 
-    # Add each member's IP address to the current pool list.
-    for member in r['service_group']['member_list']:
-        # Get a reference to this server.
-        s = c.slb.server.get(member['server'])
+    # Populate list of all servers available
+    ADC_SLB_SERVERS = Server(DeviceProxy=dp).get()
 
-        ip = str(s['server']['host'])
-        name = str(s['server']['name'])
+    # Populate lists of currently configured servers and servers with IPs with the associated VIP service_group
+    for item in sg_ml:
+        server = Server(DeviceProxy=dp).get(name=item.name).host
+        i = 1
+        for i in range(0, 1):
+            new_list = []
+            new_list.append(server)
+            new_list.append(item.name)
+            VIP_SG_SLB_SERVER_IP.append(server)
+            i -= 1
+        VIP_SG_SLB_SERVER_IP_W_IPS.append(new_list)
 
-        # Convert the server's IP (host) to str, then add to current pool list.
-        currPool[ip] = name
+    # Add new servers to the service_group
+    Servers_To_Add = set(Cliqr_ServerIPs) - set(VIP_SG_SLB_SERVER_IP)
+    print_log("Servers_To_Add: {}".format(Servers_To_Add))
+    for svr in Servers_To_Add:
+        for item in ADC_SLB_SERVERS:
+            print_log("item.host: {}, svr: {}".format(item.host, svr))
+            if item.host == svr:
+                print_log("match!! {} == {}".format(item.host, svr))
+                sg_mem = Member(name=item.name, port=A10_SERVICE_PORT, DeviceProxy=dp).update(name=vp.service_group)
 
-    ################
+    # Remove server from service_group
+    Servers_To_Remove = set(VIP_SG_SLB_SERVER_IP) - set(Cliqr_ServerIPs)
+    for index in VIP_SG_SLB_SERVER_IP_W_IPS:
+        for svr in Servers_To_Remove:
+            if index[0] == svr:
+                a10_url = "/axapi/v3/slb/service-group/" + vp.service_group + "/member/{name}+{port}"
+                service_group_member = Member(name=index[1], port=A10_SERVICE_PORT, a10_url=a10_url,
+                                              DeviceProxy=dp).delete(name=index[1], port=A10_SERVICE_PORT)
 
-    # For each server in the new serverIps, add it to addServers if it's not in the current pool
-    addServers = [server_ip for server_ip in serverIps if server_ip not in currPool.keys()]
-
-    # For each server in the currPool, add it to removeServers if it's not in serverIps
-    removeServers = [server_ip for server_ip in currPool.keys() if server_ip not in serverIps]
-
-    for server_ip in addServers:
-        serverName = 's' + server_ip
-        c.slb.server.create(serverName, server_ip)
-        c.slb.service_group.member.create(pool, serverName, 80)
-
-    for server_ip in removeServers:
-        c.slb.server.delete(currPool[server_ip])
 
 elif cmd == "stop":
-    c.slb.virtual_server.delete(vip)
-    c.slb.service_group.delete(pool)
+    # Get members of service_group before deleting it
+    sg = ServiceGroup(name=SERVICE_GROUP_NAME, protocol=A10_REAL_PROTOCOL, DeviceProxy=dp).get(name=SERVICE_GROUP_NAME)
 
-    for server_ip in serverIps:
-        serverName = 's' + server_ip
-        c.slb.server.delete(serverName)
+    # Delete the Virtual Server
+    vs = VirtualServer(name=A10_VIP, ip_address=A10_VIP_IP, DeviceProxy=dp).delete(name=A10_VIP)
+
+    # Delete the servers
+    for member in sg.member_list:
+        rs = Server(name=member.name, DeviceProxy=dp).delete(name=member.name)
+        print_log("member: {}".format(member.name))
+
+    # Delete the Service Group
+    sg = ServiceGroup(name=SERVICE_GROUP_NAME, DeviceProxy=dp).delete(name=SERVICE_GROUP_NAME)
+
+
+else:
+    print_log("Invalid command line argument.")
+
+dp.logoff()
+
