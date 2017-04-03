@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# import acos_client as acos
 import sys
 import os
 from a10sdk.common.device_proxy import DeviceProxy
 from a10sdk.core.slb.slb_virtual_server import VirtualServer
-from a10sdk.core.slb.slb_virtual_server_port import Port
+from a10sdk.core.slb.slb_server_port import Port
+# from a10sdk.core.slb.slb_virtual_server_port import Port
 from a10sdk.core.slb.slb_service_group import ServiceGroup
 from a10sdk.core.slb.slb_service_group_member import Member
 from a10sdk.core.slb.slb_server import Server
@@ -12,14 +12,14 @@ from a10sdk.core.slb.slb_server import Server
 cmd = sys.argv[1]
 
 A10_MGMT_IP = os.getenv("a10_lb_ip_address")
-A10_MGMT_PORT = os.getenv("a10mgmt_port")
+A10_MGMT_PORT = os.getenv("a10mgmt_port", "8080")
 # A10_MGMT_PROTOCOL = os.getenv("a10proto")
-A10_MGMT_USER = os.getenv("a10_username")
-A10_MGMT_PASSWD = os.getenv("a10_password")
+A10_MGMT_USER = os.getenv("a10_username", "admin")
+A10_MGMT_PASSWD = os.getenv("a10_password", "a10")  # Default for AWS marketplace is the node Id.
 a10_lb_method = os.getenv("a10_lb_method")
 A10_VIP_IP = os.getenv("a10_vip_address") # Need to figure out where to get this IP from.
 A10_SERVICE_PORT = os.getenv("a10_vs_port")
-A10_REAL_SERVER_PORT = os.getenv("a10_rs_port")
+A10_REAL_SERVER_PORT = os.getenv("a10_rs_port", "80")
 PORT_TEMPLATE = "GRACEFUL_SHUTDOWN_10MIN"  # Can pull a list from the ADC to make a drop down menu to apply to port
 A10_SERVICE_PROTOCOL = "http"  # A10_SERVICE_PROTOCOL = os.environ["virtual_service_protocol"]
 A10_REAL_PROTOCOL = "tcp"      # A10_REAL_PROTOCOL (tcp or udp only)
@@ -70,8 +70,8 @@ if cmd == "start":
     This section of code will instantiate a new VIP service. All input will be pulled from Cliqr lists
     '''
     # Need to update to add cert to allow for https call
-    dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
-                     use_https=False)
+    # dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
+    #                  use_https=False)
 
     # Can delete and replace with Cliqr provided list. List name is VIP_SG_SLB_SERVER_IP_W_IPS. Need to ensure
     # how list is presented by Cliqr matches planned list (2d list - [ [ A,ip1], [B,ip2] ] ) else code needs to be
