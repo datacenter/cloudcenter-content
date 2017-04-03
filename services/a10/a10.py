@@ -17,10 +17,10 @@ A10_MGMT_PORT = os.getenv("a10mgmt_port")
 A10_MGMT_USER = os.getenv("a10_username")
 A10_MGMT_PASSWD = os.getenv("a10_password")
 a10_lb_method = os.getenv("a10_lb_method")
-A10_VIP = os.getenv("a10_vip_address")
+A10_VIP_IP = os.getenv("a10_vip_address") # Need to figure out where to get this IP from.
 A10_SERVICE_PORT = os.getenv("a10_vs_port")
 A10_REAL_SERVER_PORT = os.getenv("a10_rs_port")
-PORT_TEMPLATE = "GRACEFUL_SHUTDOWN_10MIN"  #Can pull a list from the ADC to make a drop down menu to apply to port
+PORT_TEMPLATE = "GRACEFUL_SHUTDOWN_10MIN"  # Can pull a list from the ADC to make a drop down menu to apply to port
 A10_SERVICE_PROTOCOL = "http"  # A10_SERVICE_PROTOCOL = os.environ["virtual_service_protocol"]
 A10_REAL_PROTOCOL = "tcp"      # A10_REAL_PROTOCOL (tcp or udp only)
 HEALTH_CHECK = "HM-HTTP"       # Can pull a list from the ADC to make a drop down menu to apply to port
@@ -56,7 +56,9 @@ def __get_reals():
     # Return list like ['1.2.3.4', '1.2.3.5']
     return os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
 
+# TODO: Figure out more unique way to get pool and vip names.
 SERVICE_GROUP_NAME = 'pool' + os.environ['parentJobId']
+A10_VIP = 'vip' + os.environ['parentJobId']
 
 # Need to update to add cert to allow for https call
 dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
@@ -143,35 +145,52 @@ elif cmd == "update":
     ADC_SLB_SERVERS = Server(DeviceProxy=dp).get()
 
     # Populate lists of currently configured servers and servers with IPs with the associated VIP service_group
+    VIP_SG_SLB_SERVER_IP = []
     for item in sg_ml:
-        server = Server(DeviceProxy=dp).get(name=item.name).host
-        i = 1
-        for i in range(0, 1):
-            new_list = []
-            new_list.append(server)
-            new_list.append(item.name)
-            VIP_SG_SLB_SERVER_IP.append(server)
-            i -= 1
-        VIP_SG_SLB_SERVER_IP_W_IPS.append(new_list)
+        server = Server(DeviceProxy=dp).get(name=item.name).host  # IP Address of server in current pool.
+        VIP_SG_SLB_SERVER_IP.append(server)
+        # i = 1
+        # for i in range(0, 1):
+        #     new_list = []
+        #     new_list.append(server)
+        #     new_list.append(item.name)
+        #     VIP_SG_SLB_SERVER_IP.append(server)
+        #     i -= 1
+        # VIP_SG_SLB_SERVER_IP_W_IPS.append(new_list)  # List of servers in the current pool.
 
+    Cliqr_ServerIPs = __get_reals()  # List of IPs only.
     # Add new servers to the service_group
     Servers_To_Add = set(Cliqr_ServerIPs) - set(VIP_SG_SLB_SERVER_IP)
     print_log("Servers_To_Add: {}".format(Servers_To_Add))
-    for svr in Servers_To_Add:
-        for item in ADC_SLB_SERVERS:
-            print_log("item.host: {}, svr: {}".format(item.host, svr))
-            if item.host == svr:
-                print_log("match!! {} == {}".format(item.host, svr))
-                sg_mem = Member(name=item.name, port=A10_SERVICE_PORT, DeviceProxy=dp).update(name=vp.service_group)
+    for rs_ip in Servers_To_Add:
+        # Just put an 's' in front of the IP to get the name.
+        rs = Server(name="s"+rs_ip, host=rs_ip, DeviceProxy=dp)
+        rs.create()
+
+        # Add the real port listener with the appropriate health check and port template (if needed).
+        # TJ - Need to test none use case
+        rp = Port(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
+                  template_port=PORT_TEMPLATE, DeviceProxy=dp)
+        rp.create(name=rs_ip)
+        sg_mem = Member(name="s"+rs_ip, port=A10_SERVICE_PORT, DeviceProxy=dp).update(name=vp.service_group)
+
+        # for item in ADC_SLB_SERVERS:
+        #     print_log("item.host: {}, svr: {}".format(item.host, svr))
+        #     if item.host == svr:
+        #         print_log("match!! {} == {}".format(item.host, svr))
 
     # Remove server from service_group
     Servers_To_Remove = set(VIP_SG_SLB_SERVER_IP) - set(Cliqr_ServerIPs)
-    for index in VIP_SG_SLB_SERVER_IP_W_IPS:
-        for svr in Servers_To_Remove:
-            if index[0] == svr:
-                a10_url = "/axapi/v3/slb/service-group/" + vp.service_group + "/member/{name}+{port}"
-                service_group_member = Member(name=index[1], port=A10_SERVICE_PORT, a10_url=a10_url,
-                                              DeviceProxy=dp).delete(name=index[1], port=A10_SERVICE_PORT)
+
+    for rs_ip in Servers_To_Remove:
+        name = "s"+rs_ip
+        a10_url = "/axapi/v3/slb/service-group/" + vp.service_group + "/member/{name}+{port}"
+        service_group_member = Member(name=name, port=A10_SERVICE_PORT, a10_url=a10_url,
+                                      DeviceProxy=dp).delete(name=name, port=A10_SERVICE_PORT)
+
+    # for index in VIP_SG_SLB_SERVER_IP_W_IPS:
+    #     for svr in Servers_To_Remove:
+    #         if index[0] == svr:
 
 
 elif cmd == "stop":
