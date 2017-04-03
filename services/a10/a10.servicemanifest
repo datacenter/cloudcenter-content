@@ -11,17 +11,17 @@
     "externalActions": [
         {
             "actionName": "UPDATE",
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/a10/a10.sh update",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%a10_git_tag%/services/a10/a10.sh update",
             "actionType": "URL"
         },
         {
             "actionName": "STOP",
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/a10/a10.sh stop",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%a10_git_tag%/services/a10/a10.sh stop",
             "actionType": "URL"
         },
         {
             "actionName": "START",
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/a10/a10.sh start",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%a10_git_tag%/services/a10/a10.sh start",
             "actionType": "URL"
         }
     ],

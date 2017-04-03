@@ -9,6 +9,8 @@ serviceStatus=""
 
 defGitTag="a10."
 
+print_log $(env)
+
 if [ -n "$a10_gitTag" ]; then
     agentSendLogMessage  "Found gitTag parameter gitTag = ${a10_gitTag}"
 else
