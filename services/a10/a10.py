@@ -3,8 +3,8 @@ import sys
 import os
 from a10sdk.common.device_proxy import DeviceProxy
 from a10sdk.core.slb.slb_virtual_server import VirtualServer
-from a10sdk.core.slb.slb_server_port import Port
-# from a10sdk.core.slb.slb_virtual_server_port import Port
+from a10sdk.core.slb.slb_server_port import Port as ServerPort
+from a10sdk.core.slb.slb_virtual_server_port import Port as vPort
 from a10sdk.core.slb.slb_service_group import ServiceGroup
 from a10sdk.core.slb.slb_service_group_member import Member
 from a10sdk.core.slb.slb_server import Server
@@ -109,7 +109,7 @@ if cmd == "start":
 
         # Add the real port listener with the appropriate health check and port template (if needed).
         # TJ - Need to test none use case
-        rp = Port(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
+        rp = ServerPort(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
                   template_port=PORT_TEMPLATE, DeviceProxy=dp)
         rp.create(name=rs_ip)
 
@@ -126,7 +126,7 @@ if cmd == "start":
     # We can easily add health monitor or other templates here. Enabling snat_on_vip. Snat pool not available
     # Entering fix issue on github for a10sdk - 29MAR2017
 
-    vs_port = Port(protocol=A10_SERVICE_PROTOCOL, port_number=A10_SERVICE_PORT, service_group=SERVICE_GROUP_NAME,
+    vs_port = vPort(protocol=A10_SERVICE_PROTOCOL, port_number=A10_SERVICE_PORT, service_group=SERVICE_GROUP_NAME,
                    snat_on_vip=1, DeviceProxy=dp)
     vs_port.create(name=A10_VIP)
 
@@ -138,7 +138,7 @@ elif cmd == "update":
     '''
 
     # Get the service_group member_list for the virtual server requested
-    vp = Port(DeviceProxy=dp).get(name=A10_VIP, port_number=A10_SERVICE_PORT, protocol=A10_SERVICE_PROTOCOL)
+    vp = vPort(DeviceProxy=dp).get(name=A10_VIP, port_number=A10_SERVICE_PORT, protocol=A10_SERVICE_PROTOCOL)
     sg_ml = ServiceGroup(DeviceProxy=dp).get(name=vp.service_group).member_list
 
     # Populate list of all servers available
@@ -169,7 +169,7 @@ elif cmd == "update":
 
         # Add the real port listener with the appropriate health check and port template (if needed).
         # TJ - Need to test none use case
-        rp = Port(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
+        rp = ServerPort(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
                   template_port=PORT_TEMPLATE, DeviceProxy=dp)
         rp.create(name=rs_ip)
         sg_mem = Member(name="s"+rs_ip, port=A10_SERVICE_PORT, DeviceProxy=dp).update(name=vp.service_group)
