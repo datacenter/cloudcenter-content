@@ -46,7 +46,7 @@ if len(os.environ["CliqrDependencies"]) == 0:
 dependencies = os.environ["CliqrDependencies"].split(",")
 
 # Set the new server list from the CliQr environment
-serverIps = os.environ["CliqrTier_" + dependencies[0] + "_PUBLIC_IP"].split(",")
+serverIps = os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
 
 pool = 'pool' + os.environ['parentJobId']
 vip = 'vip' + os.environ['parentJobId']
