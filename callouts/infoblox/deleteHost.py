@@ -11,7 +11,7 @@ querystring = {
 headers = {}
 url = "https://10.110.1.45/wapi/v1.0/record:host_ipv4addr"
 response = requests.request("GET", url, headers=headers, params=querystring, verify=False, auth=('admin', 'infoblox'))
-response.json()
+# response.json()
 fqdn = response.json()[0]['host']
 
 iba_api = infoblox.Infoblox('10.110.1.45', 'admin', 'infoblox', '1.6', 'default', 'default', False)

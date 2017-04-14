@@ -1,0 +1,35 @@
+CCM = Non-HA
+Regions = AWSEast
+CCO = Non-HA
+AMQP = Non-HA
+Repos:
+Bundle Store = cdn.cliqr.com
+Package Store = repo.cliqrtech.com
+Docker = repo.cliqrtech.com
+
+{
+  "CloudCenterComponents": {
+    "CCM": {
+      "CCM_IP": "1.1.1.1",
+      "mode": "NON-HA-STANDALONE"
+    },
+    "CloudRegions": [{
+      "components": {
+        "AMQP": {
+          "AMQP_ IP": "1.1.1.1",
+          "mode": "NON-HA"
+        },
+        "CCO": {
+          "CCO_IP": "1.1.1.1",
+          "mode": "NON-HA"
+        }
+      },
+      "name": "AWSEast"
+    }],
+    "REPOS": {
+      "BUNDLE_STORE": "http://cdn.cliqr.com",
+      "DOCKER_REGISTRY": "http://repo.cliqrtech.com:5000",
+      "PACKAGE_STORE": "http://repo.cliqrtech.com"
+    }
+  }
+}

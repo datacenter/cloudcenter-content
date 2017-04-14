@@ -3,6 +3,7 @@
 ## Applications:
 
 ## Services:
+See the services README.md for instructions on working with and importing and exporting services.
 
 ### Importing/Exporting Services
 See README.md in services folder for instructions.

@@ -1,5 +1,5 @@
 #!/bin/bash -x
-exec > >(tee -a /var/tmp/repo-node-init_$$.log) 2>&1
+exec > >(tee -a /var/tmp/mon-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
@@ -26,29 +26,22 @@ dlFile () {
 agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
 
-defaultGitTag="cloudcenter-fullinstall"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
-
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
-sudo yum install -y wget rsync
+sudo yum install -y wget vim java-1.8.0-openjdk nmap
 
 # Download necessary files
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
-dlFile ${baseUrl}/installer/repo_installer.bin
+dlFile ${baseUrl}/installer/core_installer.bin
+dlFile ${baseUrl}/appliance/monitor-installer.jar
+dlFile ${baseUrl}/appliance/monitor-response.xml
 
-sudo chmod +x repo_installer.bin
-agentSendLogMessage  "Running repo installer"
-sudo ./repo_installer.bin centos7 ${cloudType} repo
+sudo chmod +x core_installer.bin
+agentSendLogMessage  "Running core installer"
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} monitor
 
-agentSendLogMessage  "Syncing repo. This will take a while, maybe 15-60 minutes.
- If you want to see what's going on, login and look at /tmp/repo_sync.log"
-sudo su repo -c "/usr/bin/repo_sync.sh"
+agentSendLogMessage  "Running jar installer"
+sudo java -jar monitor-installer.jar monitor-response.xml
+
+agentSendLogMessage  "Kibana URL: http://${CliqrTier_monitor_PUBLIC_IP}:8882"
