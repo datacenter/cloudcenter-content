@@ -27,7 +27,7 @@ content = {
     "UserResourcePoolName": "",
     "vmTagsList": "",
     "UserDatastoreCluster": "ta-apps-vmfs",
-    "RootFolderName": "",
+    "RootFolderName": "vm",
     "UserFolderName": "/mdavis/jobs",
     "RootDiskResizable": False,
     "FullClone": False,
