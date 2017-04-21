@@ -2,7 +2,7 @@
 
 . /utils.sh
 
-$(env)
+env
 
 export VMTURBO_URL="172.16.202.242"
 export VMTURBO_USER="administrator"
@@ -10,24 +10,24 @@ export VMTURBO_PASSWORD="welcome2cliqr"
 export VMTURBO_RESOURCE="http://${VMTURBO_USER}:$VMTURBO_PASSWORD@${VMTURBO_URL}"
 
 #pre fixing a datacenter in the sample
-if [ -z ${dcName} ];
-then
-    export dcName=${eNV_Cloud_Setting_UserDataCenterName}
-fi
-
-export dcName=${eNV_Cloud_Setting_UserDataCenterName}
-export vmTagsList="Name:myVm"
-export UserDataCenterName="$dcName"
-export UserClusterName="CliQr"
-export UserResourcePoolName="Eng"
-export RootFolderName="vm"
-export UserFolderName="CliqrUser-id"
-export RootDiskResizable="false"
-export FullClone="true"
-export VmRelocationEnabled="true"
-export LocalDataStoreEnabled="true"
-export SystemFolderName="CliqrTemplates"
-export networkList="10-DEV (DSwitch)"
+#if [ -z ${dcName} ];
+#then
+#    export dcName=${eNV_Cloud_Setting_UserDataCenterName}
+#fi
+#
+#export dcName=${eNV_Cloud_Setting_UserDataCenterName}
+#export vmTagsList="Name:myVm"
+#export UserDataCenterName="$dcName"
+#export UserClusterName="CliQr"
+#export UserResourcePoolName="Eng"
+#export RootFolderName="vm"
+#export UserFolderName="CliqrUser-id"
+#export RootDiskResizable="false"
+#export FullClone="true"
+#export VmRelocationEnabled="true"
+#export LocalDataStoreEnabled="true"
+#export SystemFolderName="CliqrTemplates"
+#export networkList="10-DEV (DSwitch)"
 
 export instanceNameVar=`echo CliqrTier_"${eNV_cliqrAppTierName}"_instanceType`
 eval instanceName='$'${instanceNameVar}
