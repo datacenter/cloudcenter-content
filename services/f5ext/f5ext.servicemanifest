@@ -11,22 +11,50 @@
     "externalActions": [
         {
             "actionName": "UPDATE",
-            "actionValue": "%REPO_ID_37%services/f5ext/service update",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/service update",
             "actionType": "URL"
         },
         {
             "actionName": "STOP",
-            "actionValue": "%REPO_ID_37%services/f5ext/service stop",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/service stop",
             "actionType": "URL"
         },
         {
             "actionName": "START",
-            "actionValue": "%REPO_ID_37%services/f5ext/service start",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/service start",
             "actionType": "URL"
         }
     ],
     "parentService": false,
     "serviceParamSpecs": [
+        {
+            "systemParam": true,
+            "collectionList": [],
+            "displayName": "Git Tag",
+            "userVisible": true,
+            "confirmValue": "",
+            "optional": false,
+            "defaultValue": "f5ext",
+            "webserviceListParams": null,
+            "helpText": "Tag or Branch you want to use code from.",
+            "userEditable": true,
+            "valueList": null,
+            "paramName": "gitTag",
+            "exampleValue": null,
+            "dataUnit": null,
+            "type": "string",
+            "scope": null,
+            "valueConstraint": {
+                "regex": null,
+                "sizeValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "minValue": 0,
+                "allowSpaces": true,
+                "step": 0,
+                "maxLength": 255
+            }
+        },
         {
             "exampleValue": null,
             "helpText": "bigIPAddress",
@@ -255,83 +283,16 @@
     "serviceType": "EXTERNAL",
     "parentServiceId": "36",
     "displayName": "F5 External",
-    "images": [
-        {
-            "resource": "https://sandbox.cliqr.com/v1/tenants/37/images/20",
-            "visibility": "PUBLIC",
-            "perms": [
-                "read"
-            ],
-            "name": "Ubuntu 14.04",
-            "osName": "LINUX",
-            "enabled": true,
-            "imageType": "CLOUD_WORKER",
-            "systemImage": true,
-            "id": "20",
-            "numOfNics": 1,
-            "description": "Ubuntu 14.04",
-            "count": 23,
-            "internalImageName": "CloudWorker-Ubuntu14.04",
-            "tenantId": 1,
-            "detail": null,
-            "tags": []
-        }
-    ],
+    "images": [],
     "systemService": false,
-    "serviceActions": [
-        {
-            "actionName": "RELOAD",
-            "actionValue": "service reload",
-            "actionType": "SCRIPT"
-        },
-        {
-            "actionName": "START",
-            "actionValue": "service start",
-            "actionType": "SCRIPT"
-        },
-        {
-            "actionName": "STOP",
-            "actionValue": "service stop",
-            "actionType": "SCRIPT"
-        }
-    ],
-    "bundleLocation": "%REPO_ID_37%services/sandf5.zip",
+    "serviceActions": [],
+    "bundleLocation": "",
     "externalBundleLocation": "",
     "externalService": false,
-    "servicePorts": [
-        {
-            "toPort": "22",
-            "protocol": "TCP",
-            "fromPort": "22"
-        }
-    ],
+    "servicePorts": [],
     "description": "",
-    "defaultImageName": "Ubuntu 14.04",
+    "defaultImageName": null,
     "costPerHour": 0.15,
-    "repositories": [
-        {
-            "resource": "https://sandbox.cliqr.com/v1/tenants/37/services/134/37",
-            "certname": null,
-            "port": 80,
-            "bucketName": null,
-            "chefValidationKey": null,
-            "accessKey": null,
-            "type": "HTTP",
-            "sslCredential": null,
-            "chefUser": null,
-            "description": "CliQr demo repository",
-            "usernamePassword": null,
-            "chefUserKey": null,
-            "accessSecret": null,
-            "displayName": "CliQrDemoRepo",
-            "perms": [
-                "read"
-            ],
-            "region": null,
-            "hostname": "cliqrdemo-repo.s3.amazonaws.com",
-            "id": "37",
-            "trustedCert": null
-        }
-    ],
+    "repositories": [],
     "egressRestrictions": []
 }

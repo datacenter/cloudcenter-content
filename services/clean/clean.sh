@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 . /utils.sh
 
 # Required Service Parameters:
@@ -19,6 +19,6 @@ print_log "Tag/branch for code pull set to $tag"
 yum install -y python-pip
 pip install --upgrade pip requests
 
-wget -N --no-cache https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/clean/clean.py
+wget -N --no-check-certificate --no-cache https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/clean/clean.py
 
-python clean.py $apiUN $apiPW $ccm
+python clean.py ${apiUN} ${apiPW} ${ccm}

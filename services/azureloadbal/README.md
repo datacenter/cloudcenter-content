@@ -17,6 +17,12 @@ When deploying an application profile utilizing the Load Balancer you will need 
 The load balancer will deploy into an existing Virtual network and subnet that are selected during deployment time so there is no need for outside creation of these objects.
 
 Authentication is completed by utilizing the account information already provided as environment variables within a Cloud Center/Azure deployment.
+
+Deployment Time Dependencies:
+1) All tiers of the application should be deployed to the same Resource Group / Network
+2) Do not utilize "_" or other special characters in the deployment name.  As Cloud Center may accept these characters as acceptable, Azure will not allow them to be utilized as part of the domain name which is used is the application URL.
+
+
 TODO:
 1) Add support for SSL(443)
 2) Adding text update for testing
