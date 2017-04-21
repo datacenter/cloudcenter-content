@@ -34,7 +34,7 @@ def add_host(session, token, hostname):
         "description": ""
     }
 
-    session.request('POST', 'https://{towerHost}/api/v1/inventories/{0}/hosts'.format(inventory_id, towerHost = towerHost), data=json.dumps(payload), headers=headers, verify=False)
+    session.request('POST', 'https://{towerHost}/api/v1/inventories/{0}/hosts/'.format(inventory_id, towerHost = towerHost), data=json.dumps(payload), headers=headers, verify=False)
 
 def delete_host(session, token, hostname):
     headers = {
