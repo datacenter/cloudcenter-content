@@ -2,7 +2,7 @@
 
 . /utils.sh
 
-print_log $(env)
+$(env)
 
 export VMTURBO_URL="172.16.202.242"
 export VMTURBO_USER="administrator"
@@ -64,6 +64,6 @@ getHostAndDS
 export UserDatastoreCluster="${datastore}"
 export UserHost="$host"
 
-content="{\"UserDataCenterName\":\"$dcName\",\"UserClusterName\":\"$UserClusterName\",\"UserResourcePoolName\":\"$UserResourcePoolName\",\"vmTagsList\":\"$vmTagsList\",\"UserDatastoreCluster\":\"$UserDatastoreCluster\",\"RootFolderName\":\"$RootFolderName\",\"UserFolderName\":\"$UserFolderName\", \"RootDiskResizable\":\"$RootDiskResizable\”,\"FullClone\":\"$FullClone\", \"VmRelocationEnabled\":\"$VmRelocationEnabled\",\"LocalDataStoreEnabled\":\"$LocalDataStoreEnabled\",\"SystemFolderName\":\"$SystemFolderName\",\"networkList\":\"$networkList\", \"UserHost\":\"$UserHost\",\"nodeInfo\":\"UserDataCenterName:$dcName, UserClusterName: $UserClusterName, UserDatastoreCluster:$UserDatastoreCluster, networkList: $networkList \"}"
+content="{\"UserDataCenterName\":\"$dcName\",\"UserClusterName\":\"$UserClusterName\",\"UserResourcePoolName\":\"$UserResourcePoolName\",\"vmTagsList\":\"$vmTagsList\",\"UserDatastoreCluster\":\"$UserDatastoreCluster\",\"RootFolderName\":\"$RootFolderName\",\"UserFolderName\":\"$UserFolderName\", \"RootDiskResizable\":\"$RootDiskResizable\",\"FullClone\":\"$FullClone\", \"VmRelocationEnabled\":\"$VmRelocationEnabled\",\"LocalDataStoreEnabled\":\"$LocalDataStoreEnabled\",\"SystemFolderName\":\"$SystemFolderName\",\"networkList\":\"$networkList\", \"UserHost\":\"$UserHost\",\"nodeInfo\":\"UserDataCenterName:$dcName, UserClusterName: $UserClusterName, UserDatastoreCluster:$UserDatastoreCluster, networkList: $networkList \"}"
 
 print_ext_service_result "${content}"
