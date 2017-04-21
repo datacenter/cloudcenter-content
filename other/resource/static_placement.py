@@ -24,8 +24,8 @@ def print_ext_service_result(msg):
 content = {
     "UserDataCenterName": "Tetration",
     "UserClusterName": "ta-apps",
-    "UserResourcePoolName": "",
-    "vmTagsList": "",
+    "UserResourcePoolName": "testRP",
+    "vmTagsList": "Name:mdavis-vm",
     "UserDatastoreCluster": "ta-apps-vmfs",
     "RootFolderName": "vm",
     "UserFolderName": "/mdavis/jobs",
