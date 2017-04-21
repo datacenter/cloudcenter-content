@@ -1,20 +1,21 @@
-#!/bin/bash -x
+#!/bin/bash
 
 . /utils.sh
 
 print_log $(env)
 
-export VMTURBO_URL="<VM_TURBO_HOST>"
-export VMTURBO_USER="<User>"
-export VMTURBO_PASSWORD="<pwd>"
+export VMTURBO_URL="172.16.202.242"
+export VMTURBO_USER="administrator"
+export VMTURBO_PASSWORD="welcome2cliqr"
 export VMTURBO_RESOURCE="http://${VMTURBO_USER}:$VMTURBO_PASSWORD@${VMTURBO_URL}"
 
 #pre fixing a datacenter in the sample
 if [ -z ${dcName} ];
 then
-    export dcName="SCL2"
+    export dcName=${eNV_Cloud_Setting_UserDataCenterName}
 fi
 
+export dcName=${eNV_Cloud_Setting_UserDataCenterName}
 export vmTagsList="Name:myVm"
 export UserDataCenterName="$dcName"
 export UserClusterName="CliQr"
@@ -63,14 +64,6 @@ getHostAndDS
 export UserDatastoreCluster="${datastore}"
 export UserHost="$host"
 
-content="{\"UserDataCenterName\":\"$dcName\",\"UserClusterName\":\"$UserClusterName\",\"UserResourcePoolName\":\"$UserResourcePoolName\",\"vmTagsList\":\"$vmTagsList\",\"UserDatastoreCluster\":\"$UserDatastoreCluster\",
-\"RootFolderName\":\"$RootFolderName\",
-\"UserFolderName\":\"$UserFolderName\", \"RootDiskResizable\":\"$RootDiskResizable\”,
-\"FullClone\":\"$FullClone\", \"VmRelocationEnabled\":\"$VmRelocationEnabled\",
-\"LocalDataStoreEnabled\":\"$LocalDataStoreEnabled\",
-\"SystemFolderName\":\"$SystemFolderName\",
-\"networkList\":\"$networkList\", \"UserHost\":\"$UserHost\",\"nodeInfo\":\"UserDataCenterName:
-$dcName, UserClusterName: $UserClusterName, UserDatastoreCluster:
-$UserDatastoreCluster, networkList: $networkList \"}"
+content="{\"UserDataCenterName\":\"$dcName\",\"UserClusterName\":\"$UserClusterName\",\"UserResourcePoolName\":\"$UserResourcePoolName\",\"vmTagsList\":\"$vmTagsList\",\"UserDatastoreCluster\":\"$UserDatastoreCluster\",\"RootFolderName\":\"$RootFolderName\",\"UserFolderName\":\"$UserFolderName\", \"RootDiskResizable\":\"$RootDiskResizable\”,\"FullClone\":\"$FullClone\", \"VmRelocationEnabled\":\"$VmRelocationEnabled\",\"LocalDataStoreEnabled\":\"$LocalDataStoreEnabled\",\"SystemFolderName\":\"$SystemFolderName\",\"networkList\":\"$networkList\", \"UserHost\":\"$UserHost\",\"nodeInfo\":\"UserDataCenterName:$dcName, UserClusterName: $UserClusterName, UserDatastoreCluster:$UserDatastoreCluster, networkList: $networkList \"}"
 
 print_ext_service_result "${content}"
