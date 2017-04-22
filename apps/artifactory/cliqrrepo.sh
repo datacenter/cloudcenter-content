@@ -30,7 +30,7 @@ sudo mv /etc/yum.repos.d/cliqr.repo ~
 cd /tmp
 curl -fL https://getcli.jfrog.io | sh
 
-wget --no-check-certificate --user=${dlUser} --password=${dlPass} https://download.cliqr.com/release-4.7.2-20170223.1/bundle/bundle_artifacts.zip
+wget --no-check-certificate --user=${dlUser} --password=${dlPass} https://download.cliqr.com/release-4.7.3-20170420.1/bundle/bundle_artifacts.zip
 
 
 sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
