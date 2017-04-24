@@ -7,7 +7,7 @@ from requests.auth import HTTPBasicAuth
 # requests.packages.urllib3.disable_warnings()
 
 ccmIp = os.getenv('CliqrTier_ccm_PUBLIC_IP')
-cloudType = os.getenv('ccoCloudType')
+cloudType = os.getenv('OSMOSIX_CLOUD')
 baseUrl = "https://{ccmIp}".format(ccmIp=ccmIp)
 apiUser = "admin@cliqrtech.com,1"
 apiPass = "cliqr"

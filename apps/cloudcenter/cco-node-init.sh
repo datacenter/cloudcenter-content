@@ -39,7 +39,7 @@ dlFile ${baseUrl}/appliance/cco-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 ${ccoCloudType} cco
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} cco
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar cco-installer.jar cco-response.xml
