@@ -35,9 +35,9 @@ content = {
     "LocalDataStoreEnabled": "true",
     "SystemFolderName": "CliqrTemplates",
     "networkList": "apps-202",
-    "UserHost": "ta-apps-esx-04.auslab.cisco.com"  # ,
-    # "nodeInfo": "UserDataCenterName: Tetration, UserClusterName: ta-apps,"
-    #             "UserDatastoreCluster: ta-apps-vmfs, networkList: apps-202"
+    "UserHost": "ta-apps-esx-04.auslab.cisco.com",
+    "nodeInfo": "UserDataCenterName: Tetration, UserClusterName: ta-apps,"
+                "UserDatastoreCluster: ta-apps-vmfs, networkList: apps-202"
 }
 
 print_ext_service_result(json.dumps(content))
