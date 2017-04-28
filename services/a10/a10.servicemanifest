@@ -132,7 +132,7 @@
             "webserviceListParams": null,
             "userVisible": false,
             "userEditable": false,
-            "defaultValue": "cliqr",
+            "defaultValue": "a10",
             "displayName": "Password",
             "valueList": null,
             "optional": false,

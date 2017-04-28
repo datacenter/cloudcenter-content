@@ -65,7 +65,7 @@ try:
     dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
                      use_https=False)
 except Exception as err:
-    print_log("Failed to login. Check IP, username and password.")
+    print_log("Failed to login to A10 API. Check IP, username and password.")
     print_log(err)
     exit(1)
 
@@ -91,8 +91,14 @@ if cmd == "start":
     #     VIP_SG_SLB_SERVER_IP_W_IPS.append(new)
 
     # Create Service Group to be used and add members
-    sg = ServiceGroup(name=SERVICE_GROUP_NAME, protocol=A10_REAL_PROTOCOL, DeviceProxy=dp)
-    sg.create()
+    try:
+        sg = ServiceGroup(name=SERVICE_GROUP_NAME, protocol=A10_REAL_PROTOCOL, DeviceProxy=dp)
+        sg.create()
+    except Exception as err:
+        print_log("Failed to create service group. Check IP, username and password.")
+        print_log(err)
+        exit(1)
+
 
     # Get list of Real Servers already configured on the ADC
     # ADC_REAL_SERVERS = Server(DeviceProxy=dp).get()
@@ -108,24 +114,39 @@ if cmd == "start":
     # Just a simple list of IPs like ['1.2.3.4', '1,2,3,5']
     VIP_SG_SLB_SERVER_IP_W_IPS = __get_reals()
     for rs_ip in VIP_SG_SLB_SERVER_IP_W_IPS:
+        server_name = "s"+rs_ip
         # Just put an 's' in front of the IP to get the name.
-        rs = Server(name="s"+rs_ip, host=rs_ip, DeviceProxy=dp)
+        rs = Server(name=server_name, host=rs_ip, DeviceProxy=dp)
         rs.create()
+        if rs.ERROR_MSG != "":
+            print_log("Failed to create real server.")
+            print_log(rs.ERROR_MSG)
+            exit(1)
 
         # Add the real port listener with the appropriate health check and port template (if needed).
         # TJ - Need to test none use case
-        rp = ServerPort(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
-                  template_port=PORT_TEMPLATE, DeviceProxy=dp)
-        rp.create(name=rs_ip)
+        # TODO: Add logic to create health check and port template.
+        # rp = ServerPort(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, health_check=HEALTH_CHECK,
+        #                 template_port=PORT_TEMPLATE, DeviceProxy=dp)
+        rp = ServerPort(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_PROTOCOL, DeviceProxy=dp)
+        rp.create(name=server_name)
+        if rp.ERROR_MSG != "":
+            print_log("Failed to create real port.")
+            print_log(rp.ERROR_MSG)
+            exit(1)
 
         # Add new member to new service group
         # a10_url must use static service-group. a10sdk being updated to fix issue - Dated 28MAR2017 issue #7.
         a10_url = "/axapi/v3/slb/service-group/" + SERVICE_GROUP_NAME + "/member/{name}+{port}"
-        sg_mem = Member(name=rs_ip, port=A10_REAL_SERVER_PORT, DeviceProxy=dp).update(name=SERVICE_GROUP_NAME)
+        sg_mem = Member(name=server_name, port=A10_REAL_SERVER_PORT, DeviceProxy=dp).update(name=SERVICE_GROUP_NAME)
 
     # Create new VIP using the newly created service_group
     vs = VirtualServer(name=A10_VIP, ip_address=A10_VIP_IP, DeviceProxy=dp)
     vs.create()
+    if vs.ERROR_MSG != "":
+        print_log("Failed to create virtual server.")
+        print_log(vs.ERROR_MSG)
+        exit(1)
 
     # Add a vport to the new VIP with the new service_group
     # We can easily add health monitor or other templates here. Enabling snat_on_vip. Snat pool not available
@@ -134,6 +155,10 @@ if cmd == "start":
     vs_port = vPort(protocol=A10_SERVICE_PROTOCOL, port_number=A10_SERVICE_PORT, service_group=SERVICE_GROUP_NAME,
                    snat_on_vip=1, DeviceProxy=dp)
     vs_port.create(name=A10_VIP)
+    if vs_port.ERROR_MSG != "":
+        print_log("Failed to create virtual port.")
+        print_log(vs_port.ERROR_MSG)
+        exit(1)
 
 
 elif cmd == "update":
