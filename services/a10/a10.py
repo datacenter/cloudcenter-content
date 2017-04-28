@@ -211,16 +211,20 @@ elif cmd == "update":
 
     # Remove server from service_group
     Servers_To_Remove = set(VIP_SG_SLB_SERVER_IP) - set(Cliqr_ServerIPs)
+    print_log("Servers_To_Remove: {}".format(Servers_To_Remove))
 
     for rs_ip in Servers_To_Remove:
         name = "s"+rs_ip
         a10_url = "/axapi/v3/slb/service-group/" + vp.service_group + "/member/{name}+{port}"
         service_group_member = Member(name=name, port=A10_SERVICE_PORT, a10_url=a10_url,
                                       DeviceProxy=dp).delete(name=name, port=A10_SERVICE_PORT)
+        # TODO: Add code to remove the server from the LB, not just the service group.
 
     # for index in VIP_SG_SLB_SERVER_IP_W_IPS:
     #     for svr in Servers_To_Remove:
     #         if index[0] == svr:
+
+
 
 
 elif cmd == "stop":
