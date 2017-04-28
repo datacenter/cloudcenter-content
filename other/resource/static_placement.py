@@ -2,6 +2,7 @@
 
 import json
 
+
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
     print(msg)
@@ -45,10 +46,10 @@ content = {
     "VmRelocationEnabled": "true",  #
     "LocalDataStoreEnabled": "true",  #
 
-    # vCenter Folder to clone the snapshot or template from.
+    # vCenter Folder where the VM snapshot or template is that will be cloned.
     "SystemFolderName": "CliqrTemplates",
 
-    # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthasis.
+    # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthesis.
     "networkList": "apps-202 ()",
 
     # ESX Host to deploy to
