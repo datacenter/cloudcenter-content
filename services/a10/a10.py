@@ -15,7 +15,7 @@ A10_MGMT_IP = os.getenv("a10_lb_ip_address")
 A10_MGMT_PORT = os.getenv("a10mgmt_port", "8080")
 # A10_MGMT_PROTOCOL = os.getenv("a10proto")
 A10_MGMT_USER = os.getenv("a10_username", "admin")
-A10_MGMT_PASSWD = os.getenv("a10_password", "a10")  # Default for AWS marketplace is the node Id.
+A10_MGMT_PASSWD = os.getenv("a10_password", "a10")
 a10_lb_method = os.getenv("a10_lb_method")
 A10_VIP_IP = os.getenv("a10_vip_address") # Need to figure out where to get this IP from.
 A10_SERVICE_PORT = os.getenv("a10_vs_port")
@@ -61,8 +61,13 @@ SERVICE_GROUP_NAME = 'pool' + os.environ['parentJobId']
 A10_VIP = 'vip' + os.environ['parentJobId']
 
 # Need to update to add cert to allow for https call
-dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
-                 use_https=False)
+try:
+    dp = DeviceProxy(host=A10_MGMT_IP, port=A10_MGMT_PORT, username=A10_MGMT_USER, password=A10_MGMT_PASSWD,
+                     use_https=False)
+except Exception as err:
+    print_log("Failed to login. Check IP, username and password.")
+    print_log(err)
+    exit(1)
 
 if cmd == "start":
 

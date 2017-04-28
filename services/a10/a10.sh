@@ -12,9 +12,9 @@ defGitTag="a10."
 print_log $(env)
 
 if [ -n "$a10_git_tag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${a10_git_tag}"
+    print_log  "Found gitTag parameter gitTag = ${a10_git_tag}"
 else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=${defGitTag}"
+     print_log  "Didn't find custom parameter gitTag. Using gitTag=${defGitTag}"
      a10_git_tag=${defGitTag}
 fi
 
