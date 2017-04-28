@@ -2,7 +2,6 @@
 
 import json
 
-
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
     print(msg)
@@ -20,28 +19,42 @@ def print_ext_service_result(msg):
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
-
+# This dict provides all of the deployment configuration to CloudCenter.
 content = {
-    "UserDataCenterName": "Tetration",
-    "UserClusterName": "ta-apps",
+    # vCenter Datacenter.
+    "UserDataCenterName": "MyDatacenter",
+
+    # vCenter cluster.
+    "UserClusterName": "MyCluster",
+
+    # Resource Pool.
     # "UserResourcePoolName": "",
-    "vmTagsList": "Name:mdavis-vm",
-    "UserDatastoreCluster": "ta-apps-vmfs",
-    # "RootFolderName": "vm",
-    "UserFolderName": "mdavis",
+
+    #
+    "vmTagsList": "Name:my-vm",
+
+    # Datastore or DS Cluster to deploy to.
+    "UserDatastoreCluster": "my-ds-cluster",
+
+    # vCenter VM folder
+    "UserFolderName": "myfolder1/myfolder2",
 
     # Use strings, not booleans
-    "RootDiskResizable": "false",
-    "FullClone": "true",
-    "VmRelocationEnabled": "true",
-    "LocalDataStoreEnabled": "true",
+    "RootDiskResizable": "false",  #
+    "FullClone": "true",  #
+    "VmRelocationEnabled": "true",  #
+    "LocalDataStoreEnabled": "true",  #
 
+    # vCenter Folder to clone the snapshot or template from.
     "SystemFolderName": "CliqrTemplates",
 
-    # Must be in form "<port group> (<DV Switch>)"
+    # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthasis.
     "networkList": "apps-202 ()",
-    "UserHost": "ta-apps-esx-04.auslab.cisco.com",
 
+    # ESX Host to deploy to
+    "UserHost": "esx01.demo.cisco.com",
+
+    # These values will show up in the UI for the node being created.
     # Value should be a single string, not a nested dict.
     "nodeInfo": "UserDataCenterName: Tetration, UserClusterName: ta-apps,"
                 "UserDatastoreCluster: ta-apps-vmfs, networkList: apps-202"
