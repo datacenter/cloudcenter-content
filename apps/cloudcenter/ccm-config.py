@@ -130,18 +130,6 @@ url = baseUrl+"/acctmgmt/service/agree_term"
 data = {}
 response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(apiUser, apiPass), verify=False)
 
-# Add cloud
-url = baseUrl+"/v1/tenants/1/clouds"
-data = {
-    "name": cloudType,
-    "description": "",
-    "cloudFamily": cloudType,
-    "publicCloud": True,
-    "tenantId": 1
-}
-response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(apiUser, apiPass), verify=False)
-response.text
-
 # Import Apps
 
 # Download app zip
@@ -159,37 +147,49 @@ for app_url in apps.splitlines():
     files = {'file': app_file}
     response = s.request("POST", url, files=files, headers=headers, auth=(apiUser, apiPass), verify=False)
 
-# Add Cloud Account
-cc_email = os.getEnv("ccEmail", None)
-cc_cloud_key = os.getEnv("ccCloudKey", None)
-cc_cloud_secret = os.getEnv("ccCloudSecret", None)
-cc_cloud_account = os.getEnv("ccCloudAccount", None)
-cc_tenant_id = os.getEnv("ccTenantID", None)
-
-url = baseUrl+"/v1/tenants/1/clouds/1/accounts"
-data = {
-    "IAMRoleEnable": cloudType,
-    "accountDescription": "",
-    "accountId": cc_cloud_account,
-    "accountName": cc_email,
-    "accountPassword": cc_cloud_key,
-    "accountProperties": [
-        {
-            "name": "IAMRoleEnable",
-            "value": False
-        },{
-            "name": "AccessSecretKey",
-            "value": cc_cloud_secret
-        },{
-            "name": "EC2ARN",
-            "value": ""
-        }
-    ],
-    "allowedUsers": [],
-    "cloudId": "1",
-    "displayName": "first_cloud_acct",
-    "manageCost": True,
-    "userId": 2
-}
-api_call(method="POST", url=url, data=json.dumps(data))
+# # Add cloud
+# url = baseUrl+"/v1/tenants/1/clouds"
+# data = {
+#     "name": cloudType,
+#     "description": "",
+#     "cloudFamily": cloudType,
+#     "publicCloud": True,
+#     "tenantId": 1
+# }
+# response = s.request("POST", url, data=json.dumps(data), headers=headers, auth=(apiUser, apiPass), verify=False)
+# response.text
+#
+# # Add Cloud Account
+# cc_email = os.getEnv("ccEmail", None)
+# cc_cloud_key = os.getEnv("ccCloudKey", None)
+# cc_cloud_secret = os.getEnv("ccCloudSecret", None)
+# cc_cloud_account = os.getEnv("ccCloudAccount", None)
+# cc_tenant_id = os.getEnv("ccTenantID", None)
+#
+# url = baseUrl+"/v1/tenants/1/clouds/1/accounts"
+# data = {
+#     "IAMRoleEnable": cloudType,
+#     "accountDescription": "",
+#     "accountId": cc_cloud_account,
+#     "accountName": cc_email,
+#     "accountPassword": cc_cloud_key,
+#     "accountProperties": [
+#         {
+#             "name": "IAMRoleEnable",
+#             "value": False
+#         }, {
+#             "name": "AccessSecretKey",
+#             "value": cc_cloud_secret
+#         }, {
+#             "name": "EC2ARN",
+#             "value": ""
+#         }
+#     ],
+#     "allowedUsers": [],
+#     "cloudId": "1",
+#     "displayName": "first_cloud_acct",
+#     "manageCost": True,
+#     "userId": 2
+# }
+# api_call(method="POST", url=url, data=json.dumps(data))
 
