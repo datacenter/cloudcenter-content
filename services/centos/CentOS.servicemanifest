@@ -1,0 +1,100 @@
+{
+    "egressRestrictions": [],
+    "images": [
+        {
+            "osName": "LINUX",
+            "numOfNics": 1,
+            "name": "CentOS 6.x",
+            "resource": "https://104.40.95.236/v1/tenants/1/images/4",
+            "enabled": true,
+            "imageType": "CLOUD_WORKER",
+            "description": "CentOS 6.x",
+            "internalImageName": "CloudWorker-CentOS6.x",
+            "tags": [],
+            "tenantId": 1,
+            "visibility": "PUBLIC",
+            "count": 0,
+            "id": "4",
+            "systemImage": true,
+            "perms": [
+                "delete",
+                "read",
+                "write",
+                "administration"
+            ],
+            "detail": null
+        },
+        {
+            "osName": "LINUX",
+            "numOfNics": 1,
+            "name": "CentOS 5.x",
+            "resource": "https://104.40.95.236/v1/tenants/1/images/7",
+            "enabled": true,
+            "imageType": "CLOUD_WORKER",
+            "description": "CentOS 5.x",
+            "internalImageName": "CloudWorker-CentOS5.x",
+            "tags": [],
+            "tenantId": 1,
+            "visibility": "PUBLIC",
+            "count": 0,
+            "id": "7",
+            "systemImage": true,
+            "perms": [
+                "delete",
+                "read",
+                "write",
+                "administration"
+            ],
+            "detail": null
+        },
+        {
+            "osName": "LINUX",
+            "numOfNics": 1,
+            "name": "CentOS 7.x",
+            "resource": "https://104.40.95.236/v1/tenants/1/images/21",
+            "enabled": true,
+            "imageType": "CLOUD_WORKER",
+            "description": "CentOS 7.x",
+            "internalImageName": "CloudWorker-CentOS7.x",
+            "tags": [],
+            "tenantId": 1,
+            "visibility": "PUBLIC",
+            "count": 0,
+            "id": "21",
+            "systemImage": true,
+            "perms": [
+                "delete",
+                "read",
+                "write",
+                "administration"
+            ],
+            "detail": null
+        }
+    ],
+    "name": "CentOS",
+    "systemService": true,
+    "costPerHour": 0.0,
+    "description": "Enterprise class Linux distribution",
+    "serviceParamSpecs": [],
+    "defaultImageName": "CentOS 7.x",
+    "childServices": [],
+    "externalBundleLocation": "",
+    "perms": [
+        "delete",
+        "read",
+        "write",
+        "administration"
+    ],
+    "logoPath": "/assets/img/tiers/CentOS.png",
+    "externalService": false,
+    "visible": true,
+    "servicePorts": [],
+    "serviceType": "VM_AGENT",
+    "serviceActions": [],
+    "displayName": "CentOS",
+    "parentServiceId": "42",
+    "externalActions": [],
+    "parentService": false,
+    "bundleLocation": "",
+    "repositories": []
+}
