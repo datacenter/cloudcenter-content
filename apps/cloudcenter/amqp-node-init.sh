@@ -39,7 +39,7 @@ dlFile ${baseUrl}/appliance/conn_broker-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 ${ccoCloudType} rabbit
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} rabbit
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar cco-installer.jar conn_broker-response.xml
