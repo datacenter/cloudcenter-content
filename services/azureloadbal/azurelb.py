@@ -275,7 +275,7 @@ if cmd == "start" :
 
     print_log("Finished Creating Load Balancer Components")
 
-    # print_log("LoadBalancer DNS Name: " + DOMAIN_LABEL_NAME + ".eastus.cloudapp.azure.com")
+    print_log("LoadBalancer DNS Name: " + DOMAIN_LABEL_NAME + "." + azureRegion + ".cloudapp.azure.com")
 
 elif cmd == "update" :
 # update backend pool with new nic's
