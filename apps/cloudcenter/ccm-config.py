@@ -193,3 +193,5 @@ for app_url in apps.splitlines():
 # }
 # api_call(method="POST", url=url, data=json.dumps(data))
 
+# Adding Azure account
+# {"displayName":"mdavis-Az","accountDescription":"","userId":2,"cloudId":"2","allowedUsers":[],"accountName":"mdavis@cliqr.com","accountId":"09802e14-54b4-4b43-a56c-554ba30d9230","accountProperties":[{"name":"TenantId","value":"cac4fec3-892f-4eb8-b027-f479a1e96eaa"},{"name":"ClientId","value":"0f0caab2-e283-414c-b805-7c9a7ca416ca"},{"name":"ClientKey","value":"1IrDvBsOiwfEig7YDhSusjutcYNVByyCJiNkXvnQPsU="}],"accountPassword":""}
