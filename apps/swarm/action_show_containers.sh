@@ -1,6 +1,12 @@
-#!/bin/bash
-. /utils.sh
+#!/bin/bash -x
+exec > >(tee -a /var/tmp/action_show_containers_$$.log) 2>&1
 
-print_log "$(env)"
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
+. /usr/local/osmosix/service/utils/cfgutil.sh
+. /usr/local/osmosix/service/utils/agent_util.sh
+cd ~
 
-print_log "$(docker ps)"
+env
+
+cat /var/tmp/action_show_containers_$$.log
