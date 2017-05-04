@@ -8,5 +8,3 @@ exec > >(tee -a /var/tmp/action_show_containers_$$.log) 2>&1
 cd ~
 
 env
-
-cat /var/tmp/action_show_containers_$$.log
