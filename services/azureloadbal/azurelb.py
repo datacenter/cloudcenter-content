@@ -39,7 +39,8 @@ cmd = sys.argv[1]
 regionmap = {
     "us-west" : "westus",
     "us-southcentral" : "southcentralus",
-    "us-east" : "eastus"
+    "us-east" : "eastus",
+    "us-east-2" : "eastus2"
 }
 
 # Set variable from service and custom parameters
