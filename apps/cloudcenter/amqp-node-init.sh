@@ -28,7 +28,10 @@ agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
-sudo yum install -y wget vim java-1.8.0-openjdk nmap
+sudo yum install -y wget
+sudo yum install -y vim
+sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y nmap
 
 # Download necessary files
 cd /tmp
