@@ -69,6 +69,10 @@ until $(nmap -p 5671 "${CliqrTier_amqp_PUBLIC_IP}" | grep "open" -q); do
     break
   fi
 done
+
+# Remove these two unsupported properties in the tomcat env config file.
+sed -i.bak -e 's$ -XX:PermSize=512m -XX:MaxPermSize=512m$$g' /usr/local/tomcat/bin/setenv.sh
+
 if [ $ERR -ne 0 ]; then
     agentSendLogMessage "Failed to find port 5671 on AMQP Server ${CliqrTier_amqp_PUBLIC_IP} after about 5 min. Skipping tomcat restart."
 else

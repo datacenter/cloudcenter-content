@@ -50,6 +50,8 @@ sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTie
 -e "s?ccm.log.elkHost=?ccm.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
 /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
 
+# Remove these two unsupported properties in the tomcat env config file.
+sed -i.bak -e 's$ -XX:PermSize=512m -XX:MaxPermSize=512m$$g' /usr/local/tomcat/bin/setenv.sh
 
 sudo /etc/init.d/tomcat stop
 sudo rm -f /usr/local/tomcat/catalina.pid
