@@ -16,6 +16,8 @@ When deploying an application profile utilizing the Load Balancer you will need 
 
 The load balancer will deploy into an existing Virtual network and subnet that are selected during deployment time so there is no need for outside creation of these objects.
 
+Do not utilize the default subnet configuration.  When creating the Resource Group and VNET, create a specific subnet within the configuration.  Default subnet configuration will not work correctly.
+
 Authentication is completed by utilizing the account information already provided as environment variables within a Cloud Center/Azure deployment.
 
 Deployment Time Dependencies:
