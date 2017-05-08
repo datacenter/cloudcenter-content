@@ -28,6 +28,7 @@ agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
+sudo yum update -y
 sudo yum install -y wget
 sudo yum install -y vim
 sudo yum install -y java-1.8.0-openjdk
@@ -48,3 +49,6 @@ agentSendLogMessage  "Running jar installer"
 sudo java -jar monitor-installer.jar monitor-response.xml
 
 agentSendLogMessage  "Kibana URL: http://${CliqrTier_monitor_PUBLIC_IP}:8882"
+
+sudo mv ~/cliqr.repo /etc/yum.repos.d/
+
