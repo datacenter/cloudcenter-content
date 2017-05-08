@@ -7,8 +7,6 @@ exec > >(tee -a /var/tmp/swarm-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/agent_util.sh
 cd ~
 
-env
-
 echo "Username: $(whoami)" # Should execute as cliqruser
 echo "Working Directory: $(pwd)"
 
@@ -21,7 +19,7 @@ fi
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~
 
-agentSendLogMessage "Running yum update. This make take a while..."
+# agentSendLogMessage "Running yum update. This make take a while..."
 # sudo yum update -y
 
 sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
@@ -33,7 +31,7 @@ gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 EOF
 
-sudo yum install docker-engine -y
+sudo yum install -y nmap docker-engine
 sudo systemctl enable docker.service
 
 
@@ -87,7 +85,7 @@ else
         # I'm not the master
         agentSendLogMessage "Not Master"
         # Use SSH to grab the token from the swarm master.
-        join_token=`ssh 13.64.246.192 docker -H localhost:2376 swarm join-token worker -q`
+        join_token=`ssh ${master} docker -H localhost:2376 swarm join-token worker -q`
         # Use the token to join the swarm using the master.
         docker -H localhost:2376 swarm join --token ${join_token} ${master}:2377
     fi
