@@ -22,7 +22,7 @@ fi
 sudo mv /etc/yum.repos.d/cliqr.repo ~
 
 agentSendLogMessage "Running yum update. This make take a while..."
-sudo yum update -y
+# sudo yum update -y
 
 sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [dockerrepo]
