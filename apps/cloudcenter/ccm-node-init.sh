@@ -72,13 +72,13 @@ ERR=0
 until $(curl https://${CliqrTier_ccm_PUBLIC_IP} -k -m 5 ); do
   sleep ${SLEEP_TIME}
   let "COUNT++"
-  echo $COUNT
-  if [ $COUNT -gt 50 ]; then
+  echo ${COUNT}
+  if [ ${COUNT} -gt 50 ]; then
     ERR=1
     break
   fi
 done
-if [ $ERR -ne 0 ]; then
+if [ ${ERR} -ne 0 ]; then
     agentSendLogMessage "Failed to start server after about 5 minutes"
 else
     agentSendLogMessage "Server Started."
