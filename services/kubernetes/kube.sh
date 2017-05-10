@@ -26,7 +26,8 @@ reps="${kube_reps}"
 
 # Copied from https://kubernetes.io/docs/tasks/kubectl/install/
 print_log "Installing kubectl"
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl || \
+            error "Failed to install kubectl"
 
 mkdir -p ~/.kube
 echo "${config}" > ~/.kube/config
