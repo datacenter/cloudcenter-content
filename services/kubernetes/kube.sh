@@ -30,20 +30,22 @@ print_log "Installing kubectl"
 msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl) || \
             error "Failed to install kubectl: ${msg}"
 chmod +x kubectl
+print_log "kubectl installed"
 
 mkdir -p ~/.kube
 echo "${config}" > ~/.kube/config
 
 case ${cmd} in
     start)
-        serviceStatus="Starting"
 
         msg=$(./kubectl run ${dep_name} --image ${image} --replicas=${reps}) || \
             error "Failed to create the deployment: ${msg}"
+        print_log "Deployment created"
         msg=$(./kubectl expose deployments ${dep_name} --port=${public_port} --type=LoadBalancer) || \
             error "Failed to expose the deployment: ${msg}"
+        print_log "Deployment exposed on port "
 
-        agentSendLogMessage  "Waiting for service to start."
+        print_log "Waiting for service to start."
         COUNT=0
         MAX=50
         SLEEP_TIME=5
@@ -65,25 +67,18 @@ case ${cmd} in
         print_log "URL: http://${pub_ip}:${public_port}"
         print_log "Service Started."
 
-        serviceStatus="Started"
         ;;
     stop)
-        serviceStatus="Stopping"
 
         msg=$(./kubectl delete service ${dep_name}) || \
             error "Failed to delete the service: ${msg}"
         msg=$(./kubectl delete deployment ${dep_name}) || \
             error "Failed to delete the deployment: ${msg}"
         print_log "Service Stopped."
-
-        serviceStatus="Stopped"
         ;;
     update)
-        serviceStatus="Updating"
-        serviceStatus="Updated"
         ;;
     *)
-        serviceStatus="No Valid Script Argument"
         exit 127
         ;;
 esac
