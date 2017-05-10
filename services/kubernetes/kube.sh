@@ -1,7 +1,8 @@
 #!/bin/bash
 . /utils.sh
 
-print_log "$(env)"
+# Use for debugging only!
+# print_log "$(env)"
 
 cmd=$1
 serviceStatus=""
@@ -26,8 +27,9 @@ reps="${kube_reps}"
 
 # Copied from https://kubernetes.io/docs/tasks/kubectl/install/
 print_log "Installing kubectl"
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl || \
-            error "Failed to install kubectl"
+msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl) || \
+            error "Failed to install kubectl: ${msg}"
+chmod +x kubectl
 
 mkdir -p ~/.kube
 echo "${config}" > ~/.kube/config
@@ -36,10 +38,10 @@ case ${cmd} in
     start)
         serviceStatus="Starting"
 
-        ./kubectl run ${dep_name} --image ${image} --replicas=${reps} || \
-            error "Failed to create the deployment"
-        ./kubectl expose deployments ${dep_name} --port=${public_port} --type=LoadBalancer || \
-            error "Failed to expose the deployment"
+        msg=$(./kubectl run ${dep_name} --image ${image} --replicas=${reps}) || \
+            error "Failed to create the deployment: ${msg}"
+        msg=$(./kubectl expose deployments ${dep_name} --port=${public_port} --type=LoadBalancer) || \
+            error "Failed to expose the deployment: ${msg}"
 
         agentSendLogMessage  "Waiting for service to start."
         COUNT=0
@@ -68,10 +70,10 @@ case ${cmd} in
     stop)
         serviceStatus="Stopping"
 
-        ./kubectl delete service ${dep_name} || \
-            error "Failed to delete the service"
-        ./kubectl delete deployment ${dep_name} || \
-            error "Failed to delete the deployment"
+        msg=$(./kubectl delete service ${dep_name}) || \
+            error "Failed to delete the service: ${msg}"
+        msg=$(./kubectl delete deployment ${dep_name}) || \
+            error "Failed to delete the deployment: ${msg}"
         print_log "Service Stopped."
 
         serviceStatus="Stopped"
