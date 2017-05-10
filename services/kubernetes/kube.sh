@@ -1,7 +1,7 @@
 #!/bin/bash
 . /utils.sh
 
-#print_log "$(env)"
+print_log "$(env)"
 
 cmd=$1
 serviceStatus=""

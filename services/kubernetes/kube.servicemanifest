@@ -37,6 +37,35 @@
     },
     {
       "scope": null,
+      "displayName": "Config File",
+      "helpText": "Your kubernetes config file. Paste it here.",
+      "valueList": null,
+      "paramName": "kube_config",
+      "valueConstraint": {
+        "maxLength": 255,
+        "sizeValue": 0,
+        "calloutWorkflowName": null,
+        "step": 0,
+        "minValue": 0,
+        "maxValue": 0,
+        "regex": null,
+        "allowSpaces": true
+      },
+      "userEditable": true,
+      "optional": false,
+      "userVisible": true,
+      "systemParam": true,
+      "type": "textarea",
+      "defaultValue": "",
+      "collectionList": [],
+      "dataUnit": null,
+      "webserviceListParams": null,
+      "confirmValue": "",
+      "pathSuffixValue": "",
+      "exampleValue": null
+    },
+    {
+      "scope": null,
       "displayName": "Git Tag",
       "helpText": "Tag or Branch you want to use code from.",
       "valueList": null,
@@ -153,6 +182,6 @@
   "costPerHour": 0.0,
   "logoPath": "/assets/img/appTiers/swarm/logo.png",
   "childServices": [],
-  "name": "swarm",
+  "name": "kubernetes",
   "externalService": false
 }
