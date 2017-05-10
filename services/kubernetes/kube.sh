@@ -12,7 +12,7 @@ else
     tag="kube"
 fi
 
-dep_name="${kube_dep_name}"
+dep_name="${parentJobName}"
 image="${kube_image}"
 public_port="${kube_public_port}"
 config="${kube_config}"
