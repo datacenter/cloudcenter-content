@@ -9,32 +9,15 @@ from a10sdk.core.slb.slb_service_group import ServiceGroup
 from a10sdk.core.slb.slb_service_group_member import Member
 from a10sdk.core.slb.slb_server import Server
 
-def set_cliqr_envars():
-    fname = r'/tftpboot/cliqr_envs.txt'
-    with open(fname, 'r') as f:
-        content = f.readlines()
-    content = [x.strip() for x in content]
-    env_variables = []
-    for item in content:
-        env_variables.append(item.split("="))
-    for env, value in env_variables:
-        os.environ[env] = value
-    return True
 
-DEBUG = 'False'
-if DEBUG == 'True':
-    set_cliqr_envars()
-    sys.argv[0] = 'start'   #start, update, stop
-    cmd = sys.argv[0]
-    print 'Debugging mode using file of static variables'
-elif True:
-    cmd = sys.argv[1]
+cmd = sys.argv[1]
 
 A10_MGMT_IP = os.getenv("a10_lb_ip_address")
 A10_MGMT_PORT = os.getenv("a10_mgmt_port")
 A10_MGMT_USER = os.getenv("a10_username")
 A10_MGMT_PASSWD = os.getenv("a10_password")
-A10_LB_METHOD = os.getenv("a10_lb_method")   # least-connection, round-robin, etc. Static list already within CloudCenter.
+# least-connection, round-robin, etc. Static list already within CloudCenter.
+A10_LB_METHOD = os.getenv("a10_lb_method")
 A10_VIP_IP = os.getenv("a10_vip_address")    # VIP service IP, provided by CloudCenter
 A10_SERVICE_PORT = os.getenv("a10_vs_port")  # A10 virtual server listener port (aka vport)
 A10_REAL_SERVER_PORT = os.getenv("a10_rs_port") # A10 real server listener port
@@ -46,15 +29,15 @@ A10_SERVICE_PROTOCOL = os.getenv("a10_vs_protocol", "http")
 A10_REAL_SERVER_PROTOCOL = os.getenv("a10_rp_protocol", "tcp")  # A10_REAL_PROTOCOL (tcp or udp are only choices)
 
 # TODO: Do we want to allow list for available port templates
-#A10_PORT_TEMPLATE = os.getenv("a10_port_template") #List from the ADC to make a drop down menu to apply to port
+# A10_PORT_TEMPLATE = os.getenv("a10_port_template") #List from the ADC to make a drop down menu to apply to port
 
 # TODO: Add health checks for real servers
-#A10_HEALTH_CHECK = os.getenv("a10_health_check") # Can pull a list from the ADC to make a drop down menu to apply to port
+# A10_HEALTH_CHECK = os.getenv("a10_health_check")
+# Can pull a list from the ADC to make a drop down menu to apply to port
 
 
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
-
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
 
@@ -168,7 +151,6 @@ if cmd == "start":
         exit(1)
 
 
-
 elif cmd == "update":
     '''
     This section is meant to read in the list of servers configured on Cliqr and ensure the A10 ADC add/removes the
@@ -203,7 +185,7 @@ elif cmd == "update":
         # TJ - Need to test none use case
         try:
             rp = ServerPort(port_number=A10_REAL_SERVER_PORT, protocol=A10_REAL_SERVER_PROTOCOL, DeviceProxy=dp)
-            print "rs_ip: " , rs_ip
+            print_log("rs_ip: {}".format(rs_ip))
             rp.create(name='svr_' + rs_ip)
             if rp.ERROR_MSG != "":
                 print_log("Failed to add server listener port. Check to see if port already exists")
@@ -216,7 +198,8 @@ elif cmd == "update":
             a10_url = "/axapi/v3/slb/service-group/" + SERVICE_GROUP_NAME + "/member/{name}+{port}"
             sg_mem = Member(name='svr_' + rs_ip, port=A10_SERVICE_PORT, DeviceProxy=dp).update(name=SERVICE_GROUP_NAME)
             if sg_mem.ERROR_MSG != "":
-                print_log("Failed to add server to the service-group. Check to see if server is already a member or if service-group exists")
+                print_log("Failed to add server to the service-group."
+                          "Check to see if server is already a member or if service-group exists")
                 print_log(sg_mem.ERROR_MSG)
         except Exception as err:
             print_log("Exception Occurred: Failed to update service group.")
@@ -234,7 +217,8 @@ elif cmd == "update":
                                           DeviceProxy=dp).delete(name=server_name, port=A10_SERVICE_PORT)
             if sg_mem.ERROR_MSG != "":
                 print_log(
-                    "Failed to remove server from the service-group. Check to see if server is a member or if service-group exists")
+                    "Failed to remove server from the service-group."
+                    "Check to see if server is a member or if service-group exists")
                 print_log(sg_mem.ERROR_MSG)
 
             # Delete the server
@@ -254,7 +238,7 @@ elif cmd == "stop":
     if sg.ERROR_MSG != "":
         print_log("Failed to determine service-group for service vip.")
         print_log(sg.ERROR_MSG)
-        #exit(1) - Don't exit, we want to finish clean-up
+        # exit(1) - Don't exit, we want to finish clean-up
 
     # Delete the Virtual Server
     vs = VirtualServer(name=A10_VIP, ip_address=A10_VIP_IP, DeviceProxy=dp).delete(name=A10_VIP)
@@ -262,7 +246,7 @@ elif cmd == "stop":
     if vs.ERROR_MSG != "":
         print_log("Failed to remove the service vip. Check if vip exists")
         print_log(vs.ERROR_MSG)
-        #exit(1) - Don't exit, we want to finish clean-up
+        # exit(1) - Don't exit, we want to finish clean-up
 
     # Delete the servers
     for member in sg.member_list:
@@ -271,7 +255,7 @@ elif cmd == "stop":
         if rs.ERROR_MSG != "":
             print_log("Failed to remove the servers. Check to see if server(s) exist(s)")
             print_log(rs.ERROR_MSG)
-            #exit(1) - Don't exit, we want to finish clean-up
+            # exit(1) - Don't exit, we want to finish clean-up
 
     # Delete the Service Group
     sg = ServiceGroup(name=SERVICE_GROUP_NAME, DeviceProxy=dp).delete(name=SERVICE_GROUP_NAME)
@@ -279,7 +263,7 @@ elif cmd == "stop":
     if sg.ERROR_MSG != "":
         print_log("Failed to remove the service-group for service vip. Check to see if service-group exists")
         print_log(sg.ERROR_MSG)
-        #exit(1) - Don't exit, we want to finish clean-up
+        # exit(1) - Don't exit, we want to finish clean-up
 else:
     print_log("Invalid command line argument.")
 
