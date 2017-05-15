@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 import sys
 import os
 from a10sdk.common.device_proxy import DeviceProxy
@@ -8,7 +8,6 @@ from a10sdk.core.slb.slb_virtual_server_port import Port as vPort
 from a10sdk.core.slb.slb_service_group import ServiceGroup
 from a10sdk.core.slb.slb_service_group_member import Member
 from a10sdk.core.slb.slb_server import Server
-
 
 def set_cliqr_envars():
     fname = r'/tftpboot/cliqr_envs.txt'
@@ -52,16 +51,19 @@ A10_REAL_SERVER_PROTOCOL = os.getenv("a10_rp_protocol", "tcp")  # A10_REAL_PROTO
 # TODO: Add health checks for real servers
 #A10_HEALTH_CHECK = os.getenv("a10_health_check") # Can pull a list from the ADC to make a drop down menu to apply to port
 
+
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
 
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
 
+    
 def print_error(msg):
     print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
+
 
 def print_ext_service_result(msg):
     print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
@@ -70,23 +72,21 @@ def print_ext_service_result(msg):
 
 
 def __get_reals():
-    # Create list of dependent service tiers
+    # Create list of dependent service tiers "apache, tomcat, mysql"
     dependencies = os.environ["CliqrDependencies"].split(",")
     # NOTE: THIS SCRIPT ONLY SUPPORTS THE FIRST DEPENDENT TIER!!!
     dep_tier_count = len(dependencies)
-    if dep_tier_count > 3:
+
+    if dep_tier_count != 1:
         raise Exception("This service supports exactly one dependent tier. You have {}: {}".format(dep_tier_count,
-                                                                                                 dependencies))
+                                                                                                   dependencies))
     # Set the new server list from the CliQr environment
-    # Return list of IPs: ['1.2.3.4', '1.2.3.5']
-    Cliqr_IP_List =[]
-    for x in range(len(dependencies)):
-        Cliqr_IP_List = Cliqr_IP_List + os.environ["CliqrTier_" + dependencies[x] + "_IP"].split(",")
-    return Cliqr_IP_List
+    # Return list like ['1.2.3.4', '1.2.3.5']
+    return os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
 
 # TODO: Figure out more unique way to get pool and vip names.
-SERVICE_GROUP_NAME = 'sg_' + os.environ['parentJobId']
-A10_VIP = 'vip_' + os.environ['parentJobId']
+SERVICE_GROUP_NAME = 'pool' + os.environ['parentJobId']
+A10_VIP = 'vip' + os.environ['parentJobId']
 
 # Need to update to add cert to allow for https call
 try:
@@ -99,7 +99,6 @@ except Exception as err:
     exit(1)
 
 if cmd == "start":
-
     # Create Service Group to be used and add members
     try:
         sg = ServiceGroup(name=SERVICE_GROUP_NAME, protocol=A10_REAL_SERVER_PROTOCOL, DeviceProxy=dp)
@@ -167,6 +166,7 @@ if cmd == "start":
         print_log("Failed to create virtual port.")
         print_log(vs_port.ERROR_MSG)
         exit(1)
+
 
 
 elif cmd == "update":

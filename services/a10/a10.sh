@@ -9,11 +9,13 @@ serviceStatus=""
 
 defGitTag="a10."
 
-if [ -n "$a10_gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${a10_gitTag}"
+print_log $(env)
+
+if [ -n "$a10_git_tag" ]; then
+    print_log  "Found gitTag parameter gitTag = ${a10_git_tag}"
 else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=${defGitTag}"
-     a10_gitTag=${defGitTag}
+     print_log  "Didn't find custom parameter gitTag. Using gitTag=${defGitTag}"
+     a10_git_tag=${defGitTag}
 fi
 
 print_log "Installing pip and acos_client"
