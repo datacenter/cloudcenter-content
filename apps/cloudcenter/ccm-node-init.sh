@@ -60,7 +60,8 @@ sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
 sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} ccm # -E makes sure to keep CUSTOM_REPO env variable.
 
-agentSendLogMessage  "Running jar installer"
+# agentSendLogMessage  "Running jar installer"
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-sun/bin/java 1
 sudo java -jar ccm-installer.jar ccm-response.xml
 
 
@@ -78,7 +79,7 @@ sudo rm -f /usr/local/tomcat/logs/osmosix.log
 sudo /etc/init.d/tomcat start
 
 
-agentSendLogMessage  "Waiting for server to start."
+# agentSendLogMessage  "Waiting for server to start."
 COUNT=0
 MAX=50
 SLEEP_TIME=5
