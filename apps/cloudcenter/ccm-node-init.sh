@@ -27,12 +27,13 @@ agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
-sudo mv /etc/yum.repos.d/cliqr.repo ~
-sudo yum update -y
-sudo yum install -y wget
-sudo yum install -y vim
-sudo yum install -y java-1.8.0-openjdk
-sudo yum install -y nmap
+#sudo mv /etc/yum.repos.d/cliqr.repo ~
+#sudo yum update -y
+#sudo yum install -y wget
+#sudo yum install -y vim
+#sudo yum install -y java-1.8.0-openjdk
+#sudo yum install -y nmap
+
 
 # Download necessary files
 cd /tmp
@@ -41,9 +42,23 @@ dlFile ${baseUrl}/installer/core_installer.bin
 dlFile ${baseUrl}/appliance/ccm-installer.jar
 dlFile ${baseUrl}/appliance/ccm-response.xml
 
+# Set custom repo if desired
+if [ -n "$cc_custom_repo" ]; then
+    agentSendLogMessage  "Setting custom repo to ${cc_custom_repo}"
+    export CUSTOM_REPO=${cc_custom_repo}
+fi
+
+# Remove list of installed modules residual from worker installer.
+sudo rm -f /etc/cliqr_modules.conf
+
+# Install packages not present in cliqr repo.
+sudo yum install -y python-setuptools
+sudo yum install -y jbigkit-libs
+
+# Run the core installer
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} ccm
+sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} ccm # -E makes sure to keep CUSTOM_REPO env variable.
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar ccm-installer.jar ccm-response.xml
