@@ -47,6 +47,9 @@ if [ -n "$cc_custom_repo" ]; then
     export CUSTOM_REPO=${cc_custom_repo}
 fi
 
+# Remove list of installed modules residual from worker installer.
+sudo rm -f /etc/cliqr_modules.conf
+
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
 sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} monitor
@@ -55,6 +58,10 @@ agentSendLogMessage  "Running jar installer"
 sudo java -jar monitor-installer.jar monitor-response.xml
 
 agentSendLogMessage  "Kibana URL: http://${CliqrTier_monitor_PUBLIC_IP}:8882"
+
+rm -f core_installer.bin
+rm -f monitor-installer.jar
+rm -f monitor-response.xml
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
 

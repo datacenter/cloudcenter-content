@@ -32,7 +32,7 @@ sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
 #sudo yum install -y wget
 #sudo yum install -y vim
 #sudo yum install -y java-1.8.0-openjdk
-#sudo yum install -y nmap
+sudo yum install -y nmap # Used below to check AMQP for open port.
 
 # Download necessary files
 cd /tmp
@@ -46,6 +46,9 @@ if [ -n "$cc_custom_repo" ]; then
     agentSendLogMessage  "Setting custom repo to ${cc_custom_repo}"
     export CUSTOM_REPO=${cc_custom_repo}
 fi
+
+# Remove list of installed modules residual from worker installer.
+sudo rm -f /etc/cliqr_modules.conf
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
@@ -96,6 +99,10 @@ else
     # sudo su -c 'echo "" > /usr/local/tomcat/logs/osmosix.log'
     sudo -E /etc/init.d/tomcat start
 fi
+
+rm -f core_installer.bin
+rm -f cco-installer.jar
+rm -f cco-response.xml
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
 

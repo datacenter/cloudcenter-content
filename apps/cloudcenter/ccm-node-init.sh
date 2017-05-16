@@ -100,4 +100,8 @@ else
     : # agentSendLogMessage "Server Started."
 fi
 
+rm -f core_installer.bin
+rm -f ccm-installer.jar
+rm -f ccm-response.xml
+
 sudo mv ~/cliqr.repo /etc/yum.repos.d/

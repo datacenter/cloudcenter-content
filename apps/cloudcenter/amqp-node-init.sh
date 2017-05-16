@@ -47,6 +47,9 @@ if [ -n "$cc_custom_repo" ]; then
     export CUSTOM_REPO=${cc_custom_repo}
 fi
 
+# Remove list of installed modules residual from worker installer.
+sudo rm -f /etc/cliqr_modules.conf
+
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
 sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} rabbit
@@ -63,5 +66,9 @@ sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/lo
 
 sudo /etc/init.d/guacd start
 sudo -E /etc/init.d/tomcatgua restart
+
+rm -f core_installer.bin
+rm -f cco-installer.jar
+rm -f conn_broker-response.xml
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
