@@ -204,7 +204,6 @@ function amqp_install {
 case $version in
   (4.8.0)
     cd /tmp
-    http://download.cliqr.com/release-4.8.0-20170502.3/installer/core_installer.bin
     CORE_INSTALLER='http://download.cliqr.com/release-4.8.0-20170502.3/installer/core_installer.bin'
     CCM_INSTALLER='http://download.cliqr.com/release-4.8.0-20170502.3/appliance/ccm-installer.jar'
     CCM_RESPONSE='http://download.cliqr.com/release-4.8.0-20170502.3/appliance/ccm-response.xml'
@@ -215,7 +214,6 @@ case $version in
     ;;
   (4.7.1)
     cd /tmp
-    http://download.cliqr.com/release-4.7.1-20170128.5/installer/core_installer.bin
     CORE_INSTALLER='http://download.cliqr.com/release-4.7.1-20170128.5/installer/core_installer.bin'
     CCM_INSTALLER='http://download.cliqr.com/release-4.7.1-20170128.5/appliance/ccm-installer.jar'
     CCM_RESPONSE='http://download.cliqr.com/release-4.7.1-20170128.5/appliance/ccm-response.xml'
@@ -226,7 +224,6 @@ case $version in
     ;;
   (4.6.2)
     cd /tmp
-    http://download.cliqr.com/release-4.6.2-20161216.2/installer/core_installer.bin
     CORE_INSTALLER='http://download.cliqr.com/release-4.6.2-20161216.2/installer/core_installer.bin'
     CCM_INSTALLER='http://download.cliqr.com/release-4.6.2-20161216.2/appliance/ccm-installer.jar'
     CCM_RESPONSE='http://download.cliqr.com/release-4.6.2-20161216.2/appliance/ccm-response.xml'
