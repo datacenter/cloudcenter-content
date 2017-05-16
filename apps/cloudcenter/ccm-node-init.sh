@@ -27,7 +27,7 @@ agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
-#sudo mv /etc/yum.repos.d/cliqr.repo ~
+sudo mv /etc/yum.repos.d/cliqr.repo ~
 #sudo yum update -y
 #sudo yum install -y wget
 #sudo yum install -y vim
@@ -95,9 +95,9 @@ until $(curl https://${CliqrTier_ccm_PUBLIC_IP} -k -m 5 ); do
   fi
 done
 if [ ${ERR} -ne 0 ]; then
-    agentSendLogMessage "Failed to start server after about 5 minutes"
+    : # agentSendLogMessage "Failed to start server after about 5 minutes"
 else
-    agentSendLogMessage "Server Started."
+    : # agentSendLogMessage "Server Started."
 fi
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/

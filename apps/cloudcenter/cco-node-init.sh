@@ -26,13 +26,13 @@ dlFile () {
 agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
 
-agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
+# agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
-sudo yum update -y
-sudo yum install -y wget
-sudo yum install -y vim
-sudo yum install -y java-1.8.0-openjdk
-sudo yum install -y nmap
+#sudo yum update -y
+#sudo yum install -y wget
+#sudo yum install -y vim
+#sudo yum install -y java-1.8.0-openjdk
+#sudo yum install -y nmap
 
 # Download necessary files
 cd /tmp
@@ -41,9 +41,15 @@ dlFile ${baseUrl}/installer/core_installer.bin
 dlFile ${baseUrl}/appliance/cco-installer.jar
 dlFile ${baseUrl}/appliance/cco-response.xml
 
+# Set custom repo if desired
+if [ -n "$cc_custom_repo" ]; then
+    agentSendLogMessage  "Setting custom repo to ${cc_custom_repo}"
+    export CUSTOM_REPO=${cc_custom_repo}
+fi
+
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} cco
+sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} cco
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar cco-installer.jar cco-response.xml
