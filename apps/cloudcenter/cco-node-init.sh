@@ -23,22 +23,16 @@ dlFile () {
     fi
 }
 
-echo "Username: $(whoami)" # Should execute as cliqruser
-echo "Working Directory: $(pwd)"
-
-defaultGitTag="cc-full-4.7.1.1"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
+agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
+agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
-sudo yum install -y wget vim java-1.8.0-openjdk nmap
+sudo yum update -y
+sudo yum install -y wget
+sudo yum install -y vim
+sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y nmap
 
 # Download necessary files
 cd /tmp
@@ -49,7 +43,7 @@ dlFile ${baseUrl}/appliance/cco-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 amazon cco
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} cco
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar cco-installer.jar cco-response.xml
@@ -60,6 +54,9 @@ sudo sed -i -e "s?host=?host=${CliqrTier_amqp_PUBLIC_IP}?g" /usr/local/osmosix/e
 sudo sed -i -e "s?brokerHost=?brokerHost=${CliqrTier_amqp_PUBLIC_IP}?g" \
  -e "s?gateway.cluster.addresses=?gateway.cluster.addresses=${CliqrTier_amqp_PUBLIC_IP}:5671?g" \
  /usr/local/tomcat/webapps/ROOT/WEB-INF/rabbit-gateway.properties
+sed -i -e "s?cco.log.elkHost=?cco.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
+/usr/local/tomcat/webapps/ROOT/WEB-INF/gateway.properties
+
 
 agentSendLogMessage  "Waiting for AMQP to start."
 COUNT=0
@@ -76,6 +73,10 @@ until $(nmap -p 5671 "${CliqrTier_amqp_PUBLIC_IP}" | grep "open" -q); do
     break
   fi
 done
+
+# Remove these two unsupported properties in the tomcat env config file.
+sed -i.bak -e 's$ -XX:PermSize=512m -XX:MaxPermSize=512m$$g' /usr/local/tomcat/bin/setenv.sh
+
 if [ $ERR -ne 0 ]; then
     agentSendLogMessage "Failed to find port 5671 on AMQP Server ${CliqrTier_amqp_PUBLIC_IP} after about 5 min. Skipping tomcat restart."
 else
@@ -90,6 +91,6 @@ else
     sudo -E /etc/init.d/tomcat start
 fi
 
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
+sudo mv ~/cliqr.repo /etc/yum.repos.d/
 
 

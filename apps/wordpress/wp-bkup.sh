@@ -11,8 +11,6 @@ echo "Working Directory: $(pwd)"
 
 env
 
-
-
  #Install S3
 sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
@@ -27,7 +25,7 @@ echo "[default]" | sudo tee --append /root/.aws/credentials
 echo "aws_access_key_id=$aws_access_key_id" | sudo tee --append /root/.aws/credentials
 echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.aws/credentials
 
-cd /var/www
+cd /var/www/wordpress
 
 sudo zip -r ~/wordpressbkup.zip *
 
