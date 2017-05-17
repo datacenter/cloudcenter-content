@@ -41,7 +41,7 @@ agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
-sudo mv /etc/yum.repos.d/cliqr.repo ~
+#sudo mv /etc/yum.repos.d/cliqr.repo ~
 #sudo yum update -y
 #sudo yum install -y wget
 #sudo yum install -y vim
@@ -56,11 +56,6 @@ dlFile ${baseUrl}/installer/core_installer.bin
 dlFile ${baseUrl}/appliance/ccm-installer.jar
 dlFile ${baseUrl}/appliance/ccm-response.xml
 
-# Set custom repo if desired
-if [ -n "$cc_custom_repo" ]; then
-    agentSendLogMessage  "Setting custom repo to ${cc_custom_repo}"
-    export CUSTOM_REPO=${cc_custom_repo}
-fi
 
 # Remove list of installed modules residual from worker installer.
 sudo rm -f /etc/cliqr_modules.conf
@@ -68,11 +63,27 @@ sudo rm -f /etc/cliqr_modules.conf
 # Install packages not present in cliqr repo.
 sudo yum install -y python-setuptools
 sudo yum install -y jbigkit-libs
+# sudo yum install -y mongodb-org
 
 # Run the core installer
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} ccm # -E makes sure to keep CUSTOM_REPO env variable.
+# Set custom repo if desired
+if [ -n "$cc_custom_repo" ]; then
+    agentSendLogMessage  "Setting custom repo to ${cc_custom_repo}"
+    export CUSTOM_REPO=${cc_custom_repo}
+fi
+export vnc_module=true
+
+sudo ./core_installer.bin --noexec --keep
+#The core installer incorrectly replaces a newer esxmetadata file,
+#so instead copy the original one over the one in the installer.
+if [ ${OSMOSIX_CLOUD} == "vmware" ]
+then
+    sudo cp /usr/local/osmosix/bin/esxmetadata /tmp/core/mgmtserver/mds/esxmetadata
+fi
+cd /tmp/core
+sudo -E ./setup.sh centos7 ${OSMOSIX_CLOUD} ccm # -E makes sure to keep CUSTOM_REPO env variable.
 
 # agentSendLogMessage  "Running jar installer"
 sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-sun/bin/java 1
@@ -114,8 +125,9 @@ else
     : # agentSendLogMessage "Server Started."
 fi
 
-rm -f core_installer.bin
-rm -f ccm-installer.jar
-rm -f ccm-response.xml
+sudo rm -f /tmp/core_installer.bin
+sudo rm -f /tmp/ccm-installer.jar
+sudo rm -f /tmp/ccm-response.xml
+sudo rm -rf /tmp/core
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
