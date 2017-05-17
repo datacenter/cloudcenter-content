@@ -6,6 +6,20 @@ exec > >(tee -a /var/tmp/mon-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
+check_error()
+{
+        status=$1
+        msg=$2
+        exit_status=$3
+
+        if [[ ${status} -ne 0 ]]; then
+                agentSendLogMessage "${msg}"
+                exit ${exit_status}
+        fi
+
+        return 0
+}
+
 dlFile () {
     agentSendLogMessage  "Attempting to download $1"
     if [ -n "$dlUser" ]; then
@@ -50,11 +64,16 @@ fi
 # Remove list of installed modules residual from worker installer.
 sudo rm -f /etc/cliqr_modules.conf
 
+# Install packages not present in cliqr repo.
+sudo yum install -y python-setuptools
+sudo yum install -y jbigkit-libs
+
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
 sudo -E ./core_installer.bin centos7 ${OSMOSIX_CLOUD} monitor
 
 agentSendLogMessage  "Running jar installer"
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-sun/bin/java 1
 sudo java -jar monitor-installer.jar monitor-response.xml
 
 agentSendLogMessage  "Kibana URL: http://${CliqrTier_monitor_PUBLIC_IP}:8882"

@@ -6,6 +6,20 @@ exec > >(tee -a /var/tmp/ccm-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
+check_error()
+{
+        status=$1
+        msg=$2
+        exit_status=$3
+
+        if [[ ${status} -ne 0 ]]; then
+                agentSendLogMessage "${msg}"
+                exit ${exit_status}
+        fi
+
+        return 0
+}
+
 dlFile () {
     agentSendLogMessage  "Attempting to download $1"
     if [ -n "$dlUser" ]; then
