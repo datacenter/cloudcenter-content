@@ -28,7 +28,11 @@ agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
-sudo yum install -y wget vim java-1.8.0-openjdk nmap
+sudo yum update -y
+sudo yum install -y wget
+sudo yum install -y vim
+sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y nmap
 
 # Download necessary files
 cd /tmp
@@ -54,4 +58,4 @@ sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/lo
 sudo /etc/init.d/guacd start
 sudo -E /etc/init.d/tomcatgua restart
 
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
+sudo mv ~/cliqr.repo /etc/yum.repos.d/
