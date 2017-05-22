@@ -5,13 +5,12 @@ import requests
 import os
 import random
 
-
 # Turbonomic login location and credentials.
 turbo_ip = "1.2.3.4"
 turbo_user = "administrator"
 turbo_pass = "vmturbo"
 turbo_baseurl = "https://{turbo_ip}/vmturbo/rest".format(
-    turbo_ip = turbo_ip
+    turbo_ip=turbo_ip
 )
 
 # vCenter VM folder to put the VM in - Just the folder itself, not the whole path.
@@ -21,6 +20,18 @@ deployment_folder = "jobs"
 # vCenter folder where the template or VM is that will be cloned from.
 # DON'T CHANGE
 _clone_from_folder = "CliqrTemplates"
+
+network_list = [
+    "apps-201 ()",
+    "apps-202 ()",
+    "apps-203 ()",
+    "apps-204 ()"
+]
+
+# Network to deploy the VM into.
+# For my purposes I will randomly distribute across 4 equivalent port groups,
+# but this could be done other ways as well.
+deploy_network = random.choice(network_list)
 
 
 # Send routine logging messages to CloudCenter UI
@@ -163,15 +174,6 @@ suggested_datastore = reservation['demandEntities'][0]['placements']['storageRes
 suggested_cluster = get_cluster_from_host(suggested_host)
 suggested_datacenter = get_datacenter_from_host(suggested_host)
 
-# For my purposes I will randomly distribute across 4 equivalent port groups,
-# but this could be done other ways as well.
-network_list = [
-    "apps-201 ()",
-    "apps-202 ()",
-    "apps-203 ()",
-    "apps-204 ()"
-]
-
 # This dict provides all of the deployment configuration to CloudCenter.
 content = {
     # vCenter Datacenter.
@@ -204,7 +206,7 @@ content = {
 
     # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthesis.
     # In my case I want to distribute across 4 equivalent port groups.
-    "networkList": random.choice(network_list),
+    "networkList": deploy_network,
 
     # ESX Host to deploy to
     "UserHost": suggested_host,
