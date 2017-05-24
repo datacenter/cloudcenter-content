@@ -6,35 +6,44 @@ exec > >(tee -a /var/tmp/cco-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
-echo "Username: $(whoami)" # Should execute as cliqruser
-echo "Working Directory: $(pwd)"
+dlFile () {
+    agentSendLogMessage  "Attempting to download $1"
+    if [ -n "$dlUser" ]; then
+        agentSendLogMessage  "Found user ${dlUser} specified. Using that and specified password for download auth."
+        wget --no-check-certificate --user $dlUser --password $dlPass $1
+    else
+        agentSendLogMessage  "Didn't find username specified. Downloading with no auth."
+        wget --no-check-certificate $1
+    fi
+    if [ "$?" = "0" ]; then
+        agentSendLogMessage  "$1 downloaded"
+    else
+        agentSendLogMessage  "Error downloading $1"
+        exit 1
+    fi
+}
 
-defaultGitTag="cc-full-4.7.0-1"
-if [ -n "$gitTag" ]; then
-    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
-else
-     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag = ${defaultGitTag}"
-     gitTag=${defaultGitTag}
-fi
-
-ccRel="release-4.7.1-20170128.5"
-
-agentSendLogMessage  "CloudCenter release ${ccRel} selected."
+agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
+agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
-sudo yum install -y wget vim java-1.8.0-openjdk nmap
+sudo yum update -y
+sudo yum install -y wget
+sudo yum install -y vim
+sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y nmap
 
 # Download necessary files
 cd /tmp
 agentSendLogMessage  "Downloading installer files."
-wget --no-check-certificate -O core_installer.bin --user $dlUser --password $dlPass https://download.cliqr.com/${ccRel}/installer/core_installer.bin
-wget --no-check-certificate -O cco-installer.jar --user $dlUser --password $dlPass 	https://download.cliqr.com/${ccRel}/appliance/cco-installer.jar
-wget --no-check-certificate -O cco-response.xml --user $dlUser --password $dlPass https://download.cliqr.com/${ccRel}/appliance/cco-response.xml
+dlFile ${baseUrl}/installer/core_installer.bin
+dlFile ${baseUrl}/appliance/cco-installer.jar
+dlFile ${baseUrl}/appliance/cco-response.xml
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
-sudo ./core_installer.bin centos7 amazon cco
+sudo ./core_installer.bin centos7 ${OSMOSIX_CLOUD} cco
 
 agentSendLogMessage  "Running jar installer"
 sudo java -jar cco-installer.jar cco-response.xml
@@ -45,6 +54,9 @@ sudo sed -i -e "s?host=?host=${CliqrTier_amqp_PUBLIC_IP}?g" /usr/local/osmosix/e
 sudo sed -i -e "s?brokerHost=?brokerHost=${CliqrTier_amqp_PUBLIC_IP}?g" \
  -e "s?gateway.cluster.addresses=?gateway.cluster.addresses=${CliqrTier_amqp_PUBLIC_IP}:5671?g" \
  /usr/local/tomcat/webapps/ROOT/WEB-INF/rabbit-gateway.properties
+sed -i -e "s?cco.log.elkHost=?cco.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
+/usr/local/tomcat/webapps/ROOT/WEB-INF/gateway.properties
+
 
 agentSendLogMessage  "Waiting for AMQP to start."
 COUNT=0
@@ -61,6 +73,10 @@ until $(nmap -p 5671 "${CliqrTier_amqp_PUBLIC_IP}" | grep "open" -q); do
     break
   fi
 done
+
+# Remove these two unsupported properties in the tomcat env config file.
+sed -i.bak -e 's$ -XX:PermSize=512m -XX:MaxPermSize=512m$$g' /usr/local/tomcat/bin/setenv.sh
+
 if [ $ERR -ne 0 ]; then
     agentSendLogMessage "Failed to find port 5671 on AMQP Server ${CliqrTier_amqp_PUBLIC_IP} after about 5 min. Skipping tomcat restart."
 else
@@ -75,6 +91,6 @@ else
     sudo -E /etc/init.d/tomcat start
 fi
 
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
+sudo mv ~/cliqr.repo /etc/yum.repos.d/
 
 
