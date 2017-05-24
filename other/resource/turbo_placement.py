@@ -111,7 +111,7 @@ def get_market(name):
 
 
 def get_cluster_from_host(host):
-    market = get_market("Market") # Get UUID of market.
+    market = get_market("Market")  # Get UUID of market.
     url = "{turbo_baseurl}/markets/{market}/entities".format(
         turbo_baseurl=turbo_baseurl,
         market=market
@@ -131,7 +131,7 @@ def get_cluster_from_host(host):
 
    
 def get_datacenter_from_host(host):
-    market = get_market("Market") # Get UUID of market.
+    market = get_market("Market")  # Get UUID of market.
     url = "{turbo_baseurl}/markets/{market}/entities".format(
         turbo_baseurl=turbo_baseurl,
         market=market
@@ -154,7 +154,7 @@ s = requests.Session()
 tier_name = os.getenv("eNV_cliqrAppName")
 
 # Get the instance type selected for the deployment of this VM.
-cc_instance_type=os.getenv("CliqrTier_{tier_name}_instanceType".format(tier_name=tier_name))
+cc_instance_type = os.getenv("CliqrTier_{tier_name}_instanceType".format(tier_name=tier_name))
 
 # Get the UUID of the Turbonomic template that matches the CloudCenter instance type used for this deployment.
 deploy_template_uuid = get_template_uuid_from_name(cc_instance_type)
@@ -171,6 +171,7 @@ if not reservation:
 suggested_host = reservation['demandEntities'][0]['placements']['computeResources'][0]['provider']['displayName']
 suggested_datastore = reservation['demandEntities'][0]['placements']['storageResources'][0]['provider']['displayName']
 
+# Turbonomic provides it's placement down to a specific host, but CloudCenter requires a cluster instead.
 suggested_cluster = get_cluster_from_host(suggested_host)
 suggested_datacenter = get_datacenter_from_host(suggested_host)
 
@@ -182,10 +183,11 @@ content = {
     # vCenter cluster.
     "UserClusterName": suggested_cluster,
 
+    # TODO: Test resource pool assignment.
     # Resource Pool.
     # "UserResourcePoolName": "",
 
-    #
+    # TODO: Test vm tag list.
     "vmTagsList": "Name:my-vm",
 
     # Datastore or DS Cluster to deploy to.
@@ -207,9 +209,6 @@ content = {
     # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthesis.
     # In my case I want to distribute across 4 equivalent port groups.
     "networkList": deploy_network,
-
-    # ESX Host to deploy to
-    "UserHost": suggested_host,
 
     # These values will show up in the UI for the node being created.
     # Value should be a single string, not a nested dict.

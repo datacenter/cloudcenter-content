@@ -28,17 +28,19 @@ content = {
     # vCenter cluster.
     "UserClusterName": "MyCluster",
 
+    # TODO: Test resource pool assignment.
     # Resource Pool.
     # "UserResourcePoolName": "",
 
-    #
+    # TODO: Test vm tag list.
     "vmTagsList": "Name:my-vm",
 
     # Datastore or DS Cluster to deploy to.
     "UserDatastoreCluster": "my-ds-cluster",
 
-    # vCenter VM folder
-    "UserFolderName": "myfolder1/myfolder2",
+    # vCenter VM folder - Just the folder itself, not the whole path.
+    # Not '/path/to/folder', just 'folder'.
+    "UserFolderName": "myfolder1",
 
     # Use strings, not booleans
     "RootDiskResizable": "false",  #
@@ -52,13 +54,9 @@ content = {
     # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthesis.
     "networkList": "apps-202 ()",
 
-    # ESX Host to deploy to
-    "UserHost": "esx01.demo.cisco.com",
-
     # These values will show up in the UI for the node being created.
     # Value should be a single string, not a nested dict.
-    "nodeInfo": "UserDataCenterName: Tetration, UserClusterName: ta-apps,"
-                "UserDatastoreCluster: ta-apps-vmfs, networkList: apps-202"
+    "nodeInfo": "Arbitrary String that shows up in Node Info area on deployment page."
 }
 
 print_ext_service_result(json.dumps(content))
