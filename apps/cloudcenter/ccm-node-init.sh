@@ -28,7 +28,11 @@ agentSendLogMessage "Working Directory: $(pwd)"
 
 agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
-sudo yum install -y wget vim java-1.8.0-openjdk nmap
+sudo yum update -y
+sudo yum install -y wget
+sudo yum install -y vim
+sudo yum install -y java-1.8.0-openjdk
+sudo yum install -y nmap
 
 # Download necessary files
 cd /tmp
@@ -50,6 +54,8 @@ sed -i -e "s?publicDnsName=<mgmtserver_public_dns_name>?publicDnsName=${CliqrTie
 -e "s?ccm.log.elkHost=?ccm.log.elkHost=${CliqrTier_monitor_PUBLIC_IP}?g" \
 /usr/local/tomcat/webapps/ROOT/WEB-INF/server.properties
 
+# Remove these two unsupported properties in the tomcat env config file.
+sed -i.bak -e 's$ -XX:PermSize=512m -XX:MaxPermSize=512m$$g' /usr/local/tomcat/bin/setenv.sh
 
 sudo /etc/init.d/tomcat stop
 sudo rm -f /usr/local/tomcat/catalina.pid
@@ -66,16 +72,16 @@ ERR=0
 until $(curl https://${CliqrTier_ccm_PUBLIC_IP} -k -m 5 ); do
   sleep ${SLEEP_TIME}
   let "COUNT++"
-  echo $COUNT
-  if [ $COUNT -gt 50 ]; then
+  echo ${COUNT}
+  if [ ${COUNT} -gt 50 ]; then
     ERR=1
     break
   fi
 done
-if [ $ERR -ne 0 ]; then
+if [ ${ERR} -ne 0 ]; then
     agentSendLogMessage "Failed to start server after about 5 minutes"
 else
     agentSendLogMessage "Server Started."
 fi
 
-sudo sudo mv ~/cliqr.repo /etc/yum.repos.d/
+sudo mv ~/cliqr.repo /etc/yum.repos.d/

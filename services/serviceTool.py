@@ -29,7 +29,7 @@ parser.add_argument("-d", "--debug", help="Set logging level.", choices=log_choi
 parser.add_argument("-o", "--overwrite", action='store_true',
                     help="When importing, overwrite existing service in CloudCenter. When exporting,"
                          " overwrite existing file.")
-parser.add_argument("-l", "--logo", type=argparse.FileType('rb'),
+parser.add_argument("-l", "--logo", type=argparse.FileType('rb'), required=True,
                     help="Filename of the NEW or UPDATED logo to attach to this service."
                          " Can be ommitted to leave logo unchanged.")
 

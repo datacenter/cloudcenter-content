@@ -1,0 +1,1 @@
+# Resource Placement and Validation
