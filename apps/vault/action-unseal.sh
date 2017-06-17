@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 exec > >(tee -a /var/tmp/action-unseal_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
