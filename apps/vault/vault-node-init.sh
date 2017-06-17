@@ -18,3 +18,26 @@ rm consul_0.8.4_linux_amd64.zip
 mkdir -p ~/bin
 mv vault ~/bin
 mv consul ~/bin
+
+consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
+
+# Note, disabling mlock is insecure as it allows memory to be swapped to disk
+# which may contain secrets. It's disabled here to avoid running as root.
+cat > example.hcl <<-'EOF'
+backend "consul" {
+  address = "127.0.0.1:8500"
+  path = "vault"
+}
+
+listener "tcp" {
+ address = "127.0.0.1:8200"
+ tls_disable = 1
+}
+
+disable_mlock = true
+EOF
+export VAULT_ADDR=http://127.0.0.1:8200
+vault server -config=example.hcl &
+vault init > vault_init_log
+agentSendLogMessage $(grep "Unseal Key" vault_init_log)
+agentSendLogMessage $(grep "Initial Root Token" vault_init_log)
