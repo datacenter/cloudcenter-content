@@ -16,8 +16,8 @@ unzip consul_0.8.4_linux_amd64.zip
 rm consul_0.8.4_linux_amd64.zip
 
 mkdir -p ~/bin
-mv vault ~/bin
-mv consul ~/bin
+sudo mv vault /usr/bin
+sudo mv consul /usr/bin
 
 consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
 
