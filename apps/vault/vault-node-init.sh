@@ -15,11 +15,12 @@ curl -O https://releases.hashicorp.com/consul/0.8.4/consul_0.8.4_linux_amd64.zip
 unzip consul_0.8.4_linux_amd64.zip
 rm consul_0.8.4_linux_amd64.zip
 
-mkdir -p ~/bin
 sudo mv vault /usr/bin
 sudo mv consul /usr/bin
 
 consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
+# Wait 10 seconds to give consul a chance to start
+sleep 10
 
 # Note, disabling mlock is insecure as it allows memory to be swapped to disk
 # which may contain secrets. It's disabled here to avoid running as root.
@@ -37,7 +38,7 @@ listener "tcp" {
 disable_mlock = true
 EOF
 export VAULT_ADDR=http://127.0.0.1:8200
-vault server -config=example.hcl &
+vault server -config=/tmp/example.hcl &
 vault init > vault_init_log
 agentSendLogMessage $(grep "Unseal Key" vault_init_log)
 agentSendLogMessage $(grep "Initial Root Token" vault_init_log)

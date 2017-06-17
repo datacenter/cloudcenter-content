@@ -1,5 +1,5 @@
 #!/bin/bash
-exec > >(tee -a /var/tmp/action-unseal_$$.log) 2>&1
+exec > >(tee -a /var/tmp/action-seal_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
