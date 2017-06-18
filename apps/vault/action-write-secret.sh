@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 exec > >(tee -a /var/tmp/action-write-secret_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
