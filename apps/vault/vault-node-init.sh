@@ -18,7 +18,7 @@ rm consul_0.8.4_linux_amd64.zip
 sudo mv vault /usr/bin
 sudo mv consul /usr/bin
 
-consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
+# consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
 # Wait 10 seconds to give consul a chance to start
 sleep 10
 
@@ -37,6 +37,35 @@ listener "tcp" {
 
 disable_mlock = true
 EOF
+
+cat > consul.service <<-'EOF'
+[Unit]
+Description=Consulserverprocess
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/bin/consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1
+EOF
+sudo mv consul.service /etc/systemd/system/
+sudo systemctl start consul.service
+sudo systemctl enable consul
+
+cat > vault.service <<-'EOF'
+[Unit]
+Description=vault server
+Requires=network-online.target
+After=network-online.target consul.service
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/bin/vault server -config=/tmp/example.hcl
+EOF
+sudo mv vault.service /etc/systemd/system/
+sudo systemctl start vault.service
+sudo systemctl enable vault
+
 export VAULT_ADDR=http://127.0.0.1:8200
 vault server -config=/tmp/example.hcl &
 vault init > vault_init_log
