@@ -67,7 +67,7 @@ sudo systemctl start vault.service
 sudo systemctl enable vault
 
 export VAULT_ADDR=http://127.0.0.1:8200
-vault server -config=/tmp/example.hcl &
+# vault server -config=/tmp/example.hcl &
 vault init > vault_init_log
 agentSendLogMessage $(grep "Unseal Key" vault_init_log)
 agentSendLogMessage $(grep "Initial Root Token" vault_init_log)
