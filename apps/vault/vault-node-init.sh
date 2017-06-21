@@ -8,7 +8,7 @@ exec > >(tee -a /var/tmp/vault-node-init_$$.log) 2>&1
 
 cd /tmp
 
-sudo yum install -y wget
+sudo yum install -y wget unzip
 
 wget https://releases.hashicorp.com/vault/0.7.3/vault_0.7.3_linux_amd64.zip
 unzip vault_0.7.3_linux_amd64.zip
@@ -54,7 +54,7 @@ sudo systemctl enable consul
 # TODO: Verify this isn't needed.
 # consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
 # Wait 10 seconds to give consul a chance to start
-# sleep 10
+sleep 10
 
 cat > vault.service <<-'EOF'
 [Unit]
@@ -69,6 +69,11 @@ EOF
 sudo mv vault.service /etc/systemd/system/
 sudo systemctl start vault.service
 sudo systemctl enable vault
+
+# TODO: Verify this isn't needed.
+# consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
+# Wait 10 seconds to give consul a chance to start
+sleep 10
 
 export VAULT_ADDR=http://127.0.0.1:8200
 # vault server -config=/tmp/example.hcl &
