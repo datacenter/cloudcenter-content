@@ -23,6 +23,8 @@ sudo mv consul /usr/bin
 
 # Note, disabling mlock is insecure as it allows memory to be swapped to disk
 # which may contain secrets. It's disabled here to avoid running as root.
+# Also the vault listener is set to listen on ALL IP ADDRESSES, WHICH IS A
+# SECURITY ISSUE IN PRODUCTION SCENARIO.
 cat > example.hcl <<-'EOF'
 backend "consul" {
   address = "127.0.0.1:8500"
@@ -30,7 +32,7 @@ backend "consul" {
 }
 
 listener "tcp" {
- address = "127.0.0.1:8200"
+ address = "0.0.0.0:8200"
  tls_disable = 1
 }
 
