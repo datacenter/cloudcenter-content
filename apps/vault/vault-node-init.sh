@@ -21,10 +21,6 @@ rm consul_0.8.4_linux_amd64.zip
 sudo mv vault /usr/bin
 sudo mv consul /usr/bin
 
-# consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
-# Wait 10 seconds to give consul a chance to start
-sleep 10
-
 # Note, disabling mlock is insecure as it allows memory to be swapped to disk
 # which may contain secrets. It's disabled here to avoid running as root.
 cat > example.hcl <<-'EOF'
@@ -54,6 +50,11 @@ EOF
 sudo mv consul.service /etc/systemd/system/
 sudo systemctl start consul.service
 sudo systemctl enable consul
+
+# TODO: Verify this isn't needed.
+# consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
+# Wait 10 seconds to give consul a chance to start
+# sleep 10
 
 cat > vault.service <<-'EOF'
 [Unit]
