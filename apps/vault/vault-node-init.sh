@@ -73,12 +73,13 @@ sudo systemctl start vault.service
 sudo systemctl enable vault
 
 # TODO: Verify this isn't needed.
-# consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -bind 127.0.0.1 &
-# Wait 10 seconds to give consul a chance to start
+# Wait 10 seconds to give vault a chance to start
 sleep 10
 
+echo "export VAULT_ADDR=http://127.0.0.1:8200" >> ~/.bash_profile
 export VAULT_ADDR=http://127.0.0.1:8200
-# vault server -config=/tmp/example.hcl &
 vault init > vault_init_log
 agentSendLogMessage $(grep "Unseal Key" vault_init_log)
 agentSendLogMessage $(grep "Initial Root Token" vault_init_log)
+
+sudo -E vault audit-enable file file_path=/var/log/vault_audit.log
