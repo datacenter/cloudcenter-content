@@ -10,11 +10,7 @@ network_name = os.getenv("networkName", None)
 os_type = os.getenv("vmOSName")
 nic_count = int(os.getenv("numNICs"))
 # nic_info = json.loads(os.getenv("nicInfo"))
-
-if subnet_id == "mdavis-200-no-dhcp (DVS-LAB164)":
-    use_dhcp = False  # VMware customization spec to use if you want.
-else:
-    use_dhcp = True  # VMware customization spec to use if you want.
+use_dhcp = False
 
 windows_cust_spec = None
 linux_cust_spec = None
@@ -29,8 +25,9 @@ if os_type == "Windows":
         joinDomain = False  # Or true if you want to join a Windows Domain. Then put domain admin creds below.
         print("portId=asdf")  # OpenStack specific
         # Windows Specific
-        print("domainAdminName=asdf")
-        print("domainAdminPassword=afd")
+        # print("domainAdminName=asdf") # Only if joining domain.
+        # print("domainAdminPassword=afd") # Only if joining domain.
+        # print("domainName=auslab.cisco.com") # Only if joining domain.
         print("workgroup=workgroup")
         print("organization=CliQr")
         print("productKey=D2N9P-3P6X9-2R39C-7RTCD-MDVJX")
@@ -42,6 +39,7 @@ if os_type == "Windows":
         # print("changeSid=true")
         print("deleteAccounts=false")
         print("timeZoneId=004")
+        print("fullName=Michael Davis")
 elif os_type == "Linux":
     if linux_cust_spec:
         print("custSpec=" + linux_cust_spec)
