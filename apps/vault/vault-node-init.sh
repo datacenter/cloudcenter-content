@@ -82,4 +82,5 @@ vault init > vault_init_log
 agentSendLogMessage $(grep "Unseal Key" vault_init_log)
 agentSendLogMessage $(grep "Initial Root Token" vault_init_log)
 
-sudo -E vault audit-enable file file_path=/var/log/vault_audit.log
+# TODO: Enable logging. This doesn't work yet as command requires vault to be unsealed first.
+# sudo -E vault audit-enable file file_path=/var/log/vault_audit.log
