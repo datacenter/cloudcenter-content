@@ -47,7 +47,13 @@ try:
             params = json.load(params_file_fd)
 
     # TODO: Security review required for IAM capabilties
-    create_cft = cft.create_stack(StackName=JOB_NAME, TemplateBody=template, Parameters=params, Capabilities=['CAPABILITY_NAMED_IAM'])
+    create_cft = cft.create_stack(
+        StackName=JOB_NAME,
+        TemplateBody=template,
+        Parameters=params,
+        Capabilities=['CAPABILITY_NAMED_IAM'],
+        TimeoutInMinutes=10
+    )
 
     stack_id = create_cft.get("StackId")
 
@@ -59,7 +65,7 @@ try:
     stack = cft.describe_stacks(StackName=stack_id)
 
     i = 0
-    while stack['Stacks'][0]['StackStatus'] not in ['ROLLBACK_COMPLETE', 'CREATE_COMPLETE']:
+    while stack['Stacks'][0]['StackStatus'] not in ['ROLLBACK_COMPLETE', 'CREATE_COMPLETE', 'CREATE_FAILED']:
         status = stack['Stacks'][0].get('StackStatus', None)
         reason = stack['Stacks'][0].get('StackStatusReason', None)
         message = "{}, Reason: {}".format(status, reason)
