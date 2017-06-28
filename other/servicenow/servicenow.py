@@ -3,6 +3,7 @@
 import requests
 import json
 import os
+import sys
 
 
 # I'm using Vault here to get my ServiceNow credential, but you could get some other way or just hard-code it.
@@ -18,6 +19,8 @@ def get_snow_credential():
         "username": response.json()['data']['username'],
         "password": response.json()['data']['password']
     }
+
+cmd = sys.argv[1]
 
 instance_creds = get_snow_credential()
 instance = instance_creds['instance']
@@ -62,12 +65,17 @@ for h in hostname_list:
 host_index = i
 print("Host Index: {}".format(host_index))
 
+terminated = False
+if cmd == "delete":
+    terminated = True
+
 payload = {
     "u_hostname": hostname,
     "u_node_id": node_list[host_index],
     "u_public_ip": public_ip_list[host_index],
     "u_private_ip": private_ip_list[host_index],
-    "u_os_type": os_type
+    "u_os_type": os_type,
+    "u_terminated": terminated
 }
 print("Payload: {}".format(payload))
 
