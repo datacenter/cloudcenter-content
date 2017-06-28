@@ -63,12 +63,14 @@ host_index = i
 print("Host Index: {}".format(host_index))
 
 payload = {
-    "hostname": hostname,
-    "node_id": node_list[host_index],
-    "public_ip": public_ip_list[host_index],
-    "private_ip": private_ip_list[host_index],
-    "os_type": os_type
+    "u_hostname": hostname,
+    "u_node_id": node_list[host_index],
+    "u_public_ip": public_ip_list[host_index],
+    "u_private_ip": private_ip_list[host_index],
+    "u_os_type": os_type
 }
+print("Payload: {}".format(payload))
+
 s = requests.Session()
 
 r = s.request("POST", url, data=json.dumps(payload), auth=(username, password))
