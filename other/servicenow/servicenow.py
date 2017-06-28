@@ -40,7 +40,7 @@ print("Public IPs: {}".format(public_ip_list))
 private_ip_list = os.getenv("CliqrTier_{}_IP".format(tier_name)).split(",")
 print("Private IPs: {}".format(private_ip_list))
 
-hostname_list = os.getenv("CliqrTier_{}_NODE_ID".format(tier_name)).split(",")
+hostname_list = os.getenv("CliqrTier_{}_HOSTNAME".format(tier_name)).split(",")
 print("Hosts: {}".format(hostname_list))
 
 
