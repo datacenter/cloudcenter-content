@@ -2,6 +2,7 @@
 
 import requests
 import json
+import os
 
 
 # I'm using Vault here to get my ServiceNow credential, but you could get some other way or just hard-code it.
@@ -22,12 +23,36 @@ instance_creds = get_snow_credential()
 instance = instance_creds['instance']
 username = instance_creds['username']
 password = instance_creds['password']
-table = "cmdb_ci_linux_server"
+table = "u_cloudcenter_vms"
 
 url = "https://{instance}/api/now/table/{table}".format(instance=instance, table=table)
 
+tiername = os.getenv('cliqrAppName')
+# Get lists of all info for all servers in this tier
+node_list = os.getenv("CliqrTier_{}_NODE_ID".format(tiername)).split(",")
+public_ip_list = os.getenv("CliqrTier_{}_PUBLIC_IP".format(tiername)).split(",")
+private_ip_list = os.getenv("CliqrTier_{}_IP".format(tiername)).split(",")
+hostname_list = os.getenv("CliqrTier_{}_NODE_ID".format(tiername)).split(",")
+
+hostname = os.getenv('cliqrNodeHostname')
+os_type = os.getenv('osName')
+
+# Figure out which position this particular vm is in the lists by comparing known hostname to
+# the list of hostname. Assume that this list index is the same for this host in all other lists.
+i = 0
+for h in hostname_list:
+    if h == hostname:
+        break
+    i = i + 1
+
+host_index = i
+
 payload = {
-    "name": "test1"
+    "hostname": hostname,
+    "node_id": node_list[host_index],
+    "public_ip": public_ip_list[host_index],
+    "private_ip": private_ip_list[host_index],
+    "os_type": os_type
 }
 s = requests.Session()
 
