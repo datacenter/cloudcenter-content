@@ -27,15 +27,29 @@ table = "u_cloudcenter_vms"
 
 url = "https://{instance}/api/now/table/{table}".format(instance=instance, table=table)
 
-tiername = os.getenv('cliqrAppName')
+tier_name = os.getenv('cliqrAppName')
+print("Tier Name: {}".format(tier_name))
+
 # Get lists of all info for all servers in this tier
-node_list = os.getenv("CliqrTier_{}_NODE_ID".format(tiername)).split(",")
-public_ip_list = os.getenv("CliqrTier_{}_PUBLIC_IP".format(tiername)).split(",")
-private_ip_list = os.getenv("CliqrTier_{}_IP".format(tiername)).split(",")
-hostname_list = os.getenv("CliqrTier_{}_NODE_ID".format(tiername)).split(",")
+node_list = os.getenv("CliqrTier_{}_NODE_ID".format(tier_name)).split(",")
+print("Nodes: {}".format(node_list))
+
+public_ip_list = os.getenv("CliqrTier_{}_PUBLIC_IP".format(tier_name)).split(",")
+print("Public IPs: {}".format(public_ip_list))
+
+private_ip_list = os.getenv("CliqrTier_{}_IP".format(tier_name)).split(",")
+print("Private IPs: {}".format(private_ip_list))
+
+hostname_list = os.getenv("CliqrTier_{}_NODE_ID".format(tier_name)).split(",")
+print("Hosts: {}".format(hostname_list))
+
 
 hostname = os.getenv('cliqrNodeHostname')
+print("Hostname: {}".format(hostname))
+
 os_type = os.getenv('osName')
+print("OS Type: {}".format(os_type))
+
 
 # Figure out which position this particular vm is in the lists by comparing known hostname to
 # the list of hostname. Assume that this list index is the same for this host in all other lists.
@@ -46,6 +60,7 @@ for h in hostname_list:
     i = i + 1
 
 host_index = i
+print("Host Index: {}".format(host_index))
 
 payload = {
     "hostname": hostname,
