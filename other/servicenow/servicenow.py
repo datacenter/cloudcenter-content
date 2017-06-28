@@ -20,7 +20,10 @@ def get_snow_credential():
         "password": response.json()['data']['password']
     }
 
-cmd = sys.argv[1]
+cmd = None
+if len(sys.argv > 1):
+    cmd = sys.argv[1]
+
 
 instance_creds = get_snow_credential()
 instance = instance_creds['instance']
