@@ -68,9 +68,9 @@ for h in hostname_list:
 host_index = i
 print("Host Index: {}".format(host_index))
 
-terminated = False
+status = "Operational"
 if cmd == "delete":
-    terminated = True
+    status = "Terminated"
 
 payload = {
     "u_hostname": hostname,
@@ -78,7 +78,7 @@ payload = {
     "u_public_ip": public_ip_list[host_index],
     "u_private_ip": private_ip_list[host_index],
     "u_os_type": os_type,
-    "u_terminated": terminated
+    "u_status": status
 }
 print("Payload: {}".format(payload))
 
