@@ -1,7 +1,6 @@
 controllerConfig=demo
 iiopPort=3700
 serverPort=8090
-serverHostName=demoserver #Specify the controller hostname instead of demoserver
 controllerTenancyMode=single
 adminPort=4848
 sys.languageId=en
