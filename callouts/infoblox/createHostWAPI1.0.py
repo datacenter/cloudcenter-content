@@ -17,11 +17,11 @@ dns_server_list = "10.100.1.15,8.8.8.8"
 wapi_version = "1.2"
 ib_api_endpoint = "https://10.110.5.254/wapi/v{}".format(wapi_version)
 
-# Search networks for the one with an Extensible Attribute VLAN = network.
+# Search networks for the one with an Extensible Attribute Port Group = network.
 # This allows you to control which network goes with which port group from infoblox.
 url = "{}/network".format(ib_api_endpoint)
 querystring = {
-    "*VLAN": network,
+    "*Port Group": network,
     "_return_fields": "extattrs"
 }
 headers = {}
