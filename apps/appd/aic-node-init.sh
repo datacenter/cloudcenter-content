@@ -8,12 +8,12 @@ exec > >(tee -a /var/tmp/aic-node-init_$$.log) 2>&1
 
 # yum install -y unzip
 
+cd /tmp
 curl -o controller_linux.sh ${appd_installer_url}
-curl -o response.varfile ${appd_response_file}
-#unzip controller_linux.zip
 sudo chmod +x controller_linux.sh
 
-echo "serverHostName=${cliqrNodeHostname}" >> response.varfile
+curl -o response.varfile ${appd_response_file}
+echo -e "\nserverHostName=${cliqrNodeHostname}" >> response.varfile
 
 sudo ./controller_linux.sh -q -varfile response.varfile
 
