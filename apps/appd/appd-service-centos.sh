@@ -18,6 +18,7 @@ curl -o appdynamics-machine-agent.rpm ${agentUrl}
 agentSendLogMessage "Installing the AppDynamics Machine Agent."
 sudo rpm -ivh appdynamics-machine-agent.rpm
 agentSendLogMessage "The agent files are installed in opt/appdynamics/machine-agent and the agent is added as a service."
+rm -f appdynamics-machine-agent.rpm
 
 sudo sed -i.bak -e "s%<controller-host>%<controller-host>${appd_controller_ip}%g" \
 -e "s%<controller-port>%<controller-port>${appd_controller_http_port}%g" \

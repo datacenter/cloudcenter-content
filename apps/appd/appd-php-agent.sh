@@ -12,16 +12,20 @@ appd_controller_http_port="8090"
 appd_access_key="281c9d49-f465-426f-ab92-ba1c983d434d"
 agentUrl="http://172.16.201.244:8081/artifactory/appd/download-file/php-rpm/4.3.3.4/appdynamics-php-agent.x86_64.rpm"
 
-#cd /tmp
-#agentSendLogMessage "Downloading the AppDynamics Machine Agent from ${agentUrl}."
-#curl -o appdynamics-machine-agent.rpm ${agentUrl}
-#agentSendLogMessage "Installing the AppDynamics Machine Agent."
-#sudo rpm -ivh appdynamics-machine-agent.rpm
-#agentSendLogMessage "The agent files are installed in opt/appdynamics/machine-agent and the agent is added as a service."
-#
-#sudo sed -i.bak -e "s%<controller-host>%<controller-host>${appd_controller_ip}%g" \
-#-e "s%<controller-port>%<controller-port>${appd_controller_http_port}%g" \
-#-e "s%<account-access-key>%<account-access-key>${appd_access_key}%g" \
-#/opt/appdynamics/machine-agent/conf/controller-info.xml
-#
-#sudo systemctl start appdynamics-machine-agent
+agentSendLogMessage "Installing PHP CLI."
+sudo yum install -y php-cli
+
+export APPD_CONF_CONTROLLER_HOST=${appd_controller_ip}
+export APPD_CONF_CONTROLLER_PORT=${appd_controller_http_port}
+export APPD_CONF_APP=${parentJobName}
+export APPD_CONF_TIER=${cliqrNodeHostname}
+export APPD_CONF_ACCESS_KEY=${appd_access_key}
+
+
+cd /tmp
+agentSendLogMessage "Downloading the AppDynamics PHP Agent from ${agentUrl}."
+curl -o appdynamics-php-agent.rpm ${agentUrl}
+agentSendLogMessage "Installing the AppDynamics PHP Agent."
+sudo -E rpm -i appdynamics-php-agent.rpm
+agentSendLogMessage "The agent files are installed in opt/appdynamics/machine-agent and the agent is added as a service."
+rm -f appdynamics-php-agent.rpm
