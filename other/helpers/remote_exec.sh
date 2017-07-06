@@ -29,5 +29,5 @@ if [ "${osName}" == "Linux" ]; then
 
 else
     # Remote execution isn't supported on Windows right now.
-    print_log "Not Linux, so skipping appd agent install."
+    print_log "Not Linux, so skipping script."
 fi
