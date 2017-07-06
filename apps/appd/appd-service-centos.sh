@@ -10,7 +10,7 @@ exec > >(tee -a /var/tmp/appd-service-centos-init_$$.log) 2>&1
 appd_controller_ip="172.16.204.34"
 appd_controller_http_port="8090"
 appd_access_key="281c9d49-f465-426f-ab92-ba1c983d434d"
-agentUrl="https://download-files.appdynamics.com/download-file/machine/4.3.3.4/appdynamics-machine-agent-4.3.3.4-1.x86_64.rpm"
+agentUrl="http://172.16.201.244:8081/artifactory/appd/download-file/machine/4.3.3.4/appdynamics-machine-agent-4.3.3.4-1.x86_64.rpm"
 
 cd /tmp
 agentSendLogMessage "Downloading the AppDynamics Machine Agent from ${agentUrl}."
