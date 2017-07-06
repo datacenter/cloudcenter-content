@@ -5,7 +5,7 @@
 # Should be URL of script to download and execute on the node remotely.
 script=$1
 
-if [ "${osName}" -e "Linux" ]; then
+if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
 
     # Get SSH key of cliqruser on node from injected env and stick it in a file.

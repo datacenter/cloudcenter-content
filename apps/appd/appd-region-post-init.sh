@@ -2,7 +2,7 @@
 # Utility script to run arbitrary script remotely with lifecycle action.
 . /utils.sh
 
-if [ "${osName}" -e "Linux" ]; then
+if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
 
     # Get SSH key of cliqruser on node from injected env and stick it in a file.
