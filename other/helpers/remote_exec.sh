@@ -2,6 +2,9 @@
 # Utility script to run arbitrary script remotely with lifecycle action.
 . /utils.sh
 
+# Should be URL of script to download and execute on the node remotely.
+script=$1
+
 if [ "${osName}" -e "Linux" ]; then
     yum install -y openssh-clients
 
@@ -19,7 +22,7 @@ if [ "${osName}" -e "Linux" ]; then
     ssh-keyscan ${node_ip} >> ~/.ssh/known_hosts
 
     # Download the script that you want to run.
-    curl -o script.sh https://raw.githubusercontent.com/datacenter/cloudcenter-content/appd/apps/appd/appd-service-centos.sh
+    curl -o script.sh ${script}
 
     # Run the script.
     ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh
