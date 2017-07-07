@@ -20,9 +20,12 @@ sudo rpm -ivh appdynamics-machine-agent.rpm
 agentSendLogMessage "The agent files are installed in opt/appdynamics/machine-agent and the agent is added as a service."
 rm -f appdynamics-machine-agent.rpm
 
+# Note that Service Visibility (sim-enabled) won't work without a license, even
+# if enabled.
 sudo sed -i.bak -e "s%<controller-host>%<controller-host>${appd_controller_ip}%g" \
 -e "s%<controller-port>%<controller-port>${appd_controller_http_port}%g" \
 -e "s%<account-access-key>%<account-access-key>${appd_access_key}%g" \
+-e "s%<sim-enabled>false%<sim-enabled>true%g" \
 /opt/appdynamics/machine-agent/conf/controller-info.xml
 
 sudo systemctl start appdynamics-machine-agent
