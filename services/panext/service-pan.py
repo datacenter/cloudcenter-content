@@ -37,6 +37,7 @@ addrGrp = "addrGrp" + os.environ['parentJobId']
 api_username = os.getenv('panext_username')
 api_password = os.getenv('panext_password')
 hostname = os.getenv('panext_hostname')
+panext_fwtag = os.environ["panext_fwtag"]
 
 if cmd == "start":
     # xpath = "/config/devices/entry/vsys/entry/address"
@@ -54,7 +55,7 @@ if cmd == "start":
     grpEntryStatic = ET.SubElement(addressGrpEntry, "static")
     tag = ET.SubElement(addressGrpEntry, "tag")
     memberTag = ET.SubElement(tag, "member")
-    memberTag.text = os.environ["fwTag"]
+    memberTag.text = panext_fwtag
 
     for dependency in dependencies:
         depNodeIPs = os.environ["CliqrTier_" + dependency + "_IP"].split(',')
