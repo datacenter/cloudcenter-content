@@ -1,0 +1,67 @@
+{
+    "servicePorts": [],
+    "name": "panext",
+    "systemService": false,
+    "parentServiceId": "36",
+    "description": "",
+    "externalBundleLocation": "",
+    "costPerHour": 0.0,
+    "serviceType": "EXTERNAL",
+    "childServices": [],
+    "externalActions": [
+        {
+            "actionName": "START",
+            "actionType": "URL",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%panext_gitTag%/services/panext/service start"
+        }
+    ],
+    "egressRestrictions": [],
+    "images": [],
+    "parentService": false,
+    "displayName": "Palo Alto FW",
+    "serviceActions": [],
+    "externalService": false,
+    "perms": [
+        "read",
+        "administration",
+        "write",
+        "delete"
+    ],
+    "bundleLocation": "",
+    "serviceParamSpecs": [
+        {
+            "helpText": "",
+            "paramName": "panext_gitTag",
+            "collectionList": [],
+            "systemParam": true,
+            "defaultValue": "paloalto",
+            "valueList": null,
+            "optional": false,
+            "displayName": "Git Tag",
+            "dataUnit": null,
+            "userEditable": true,
+            "valueConstraint": {
+                "sizeValue": 0,
+                "maxLength": 255,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "minValue": 0,
+                "allowSpaces": true,
+                "maxValue": 0,
+                "regex": null
+            },
+            "confirmValue": null,
+            "scope": null,
+            "exampleValue": null,
+            "webserviceListParams": null,
+            "multiselectSupported": false,
+            "pathSuffixValue": "",
+            "type": "string",
+            "userVisible": true
+        }
+    ],
+    "defaultImageName": null,
+    "repositories": [],
+    "logoPath": "/assets/img/appTiers/panext/logo.png",
+    "visible": true
+}
