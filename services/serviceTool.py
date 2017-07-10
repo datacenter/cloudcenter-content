@@ -29,7 +29,7 @@ parser.add_argument("-d", "--debug", help="Set logging level.", choices=log_choi
 parser.add_argument("-o", "--overwrite", action='store_true',
                     help="When importing, overwrite existing service in CloudCenter. When exporting,"
                          " overwrite existing file.")
-parser.add_argument("-l", "--logo", type=argparse.FileType('rb'), required=True,
+parser.add_argument("-l", "--logo", type=argparse.FileType('rb'), required=False,
                     help="Filename of the NEW or UPDATED logo to attach to this service."
                          " Can be ommitted to leave logo unchanged.")
 
@@ -350,6 +350,9 @@ def import_service(service):
         j = response.json()
         logo_path = j['params'][0]['value']
         service['logoPath'] = logo_path
+    else:
+        logging.critical("You must specify a logo file for new services. Use the -l switch.")
+        exit(1)
 
     logging.debug(json.dumps(service, indent=2))
 
