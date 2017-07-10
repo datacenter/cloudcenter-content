@@ -2,6 +2,8 @@
 
 . /utils.sh
 
+env
+
 print_log "Installing python-pip"
 yum install -y python-pip
 print_log "Upgrading python-pip"
