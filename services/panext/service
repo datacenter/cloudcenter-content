@@ -2,7 +2,7 @@
 
 . /utils.sh
 
-case $cmd in
+case $1 in
 	start)
 		yum install python-pip python2.7-elementtree -y
 		pip install pip --upgrade
@@ -24,9 +24,3 @@ case $cmd in
 		exit 127
 		;;
 esac
-
-#result="{\"hostName\": \"example.com\", \"ipAddress\": \"192.168.1.8\", \"environment\":{\"instanceName\": \"test_instance\", \"instanceType\":\"dummy\", \"serviceType\": \"custom\", \"serviceStatus\":\"$serviceStatus\"}}"
-result="{\"hostName\": \"$serviceStatus\", \"ipAddress\": \"192.168.1.8\"}"
-# echo $result
-print_ext_service_result "$result"
-print_error "something wrong"
