@@ -92,7 +92,7 @@
             "pathSuffixValue": ""
         },
         {
-            "defaultValue": "paloalto",
+            "defaultValue": "panext1.0",
             "paramName": "panext_gitTag",
             "userEditable": false,
             "valueConstraint": {
