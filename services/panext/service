@@ -2,20 +2,12 @@
 
 . /utils.sh
 
-cmd=$1
-serviceStatus=""
-SVCNAME=$OSSVC_CONFIG
-SVCHOME="$OSSVC_HOME/$OSSVC_CONFIG"
-USER_ENV="/usr/local/osmosix/etc/userenv"
-
-#print_ext_service_result "{foo:bar}"
-
-
 case $cmd in
 	start)
 		yum install python-pip python2.7-elementtree -y
+		pip install pip --upgrade
 		pip install pan-python
-		wget https://cliqrdemo-repo.s3.amazonaws.com/services/service-pan.py
+		wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/${panext_gitTag}/services/panext/service-pan.py
 		python service-pan.py start
 		#$OSSVC_HOME/$SVCNAME/service-pan.py start
 
