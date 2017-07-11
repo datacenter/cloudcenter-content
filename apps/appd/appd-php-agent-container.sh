@@ -17,26 +17,26 @@ container_name=`docker ps | awk '{ print $1 }' | tail -n1`
 
 agentSendLogMessage "Installing PHP CLI."
 
-docker exec ${container_name} apt-get update
-docker exec ${container_name} apt-get install -y php5-cli
-docker exec ${container_name} mkdir -p ${agentInstallPath}
+sudo docker exec ${container_name} apt-get update
+sudo docker exec ${container_name} apt-get install -y php5-cli
+sudo docker exec ${container_name} mkdir -p ${agentInstallPath}
 
 agentSendLogMessage "Downloading the AppDynamics PHP Agent from ${agentUrl}."
-docker exec ${container_name} curl -o ${agentDownloadPath} ${agentUrl}
+sudo docker exec ${container_name} curl -o ${agentDownloadPath} ${agentUrl}
 
 agentSendLogMessage "Extracting agent to ${agentInstallPath}"
-docker exec ${container_name} tar -xvjf ${agentDownloadPath} -C ${agentInstallPath}
-docker exec ${container_name} rm -f ${agentDownloadPath}
-docker exec ${container_name} chown -R www-data:www-data ${agentInstallPath}
-docker exec ${container_name} chmod -R 755 ${agentInstallPath}/appdynamics-php-agent/logs
-docker exec ${container_name} chmod 777 ${agentInstallPath}/appdynamics-php-agent/logs
+sudo docker exec ${container_name} tar -xvjf ${agentDownloadPath} -C ${agentInstallPath}
+sudo docker exec ${container_name} rm -f ${agentDownloadPath}
+sudo docker exec ${container_name} chown -R www-data:www-data ${agentInstallPath}
+sudo docker exec ${container_name} chmod -R 755 ${agentInstallPath}/appdynamics-php-agent/logs
+sudo docker exec ${container_name} chmod 777 ${agentInstallPath}/appdynamics-php-agent/logs
 
 agentSendLogMessage "Installing the AppDynamics PHP Agent."
-docker exec ${container_name} ${agentInstallPath}/appdynamics-php-agent/install.sh \
+sudo docker exec ${container_name} ${agentInstallPath}/appdynamics-php-agent/install.sh \
 -a=customer1@${appd_access_key} ${appd_controller_ip} ${appd_controller_http_port} \
 ${parentJobName} ${cliqrAppTierName} ${cliqrNodeHostname}
 
 agentSendLogMessage "The agent files are installed in ${agentInstallPath}."
 
 agentSendLogMessage "Restarting apache-php container ${container_name}"
-docker restart ${container_name}
+sudo docker restart ${container_name}
