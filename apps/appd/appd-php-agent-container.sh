@@ -13,7 +13,7 @@ appd_access_key="281c9d49-f465-426f-ab92-ba1c983d434d"
 agentUrl="http://172.16.201.244:8081/artifactory/appd/download-file/php-tar/4.3.3.4/appdynamics-php-agent-x64-linux-4.3.3.4.tar.bz2"
 agentInstallPath="/opt/appdynamics/php-agent"
 agentDownloadPath="/tmp/agent.tar.bz"
-container_name=`docker ps | awk '{ print $1 }' | tail -n1`
+container_name=`sudo docker ps | awk '{ print $1 }' | tail -n1`
 
 agentSendLogMessage "Installing PHP CLI."
 
