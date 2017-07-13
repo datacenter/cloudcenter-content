@@ -19,10 +19,10 @@ case $cmd in
 	install)
         log "[INSTALL] Installing $SVCNAME"
         yum install -y java-1.8.0-openjdk-devel unzip
-        wget http://download.jboss.org/wildfly/9.0.1.Final/wildfly-9.0.1.Final.zip
-        unzip wildfly-9.0.1.Final.zip -d /opt/
-        rm -f wildfly-9.0.1.Final.zip
-        ln -s /opt/wildfly-9.0.1.Final /opt/wildfly
+        wget http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip
+        unzip wildfly-10.1.0.Final.zip -d /opt/
+        rm -f wildfly-10.1.0.Final.zip
+        ln -s /opt/wildfly-10.1.0.Final /opt/wildfly
         # cp ./wildfly.conf /etc/default/wildfly.conf
         curl -o /etc/default/wildfly.conf ${wildfly_conf}
         cp /opt/wildfly/bin/init.d/wildfly-init-redhat.sh /etc/init.d/wildfly
@@ -30,7 +30,7 @@ case $cmd in
         chkconfig wildfly on
         mkdir -p /var/log/wildfly
         adduser wildfly
-        chown -R wildfly:wildfly /opt/wildfly-9.0.1.Final
+        chown -R wildfly:wildfly /opt/wildfly-10.1.0.Final
         chown -R wildfly:wildfly /opt/wildfly
         chown -R wildfly:wildfly /var/log/wildfly
 		;;
@@ -42,6 +42,9 @@ case $cmd in
 			log "[DEPLOY] Downloading ${wfWarURL} to /opt/wildfly/standalone/deployments/ROOT.war"
 			# mv $wfWarURL /opt/wildfly/standalone/deployments/ROOT.war # Always place the app binary at / by naming it ROOT.war
 			curl -o /opt/wildfly/standalone/deployments/ROOT.war "${wfWarURL}"
+            chown -R wildfly:wildfly /opt/wildfly-10.1.0.Final
+            chown -R wildfly:wildfly /opt/wildfly
+            chown -R wildfly:wildfly /var/log/wildfly
 		fi
 		;;
 	configure)
