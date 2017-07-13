@@ -17,21 +17,22 @@ USER_ENV="/usr/local/osmosix/etc/userenv"
 
 case $cmd in
 	install)
-		log "[INSTALL] Installing $SVCNAME"
-		yum install java-1.8.0-openjdk-devel -y
-		wget http://download.jboss.org/wildfly/9.0.1.Final/wildfly-9.0.1.Final.zip
-		unzip wildfly-9.0.1.Final.zip -d /opt/
-		rm -f wildfly-9.0.1.Final.zip
-		ln -s /opt/wildfly-9.0.1.Final /opt/wildfly
-		cp ./wildfly.conf /etc/default/wildfly.conf
-		cp /opt/wildfly/bin/init.d/wildfly-init-redhat.sh /etc/init.d/wildfly
-		chkconfig --add wildfly
-		chkconfig wildfly on
-		mkdir -p /var/log/wildfly
-		adduser wildfly
-		chown -R wildfly:wildfly /opt/wildfly-9.0.1.Final
-		chown -R wildfly:wildfly /opt/wildfly
-		chown -R wildfly:wildfly /var/log/wildfly
+        log "[INSTALL] Installing $SVCNAME"
+        yum install -y java-1.8.0-openjdk-devel unzip
+        wget http://download.jboss.org/wildfly/9.0.1.Final/wildfly-9.0.1.Final.zip
+        unzip wildfly-9.0.1.Final.zip -d /opt/
+        rm -f wildfly-9.0.1.Final.zip
+        ln -s /opt/wildfly-9.0.1.Final /opt/wildfly
+        # cp ./wildfly.conf /etc/default/wildfly.conf
+        curl -o /etc/default/wildfly.conf ${wildfly_conf}
+        cp /opt/wildfly/bin/init.d/wildfly-init-redhat.sh /etc/init.d/wildfly
+        chkconfig --add wildfly
+        chkconfig wildfly on
+        mkdir -p /var/log/wildfly
+        adduser wildfly
+        chown -R wildfly:wildfly /opt/wildfly-9.0.1.Final
+        chown -R wildfly:wildfly /opt/wildfly
+        chown -R wildfly:wildfly /var/log/wildfly
 		;;
 	deploy)
 		log "[DEPLOY] Deploying $SVCNAME"
@@ -47,25 +48,25 @@ case $cmd in
 		log "[CONFIGURE] Configuring $SVCNAME"
 		;;
 	start)
-		if [ ! -z "$cliqrUserScript" -a -f "$cliqrUserScript" ]; then
-			log "[START] Invoking pre-start user script"
-			$cliqrUserScript 1 $cliqrUserScriptParams
-		fi
+        if [ ! -z "$cliqrUserScript" -a -f "$cliqrUserScript" ]; then
+            log "[START] Invoking pre-start user script"
+            $cliqrUserScript 1 $cliqrUserScriptParams
+        fi
 
-		log "[START] Starting $SVCNAME"
-		service wildfly start
+        log "[START] Starting $SVCNAME"
+        systemctl start wildfly
 
-		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
-			log "[START] Invoking post-start user script"
-			$cliqrUserScript 2 $cliqrUserScriptParams
-		fi
+        if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
+            log "[START] Invoking post-start user script"
+            $cliqrUserScript 2 $cliqrUserScriptParams
+        fi
 
-		# Run restore script in case of migration
-		if [ "$appMigrating" == "true" ]; then
-				runMigrationRestoreScript
-		fi
-		log "[START] $SVCNAME successfully started."
-		;;
+        # Run restore script in case of migration
+        if [ "$appMigrating" == "true" ]; then
+            runMigrationRestoreScript
+        fi
+        log "[START] $SVCNAME successfully started."
+        ;;
 	stop)
 		log "[STOP] Invoking pre-stop user script"
 		if [ ! -z $cliqrUserScript -a -f $cliqrUserScript ]; then
