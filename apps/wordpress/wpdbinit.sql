@@ -4,6 +4,6 @@ SET GLOBAL general_log = 'ON';
 
 CREATE DATABASE wordpress;
 
-GRANT ALL PRIVILEGES ON wordpress.* TO "root"@"%" IDENTIFIED BY "welcome2cliqr";
+GRANT ALL PRIVILEGES ON wordpress.* TO wordpress@'%' IDENTIFIED BY 'welcome2cliqr';
 
 FLUSH PRIVILEGES;

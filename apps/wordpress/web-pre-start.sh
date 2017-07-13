@@ -9,7 +9,7 @@ echo "Username: $(whoami)"
 echo "Working Directory: $(pwd)"
 
 sudo sed -e 's/database_name_here/wordpress/' \
--e 's/username_here/root/' \
+-e 's/username_here/wordpress/' \
 -e 's/password_here/welcome2cliqr/' \
 -e 's/localhost/'$CliqrTier_mysql_1_PUBLIC_IP'/' \
 -e 's/utf8/utf8mb4/' \
