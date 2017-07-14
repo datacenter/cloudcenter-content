@@ -28,6 +28,6 @@ sed -i.bak -e "s%admin_password=''%admin_password='${tower_admin_password}'%g" \
 inventory
 
 agentSendLogMessage  "Running installer."
-mkdir -p /var/log/tower
-./setup.sh
+sudo mkdir -p /var/log/tower
+sudo ./setup.sh
 agentSendLogMessage  "Tower installation complete."
