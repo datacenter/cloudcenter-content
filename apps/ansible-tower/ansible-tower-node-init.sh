@@ -27,7 +27,13 @@ sed -i.bak -e "s%admin_password=''%admin_password='${tower_admin_password}'%g" \
 -e "s%rabbitmq_password=''%rabbitmq_password='${tower_rabbit_password}'%g" \
 inventory
 
+# Move our cliqr repo out of the way.
+sudo mv /etc/yum.repos.d/cliqr.repo /tmp/
+
 agentSendLogMessage  "Running installer."
 sudo mkdir -p /var/log/tower
 sudo ./setup.sh
 agentSendLogMessage  "Tower installation complete."
+
+# Put our cliqr repo back.
+sudo mv /tmp/cliqr.repo /etc/yum.repos.d/
