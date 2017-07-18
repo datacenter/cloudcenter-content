@@ -1,0 +1,3 @@
+configure
+set mgt-config users admin password
+commit
