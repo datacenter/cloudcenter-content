@@ -8,27 +8,31 @@ exec > >(tee -a /var/tmp/maria-node-init_$$.log) 2>&1
 
 agentSendLogMessage $(env)
 
-cat <<EOF > /etc/yum.repos.d/MariaDB.repo
+sudo su -c "cat <<EOF > /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.1/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
+"
+sudo mv /etc/yum.repos.d/cliqr.repo ~
 
-rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB && \
-groupadd -g 250 -r mysql && useradd -u 250 -r -g mysql mysql && \
-yum -y install MariaDB-server MariaDB-client galera less which socat pwgen && yum clean all && \
-yum install expect -y
+sudo rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+sudo groupadd -g 250 -r mysql
+sudo useradd -u 250 -r -g mysql mysql
+sudo yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld
+sudo yum install expect -y
+sudo yum clean all
 
-systemctl enable mariadb
-systemctl start mariadb
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
 
 # mysql secure installation
 CURRENT_MYSQL_PASSWORD=''
-NEW_MYSQL_PASSWORD="$GALERA_DB_ROOT_PWD"
+NEW_MYSQL_PASSWORD="${GALERA_DB_ROOT_PWD}"
 
-SECURE_MYSQL=$(expect -c "
+SECURE_MYSQL=$(sudo expect -c "
 
 set timeout 3
 spawn mysql_secure_installation
@@ -73,13 +77,15 @@ FLUSH PRIVILEGES;
 EOF
 
 
-systemctl stop mariadb
-firewall-cmd --add-port=4567/tcp --permanent
-firewall-cmd --add-port=4568/tcp --permanent
-firewall-cmd --add-port=4444/tcp --permanent
-firewall-cmd --add-port=3306/tcp --permanent
-firewall-cmd --add-port=9200/tcp --permanent
-firewall-cmd --reload
+sudo systemctl stop mariadb
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo firewall-cmd --add-port=4567/tcp --permanent
+sudo firewall-cmd --add-port=4568/tcp --permanent
+sudo firewall-cmd --add-port=4444/tcp --permanent
+sudo firewall-cmd --add-port=3306/tcp --permanent
+sudo firewall-cmd --add-port=9200/tcp --permanent
+sudo firewall-cmd --reload
 
 # MYSQL Config Settings
 cat << EOF > /etc/my.cnf.d/server.cnf
@@ -163,10 +169,10 @@ wsrep_provider                 = /usr/lib64/galera/libgalera_smm.so
 wsrep_sst_method               = rsync
 wsrep_slave_threads            = 4
 innodb-flush-log-at-trx-commit = 2
-wsrep_cluster_address          = "gcomm://$GALERA_DB_NODE_LIST"
-wsrep_cluster_name             = '$GALERA_CLUSTER_NAME'
-wsrep_node_address             = '$GALERA_NODE_IP'
-wsrep_node_name                = '$GALERA_NODE_NAME'
+wsrep_cluster_address          = "gcomm://${CliqrTier_maria_galera_PUBLIC_IP}"
+wsrep_cluster_name             = '${GALERA_CLUSTER_NAME}'
+wsrep_node_address             = '${CliqrTier_maria_galera_PUBLIC_IP}'
+wsrep_node_name                = '${CliqrTier_maria_galera_HOSTNAME}'
 
 # MYISAM REPLICATION SUPPORT #
 wsrep_replicate_myisam         = ON
@@ -180,3 +186,5 @@ else
     echo "starting slave"
     systemctl start mariadb
 fi
+
+sudo mv ~/cliqr.repo /etc/yum.repos.d/
