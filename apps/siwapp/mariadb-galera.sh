@@ -88,7 +88,7 @@ sudo firewall-cmd --add-port=9200/tcp --permanent
 sudo firewall-cmd --reload
 
 # MYSQL Config Settings
-cat << EOF > /etc/my.cnf.d/server.cnf
+sudo -c "cat << EOF > /etc/my.cnf.d/server.cnf
 [mysql]
 
 # This config is tuned for a 4xCore, 8GB Ram DB Host
@@ -169,7 +169,7 @@ wsrep_provider                 = /usr/lib64/galera/libgalera_smm.so
 wsrep_sst_method               = rsync
 wsrep_slave_threads            = 4
 innodb-flush-log-at-trx-commit = 2
-wsrep_cluster_address          = "gcomm://${CliqrTier_maria_galera_PUBLIC_IP}"
+wsrep_cluster_address          = 'gcomm://${CliqrTier_maria_galera_PUBLIC_IP}'
 wsrep_cluster_name             = '${GALERA_CLUSTER_NAME}'
 wsrep_node_address             = '${CliqrTier_maria_galera_PUBLIC_IP}'
 wsrep_node_name                = '${CliqrTier_maria_galera_HOSTNAME}'
@@ -177,14 +177,15 @@ wsrep_node_name                = '${CliqrTier_maria_galera_HOSTNAME}'
 # MYISAM REPLICATION SUPPORT #
 wsrep_replicate_myisam         = ON
 EOF
+"
 
-if [ "$GALERA_DB_ROLE" == "master" ];
+if [ "${GALERA_DB_ROLE}" == "master" ];
 then
     echo "starting master"
-    galera_new_cluster
+    sudo galera_new_cluster
 else
     echo "starting slave"
-    systemctl start mariadb
+    sudo systemctl start mariadb
 fi
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
