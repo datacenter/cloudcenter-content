@@ -18,6 +18,9 @@
 --
 -- Table structure for table `common`
 --
+CREATE DATABASE siwapp;
+
+USE DATABASE siwapp;
 
 DROP TABLE IF EXISTS `common`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
