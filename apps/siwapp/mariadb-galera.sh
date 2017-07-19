@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 exec > >(tee -a /var/tmp/maria-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
@@ -88,7 +88,7 @@ sudo firewall-cmd --add-port=9200/tcp --permanent
 sudo firewall-cmd --reload
 
 # MYSQL Config Settings
-sudo -c "cat << EOF > /etc/my.cnf.d/server.cnf
+sudo su -c "cat << EOF > /etc/my.cnf.d/server.cnf
 [mysql]
 
 # This config is tuned for a 4xCore, 8GB Ram DB Host
@@ -179,12 +179,20 @@ wsrep_replicate_myisam         = ON
 EOF
 "
 
-if [ "${GALERA_DB_ROLE}" == "master" ];
-then
-    echo "starting master"
+temp_ifs=${IFS}
+IFS=','
+nodeArr=(${CliqrTier_maria_galera_NODE_ID}) # Array of nodes in my tier.
+# ipArr=(${CliqrTier_swarm_PUBLIC_IP}) # Array of IPs in my tier.
+master=${nodeArr[0]} # Let the first node in the service tier be the master.
+IFS=${temp_ifs}
+
+if [ "${master}" == "${cliqrNodeId}" ]; then
+    # I'm the master
+    agentSendLogMessage "Master"
+    agentSendLogMessage "Initializing master..."
     sudo galera_new_cluster
 else
-    echo "starting slave"
+    agentSendLogMessage "starting slave"
     sudo systemctl start mariadb
 fi
 
