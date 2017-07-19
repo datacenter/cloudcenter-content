@@ -1,40 +1,73 @@
-#!/bin/bash
+#!/bin/bash -x
+exec > >(tee -a /var/tmp/apache-node-init_$$.log) 2>&1
+
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
+. /usr/local/osmosix/service/utils/cfgutil.sh
+. /usr/local/osmosix/service/utils/agent_util.sh
+
+agentSendLogMessage $(env)
 
 #---------Script Variables------------#
-APP_PORT=$1
+#siwapp_APP_PORT=$1
 
 #---------DO NOT MODIFY BELOW------------#
-echo -e "Starting app install script" >> /var/log/siwapp/install.log
-yum -y install git httpd php php-mysql php-xml php-mbstring && \
-yum -y update && yum clean all
+sudo mv /etc/yum.repos.d/cliqr.repo ~
 
-git clone https://github.com/siwapp/siwapp-sf1.git /var/www/html/
+agentSendLogMessage "Starting app install script"
+sudo yum -y update
+sudo yum -y install git httpd php php-mysql php-xml php-mbstring
+sudo yum clean all
 
-mkdir /var/www/html/cache
-chmod 777 /var/www/html/cache
-chmod 777 /var/www/html/web/config.php
-chmod 777 /var/www/html/config/databases.yml
+sudo git clone https://github.com/siwapp/siwapp-sf1.git /var/www/html/
 
-mkdir /var/www/html/web/uploads
-chmod 777 /var/www/html/web/uploads
+sudo mkdir /var/www/html/cache
+sudo chmod 777 /var/www/html/cache
+sudo chmod 777 /var/www/html/web/config.php
+sudo chmod 777 /var/www/html/config/databases.yml
 
-chown -R apache:apache /var/www/html/
+sudo mkdir /var/www/html/web/uploads
+sudo chmod 777 /var/www/html/web/uploads
 
-sed -i -e '57,63d' /var/www/html/web/pre_installer_code.php
+sudo chown -R apache:apache /var/www/html/
 
-sed -i "s/80/$APP_PORT/" /etc/httpd/conf/httpd.conf
+sudo sed -i -e '57,63d' /var/www/html/web/pre_installer_code.php
 
-echo $"<Directory /var/www/html/web>
+sudo sed -i "s/80/${siwapp_APP_PORT}/" /etc/httpd/conf/httpd.conf
+
+sudo su -c "echo $'<Directory /var/www/html/web>
 	Options FollowSymLinks
 	AllowOverride All
 </Directory>
-<VirtualHost *:$APP_PORT>
+<VirtualHost *:${siwapp_APP_PORT}>
 	DocumentRoot /var/www/html/web
 	RewriteEngine On
-</VirtualHost>"\
->> /etc/httpd/conf/httpd.conf
+</VirtualHost>'\
+>> /etc/httpd/conf/httpd.conf"
 
-echo -e "Restarting http services" >> /var/log/siwapp/install.log
-systemctl enable httpd
-systemctl start httpd
-echo -e "App install script complete" >> /var/log/siwapp/install.log
+sudo su -c "cat << EOF > /var/www/html/config/databases.yml
+all:
+  doctrine:
+    class: sfDoctrineDatabase
+    param:
+      dsn: 'mysql:host=${CliqrTier_haproxy_galera_PUBLIC_IP};dbname=siwapp'
+      username: 'siwapp'
+      password: '!Ciscodc123'
+
+test:
+  doctrine:
+    class: sfDoctrineDatabase
+    param:
+      dsn: 'mysql:host=${CliqrTier_haproxy_galera_PUBLIC_IP};dbname=siwapp_test'
+      username: 'siwapp'
+      password: '!Ciscodc123'
+EOF
+"
+
+
+agentSendLogMessage "Restarting http services"
+sudo systemctl enable httpd
+sudo systemctl start httpd
+agentSendLogMessage "App install script complete"
+
+sudo mv ~/cliqr.repo /etc/yum.repos.d/

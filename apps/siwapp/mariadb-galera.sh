@@ -21,7 +21,8 @@ sudo mv /etc/yum.repos.d/cliqr.repo ~
 sudo rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 sudo groupadd -g 250 -r mysql
 sudo useradd -u 250 -r -g mysql mysql
-sudo yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld
+sudo yum update -y
+sudo yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld nmap
 sudo yum install expect -y
 sudo yum clean all
 
@@ -182,8 +183,9 @@ EOF
 temp_ifs=${IFS}
 IFS=','
 nodeArr=(${CliqrTier_maria_galera_NODE_ID}) # Array of nodes in my tier.
-# ipArr=(${CliqrTier_swarm_PUBLIC_IP}) # Array of IPs in my tier.
+ipArr=(${CliqrTier_maria_galera_PUBLIC_IP}) # Array of IPs in my tier.
 master=${nodeArr[0]} # Let the first node in the service tier be the master.
+master_addr=${ipArr[0]} # Let the first node in the service tier be the master.
 IFS=${temp_ifs}
 
 if [ "${master}" == "${cliqrNodeId}" ]; then
@@ -192,8 +194,29 @@ if [ "${master}" == "${cliqrNodeId}" ]; then
     agentSendLogMessage "Initializing master..."
     sudo galera_new_cluster
 else
-    agentSendLogMessage "starting slave"
-    sudo systemctl start mariadb
+    agentSendLogMessage  "Waiting for master node to be initialized..."
+    COUNT=0
+    MAX=50
+    SLEEP_TIME=5
+    ERR=0
+
+    # Keep checking for port 2377 on the master to be open
+    mypass='!Ciscodc123'
+    until $(mysql -h $master_addr -u root -p"${mypass}" -e ""); do
+      sleep ${SLEEP_TIME}
+      let "COUNT++"
+      echo ${COUNT}
+      if [ ${COUNT} -gt ${MAX} ]; then
+        ERR=1
+        break
+      fi
+    done
+    if [ ${ERR} -ne 0 ]; then
+        agentSendLogMessage "Failed to find port 3306 open on master node, so guessing something is wrong."
+    else
+        agentSendLogMessage "starting slave"
+        sudo systemctl start mariadb
+    fi
 fi
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
