@@ -51,16 +51,16 @@ all:
     class: sfDoctrineDatabase
     param:
       dsn: 'mysql:host=${CliqrTier_haproxy_galera_PUBLIC_IP};dbname=siwapp'
-      username: 'siwapp'
-      password: '!Ciscodc123'
+      username: '${GALERA_DB_USER}'
+      password: '${GALERA_DB_USER_PWD}'
 
 test:
   doctrine:
     class: sfDoctrineDatabase
     param:
       dsn: 'mysql:host=${CliqrTier_haproxy_galera_PUBLIC_IP};dbname=siwapp_test'
-      username: 'siwapp'
-      password: '!Ciscodc123'
+      username: '${GALERA_DB_USER}'
+      password: '${GALERA_DB_USER_PWD}'
 EOF
 "
 

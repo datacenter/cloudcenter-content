@@ -200,9 +200,8 @@ else
     SLEEP_TIME=5
     ERR=0
 
-    # Keep checking for port 2377 on the master to be open
-    mypass='!Ciscodc123'
-    until $(mysql -h $master_addr -u root -p"${mypass}" -e ""); do
+    # Keep checking for port 3306 on the master to be open
+    until $(mysql -h $master_addr -u root -p"${GALERA_DB_ROOT_PWD}" -e ""); do
       sleep ${SLEEP_TIME}
       let "COUNT++"
       echo ${COUNT}
