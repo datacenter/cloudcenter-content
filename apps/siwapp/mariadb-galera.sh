@@ -212,8 +212,9 @@ if [ "${master}" == "${cliqrNodeId}" ]; then
     sudo galera_new_cluster
     #Download and restore old database
     agentSendLogMessage "Downloading SQL file and restoring database."
-    curl -o siwapp.sql https://raw.githubusercontent.com/datacenter/cloudcenter-content/${siwapp_git_tag}/apps/siwapp/siwapp.sql
-    sudo su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' -D siwapp < siwapp.sql"
+    curl -o /tmp/siwapp.sql https://raw.githubusercontent.com/datacenter/cloudcenter-content/${siwapp_git_tag}/apps/siwapp/siwapp.sql
+    sudo su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' < /tmp/siwapp.sql"
+    sudo su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' -e 'CREATE USER haproxy; FLUSH PRIVILEGES;'"
 
 else
     agentSendLogMessage  "Waiting for master node to be initialized..."
@@ -234,6 +235,7 @@ else
     done
     if [ ${ERR} -ne 0 ]; then
         agentSendLogMessage "Failed to find port 3306 open on master node, so guessing something is wrong."
+        exit 1
     else
         agentSendLogMessage "starting slave"
         sudo systemctl start mariadb

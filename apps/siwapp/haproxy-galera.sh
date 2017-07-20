@@ -14,14 +14,14 @@ sudo yum install -y haproxy
 agentSendLogMessage "Configuring haproxy"
 sudo su -c 'echo "
 #---------------------------------------------------------------------
-https frontend
+# https frontend
 #---------------------------------------------------------------------
 frontend mariadb_in
 mode tcp
 bind *:3306
 default_backend mariadb_servers
 #---------------------------------------------------------------------
-Siwapp App Server Backend
+# Siwapp App Server Backend
 #---------------------------------------------------------------------
 backend mariadb_servers
 balance roundrobin
