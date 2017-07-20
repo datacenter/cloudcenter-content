@@ -14,19 +14,18 @@ sudo yum install -y haproxy
 agentSendLogMessage "Configuring haproxy"
 sudo su -c 'echo "
 #---------------------------------------------------------------------
-https frontend
+# http frontend
 #---------------------------------------------------------------------
-frontend mariadb_in
-mode tcp
-bind *:3306
-default_backend mariadb_servers
+frontend  http_in
+        mode http
+        bind *:80
+        default_backend siwapp_apps
 #---------------------------------------------------------------------
-Siwapp App Server Backend
+# Siwapp App Server Backend
 #---------------------------------------------------------------------
-backend mariadb_servers
-balance roundrobin
-option tcpka
-option mysql-check user haproxy
+backend siwapp_apps
+	balance roundrobin
+	cookie SERVERID insert indirect nocache
 " >> /etc/haproxy/haproxy.cfg'
 
 # Set internal seperator to ',' since they're comma-delimited lists.
@@ -38,7 +37,7 @@ ipArr=(${CliqrTier_apache2_PUBLIC_IP}) # Array of IPs in my tier.
 # Iterate through list of hosts to add hosts and corresponding IPs to haproxy config file.
 host_index=0
 for host in $CliqrTier_apache2_galera_HOSTNAME ; do
-    # sudo su -c "echo 'server ${host} ${ipArr[${host_index}]}:3306 check inter 5s' >> /etc/haproxy/haproxy.cfg"
+    # sudo su -c "echo 'server ${host} ${ipArr[${host_index}]}:8081 check cookie ${host} inter 5s' >> /etc/haproxy/haproxy.cfg"
     sudo su -c "echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts"
     let host_index=${host_index}+1
 done
