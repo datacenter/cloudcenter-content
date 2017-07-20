@@ -29,18 +29,20 @@ option tcpka
 option mysql-check user haproxy
 " >> /etc/haproxy/haproxy.cfg'
 
+# Set internal seperator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
 IFS=','
-nodeArr=(${CliqrTier_maria_galera_NODE_ID}) # Array of nodes in my tier.
+# nodeArr=(${CliqrTier_maria_galera_NODE_ID}) # Array of nodes in my tier.
 ipArr=(${CliqrTier_maria_galera_PUBLIC_IP}) # Array of IPs in my tier.
 
 # Iterate through list of hosts to add hosts and corresponding IPs to haproxy config file.
 host_index=0
 for host in $CliqrTier_maria_galera_HOSTNAME ; do
-    # sudo su -c "echo 'server ${host} ${ipArr[${host_index}]}:3306 check inter 5s' >> /etc/haproxy/haproxy.cfg"
+    sudo su -c "echo 'server ${host} ${ipArr[${host_index}]}:3306 check inter 5s' >> /etc/haproxy/haproxy.cfg"
     sudo su -c "echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts"
     let host_index=${host_index}+1
 done
+# Set internal separator back to original.
 IFS=${temp_ifs}
 
 sudo systemctl start haproxy
