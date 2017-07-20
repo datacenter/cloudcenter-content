@@ -1,5 +1,5 @@
 #!/bin/bash -x
-exec > >(tee -a /var/tmp/haproxy-node-init_$$.log) 2>&1
+exec > >(tee -a /var/tmp/haproxy-galera-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
