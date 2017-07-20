@@ -245,6 +245,7 @@ if cmd == "start" :
         SUBNET_NAME,
     )
 
+    print_log("Got After Get subnet info")
 
     async_subnet_creation = network_client.subnets.create_or_update(
         GROUP_NAME,
@@ -254,9 +255,12 @@ if cmd == "start" :
     )
     subnet_info = async_subnet_creation.result()
 
+    print_log("Got After create or update subnets")
+    
     # Iterate through the cluster nodes and add each nic to the backend pool
     get_nodes = APP_CLUSTER_NODES.split(",")
     for node in get_nodes:
+        print_log("inside loop to add nic to backend pool " + node)
         IP_CONFIG_NAME = node + '-ipconfig-0'
         VMS_INFO = {
                 1: {
