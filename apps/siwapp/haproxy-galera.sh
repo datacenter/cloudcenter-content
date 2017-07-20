@@ -23,10 +23,19 @@ default_backend mariadb_servers
 #---------------------------------------------------------------------
 # Siwapp App Server Backend
 #---------------------------------------------------------------------
-backend mariadb_servers
+# These next few lines didnt work for some reason so we just commented them out.
+# backend mariadb_servers
+# balance roundrobin
+# option tcpka
+# option mysql-check user haproxy
+
+listen galera 0.0.0.0:3306
 balance roundrobin
+mode tcp
 option tcpka
 option mysql-check user haproxy
+
+
 " >> /etc/haproxy/haproxy.cfg'
 
 # Set internal seperator to ',' since they're comma-delimited lists.

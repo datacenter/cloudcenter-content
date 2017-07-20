@@ -6,7 +6,7 @@ exec > >(tee -a /var/tmp/maria-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
-agentSendLogMessage $(env)
+# agentSendLogMessage $(env)
 
 sudo su -c "cat <<EOF > /etc/yum.repos.d/MariaDB.repo
 [mariadb]

@@ -28,16 +28,15 @@ backend siwapp_apps
 	cookie SERVERID insert indirect nocache
 " >> /etc/haproxy/haproxy.cfg'
 
-# Set internal seperator to ',' since they're comma-delimited lists.
+# Set internal separator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
 IFS=','
-# nodeArr=(${CliqrTier_apache2_NODE_ID}) # Array of nodes in my tier.
 ipArr=(${CliqrTier_apache2_PUBLIC_IP}) # Array of IPs in my tier.
 
 # Iterate through list of hosts to add hosts and corresponding IPs to haproxy config file.
 host_index=0
-for host in $CliqrTier_apache2_galera_HOSTNAME ; do
-    # sudo su -c "echo 'server ${host} ${ipArr[${host_index}]}:8081 check cookie ${host} inter 5s' >> /etc/haproxy/haproxy.cfg"
+for host in $CliqrTier_apache2_HOSTNAME ; do
+    sudo su -c "echo 'server ${host} ${ipArr[${host_index}]}:8081 check cookie ${host} inter 5s' >> /etc/haproxy/haproxy.cfg"
     sudo su -c "echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts"
     let host_index=${host_index}+1
 done

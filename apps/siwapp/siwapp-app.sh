@@ -6,7 +6,7 @@ exec > >(tee -a /var/tmp/apache-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
-agentSendLogMessage $(env)
+# agentSendLogMessage $(env)
 
 #---------Script Variables------------#
 #siwapp_APP_PORT=$1
@@ -66,6 +66,7 @@ test:
 EOF
 "
 
+sudo sed -i.bak "s#false#true#g" /var/www/html/web/config.php
 
 agentSendLogMessage "Restarting http services"
 sudo systemctl enable httpd
