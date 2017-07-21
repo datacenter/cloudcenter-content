@@ -9,6 +9,7 @@ exec > >(tee -a /var/tmp/haproxy-apache-node-init_$$.log) 2>&1
 sudo mv /etc/yum.repos.d/cliqr.repo ~
 
 agentSendLogMessage "Installing haproxy."
+sudo yum -y update
 sudo yum install -y haproxy
 
 agentSendLogMessage "Configuring haproxy"
