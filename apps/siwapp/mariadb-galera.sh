@@ -97,7 +97,7 @@ master_addr=${ipArr[0]} # Let the first node in the service tier be the master.
 
 # Iterate through list of hosts to find this hosts's index in the array for later use.
 host_index=0
-for host in $CliqrTier_maria_galera_HOSTNAME ; do
+for host in $CliqrTier_siwapp_mariadb_HOSTNAME ; do
     if [ ${host} = ${cliqrNodeHostname} ]; then
         # INDEX for this host is current position in array.
         echo "Index: ${host_index}"
@@ -194,7 +194,7 @@ wsrep_provider                 = /usr/lib64/galera/libgalera_smm.so
 wsrep_sst_method               = rsync
 wsrep_slave_threads            = 4
 innodb-flush-log-at-trx-commit = 2
-wsrep_cluster_address          = 'gcomm://${CliqrTier_maria_galera_PUBLIC_IP}'
+wsrep_cluster_address          = 'gcomm://${CliqrTier_siwapp_mariadb_PUBLIC_IP}'
 wsrep_cluster_name             = '${GALERA_CLUSTER_NAME}'
 wsrep_node_address             = '${my_addr}'
 wsrep_node_name                = '${cliqrNodeHostname}'
