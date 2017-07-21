@@ -23,7 +23,7 @@ Description=siwapp-simulator
 [Service]
 Type=simple
 User=root
-ExecStart=python /usr/share/systemd/siwapp-load-generator.py
+ExecStart=/usr/bin/python /usr/share/systemd/siwapp-load-generator.py
 Restart=on-abort
 
 
