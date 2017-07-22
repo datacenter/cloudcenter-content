@@ -23,6 +23,7 @@ SIWAPP_PAGES = ['dashboard','invoices','recurring','customers','estimates','prod
 
 while True:
     try:
+        session = requests.session()
         resp = session.get(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN,timeout=10)
         break
     except requests.exceptions.ConnectTimeout:
