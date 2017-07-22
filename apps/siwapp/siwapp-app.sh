@@ -34,6 +34,7 @@ sudo chown -R apache:apache /var/www/html/
 sudo sed -i -e '57,63d' /var/www/html/web/pre_installer_code.php
 
 sudo sed -i "s/80/${siwapp_APP_PORT}/" /etc/httpd/conf/httpd.conf
+sudo sed -i "s/LogFormat \"%h/LogFormat \"%a/g" /etc/httpd/conf/httpd.conf
 
 sudo sed -i "21s%.*%${cliqrNodeHostname}%g" /var/www/html/apps/siwapp/templates/layout.php
 
