@@ -3,3 +3,5 @@ Thumbs.db
 .idea/*
 .idea.old/
 /.idea/
+
+.DS_Store

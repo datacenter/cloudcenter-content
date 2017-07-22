@@ -11,17 +11,17 @@
     "externalActions": [
         {
             "actionName": "UPDATE",
-            "actionValue": "%REPO_ID_37%services/f5ext/service update",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/netscalerext/netscaler.sh update",
             "actionType": "URL"
         },
         {
             "actionName": "STOP",
-            "actionValue": "%REPO_ID_37%services/f5ext/service stop",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/netscalerext/netscaler.sh stop",
             "actionType": "URL"
         },
         {
             "actionName": "START",
-            "actionValue": "%REPO_ID_37%services/f5ext/service start",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/netscalerext/netscaler.sh start",
             "actionType": "URL"
         }
     ],
@@ -29,7 +29,7 @@
     "serviceParamSpecs": [
         {
             "exampleValue": null,
-            "helpText": "bigIPAddress",
+            "helpText": "Management API IP of your NetScaler LB",
             "type": "string",
             "dataUnit": null,
             "valueConstraint": {
@@ -49,7 +49,7 @@
             "userVisible": true,
             "userEditable": true,
             "defaultValue": "54.234.107.193",
-            "displayName": "bigIPAddress",
+            "displayName": "NetScaler IP",
             "valueList": null,
             "optional": false,
             "systemParam": true,
@@ -228,32 +228,10 @@
     "parentServiceId": "36",
     "displayName": "Netscaler",
     "systemService": false,
-    "serviceActions": [
-        {
-            "actionName": "RELOAD",
-            "actionValue": "service reload",
-            "actionType": "SCRIPT"
-        },
-        {
-            "actionName": "START",
-            "actionValue": "service start",
-            "actionType": "SCRIPT"
-        },
-        {
-            "actionName": "STOP",
-            "actionValue": "service stop",
-            "actionType": "SCRIPT"
-        }
-    ],
+    "serviceActions": [],
     "externalBundleLocation": "",
     "externalService": false,
-    "servicePorts": [
-        {
-            "toPort": "22",
-            "protocol": "TCP",
-            "fromPort": "22"
-        }
-    ],
+    "servicePorts": [],
     "description": "",
     "costPerHour": 0.15,
     "egressRestrictions": []

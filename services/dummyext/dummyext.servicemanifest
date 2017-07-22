@@ -1,0 +1,202 @@
+{
+    "bundleLocation": "",
+    "systemService": false,
+    "images": [],
+    "serviceType": "EXTERNAL",
+    "visible": true,
+    "defaultImageName": null,
+    "childServices": [],
+    "serviceActions": [],
+    "perms": [
+        "read",
+        "delete",
+        "administration",
+        "write"
+    ],
+    "parentServiceId": "48",
+    "servicePorts": [],
+    "serviceParamSpecs": [
+        {
+            "collectionList": [],
+            "valueList": null,
+            "dataUnit": null,
+            "confirmValue": null,
+            "exampleValue": null,
+            "valueConstraint": {
+                "regex": null,
+                "step": 0,
+                "minValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "maxLength": 255,
+                "sizeValue": 0,
+                "allowSpaces": true
+            },
+            "optional": false,
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "displayName": "param1",
+            "paramName": "param1",
+            "webserviceListParams": null,
+            "type": "string",
+            "systemParam": true,
+            "helpText": "param1",
+            "userEditable": true,
+            "scope": null,
+            "defaultValue": "value1"
+        },
+        {
+            "collectionList": [],
+            "valueList": null,
+            "dataUnit": null,
+            "confirmValue": null,
+            "exampleValue": null,
+            "valueConstraint": {
+                "regex": null,
+                "step": 0,
+                "minValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "maxLength": 255,
+                "sizeValue": 0,
+                "allowSpaces": true
+            },
+            "optional": false,
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "displayName": "param2",
+            "paramName": "param2",
+            "webserviceListParams": null,
+            "type": "string",
+            "systemParam": true,
+            "helpText": "param2",
+            "userEditable": true,
+            "scope": null,
+            "defaultValue": "value2"
+        },
+        {
+            "collectionList": [],
+            "valueList": null,
+            "dataUnit": null,
+            "confirmValue": null,
+            "exampleValue": null,
+            "valueConstraint": {
+                "regex": null,
+                "step": 0,
+                "minValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "maxLength": 255,
+                "sizeValue": 0,
+                "allowSpaces": true
+            },
+            "optional": false,
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "displayName": "param3",
+            "paramName": "param3",
+            "webserviceListParams": null,
+            "type": "string",
+            "systemParam": true,
+            "helpText": "param3",
+            "userEditable": true,
+            "scope": null,
+            "defaultValue": "value3"
+        },
+        {
+            "collectionList": [],
+            "valueList": null,
+            "dataUnit": null,
+            "confirmValue": null,
+            "exampleValue": null,
+            "valueConstraint": {
+                "regex": null,
+                "step": 0,
+                "minValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "maxLength": 255,
+                "sizeValue": 0,
+                "allowSpaces": true
+            },
+            "optional": false,
+            "userVisible": true,
+            "pathSuffixValue": "pathv1",
+            "displayName": "path1",
+            "paramName": "path1",
+            "webserviceListParams": null,
+            "type": "path",
+            "systemParam": true,
+            "helpText": "path1",
+            "userEditable": true,
+            "scope": null,
+            "defaultValue": "pathv1"
+        },
+        {
+            "collectionList": [],
+            "valueList": null,
+            "dataUnit": null,
+            "confirmValue": null,
+            "exampleValue": null,
+            "valueConstraint": {
+                "regex": null,
+                "step": 0,
+                "minValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "maxLength": 255,
+                "sizeValue": 0,
+                "allowSpaces": true
+            },
+            "optional": false,
+            "userVisible": true,
+            "pathSuffixValue": "",
+            "displayName": "gitTag",
+            "paramName": "gitTag",
+            "webserviceListParams": null,
+            "type": "string",
+            "systemParam": true,
+            "helpText": "gitTag",
+            "userEditable": true,
+            "scope": null,
+            "defaultValue": "dummyext"
+        }
+    ],
+    "repositories": [],
+    "externalService": false,
+    "costPerHour": 0.0,
+    "egressRestrictions": [],
+    "displayName": "Dummy",
+    "externalBundleLocation": "",
+    "logoPath": "/assets/img/appTiers/dummyext/logo.png",
+    "description": "",
+    "parentService": false,
+    "externalActions": [
+        {
+            "actionName": "START",
+            "actionType": "CMD",
+            "actionValue": ". /utils.sh; print_log \"Service: Start\""
+        },
+        {
+            "actionName": "RESUME",
+            "actionType": "CMD",
+            "actionValue": ". /utils.sh; print_log \"Service: Resume\""
+        },
+        {
+            "actionName": "SUSPEND",
+            "actionType": "CMD",
+            "actionValue": ". /utils.sh; print_log \"Service: Suspend\""
+        },
+        {
+            "actionName": "UPDATE",
+            "actionType": "CMD",
+            "actionValue": ". /utils.sh; print_log \"Service: Update\""
+        },
+        {
+            "actionName": "STOP",
+            "actionType": "CMD",
+            "actionValue": ". /utils.sh; print_log \"Service: Stop\""
+        }
+    ],
+    "name": "dummyext"
+}

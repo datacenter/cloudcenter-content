@@ -2,39 +2,17 @@
 
 . /utils.sh
 
-cmd=$1
-serviceStatus=""
-SVCNAME=$OSSVC_CONFIG
-SVCHOME="$OSSVC_HOME/$OSSVC_CONFIG"
-USER_ENV="/usr/local/osmosix/etc/userenv"
+print_log "Installing python-pip"
+yum install -y python-pip
+print_log "Upgrading python-pip"
+pip install pip --upgrade
+print_log "Installing requests"
+yum install -y requests
+print_log "Installing python2.7-elementtree"
+yum install -y python2.7-elementtree
+print_log "Installing pan-python"
+pip install pan-python
 
-#print_ext_service_result "{foo:bar}"
-
-
-case $cmd in
-	start)
-		yum install python-pip python2.7-elementtree -y
-		pip install pan-python
-		wget https://cliqrdemo-repo.s3.amazonaws.com/services/service-pan.py
-		python service-pan.py start
-		#$OSSVC_HOME/$SVCNAME/service-pan.py start
-
-		serviceStatus="Started"
-		;;
-	stop)
-		serviceStatus="Stopped"
-		;;
-	update)
-		serviceStatus="Updated"
-		;;
-	*)
-		serviceStatus="No Valid Script Argument"
-		exit 127
-		;;
-esac
-
-#result="{\"hostName\": \"example.com\", \"ipAddress\": \"192.168.1.8\", \"environment\":{\"instanceName\": \"test_instance\", \"instanceType\":\"dummy\", \"serviceType\": \"custom\", \"serviceStatus\":\"$serviceStatus\"}}"
-result="{\"hostName\": \"$serviceStatus\", \"ipAddress\": \"192.168.1.8\"}"
-# echo $result
-print_ext_service_result "$result"
-print_error "something wrong"
+print_log "Downloading and executing service-pan.py"
+curl -O https://raw.githubusercontent.com/datacenter/cloudcenter-content/${panext_gitTag}/services/panext/service-pan.py
+python service-pan.py $1
