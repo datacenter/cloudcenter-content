@@ -10,7 +10,6 @@ def get_cliqr_env_variables(var_list):
 import os
 import sys
 import time
-import socket
 import requests
 from lxml import html
 
@@ -22,13 +21,12 @@ SIWAPP_FRONTEND_PROXY_URL = 'http://' + environment_variables["CliqrTier_siwapp_
 SIWAPP_LOGIN = '/login'
 SIWAPP_PAGES = ['dashboard','invoices','recurring','customers','estimates','products']
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 while True:
-    resp = os.system('ping -c 3 ' + environment_variables["CliqrTier_siwapp_haproxy_app_PUBLIC_IP"])
-    if resp == 0:
-         break
-    time.sleep(10)
+    try:
+        resp = session.get(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN,timeout=10)
+        break
+    except requests.exceptions.ConnectTimeout:
+        print("Get Timed Out")
 
 while True:
     for server in SIWAPP_APP_SERVERS:
