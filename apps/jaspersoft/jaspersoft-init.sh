@@ -47,3 +47,4 @@ cd /opt/jasperreports-server-cp-6.1.1-bin/buildomatic/
 sudo ./js-install-ce.sh minimal
 sudo /etc/init.d/tomcat start
 #https://downloads.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%206.3.0/jasperreports-server-cp-6.3.0-linux-x64-installer.run?r=http%3A%2F%2Fcommunity.jaspersoft.com%2Fproject%2Fjasperreports-server%2Freleases&ts=1486080002&use_mirror=pilotfiber
+# https://superb-dca2.dl.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%206.4.0/TIB_js-jrs-cp_6.4.0_linux_x86.run

@@ -6,6 +6,7 @@ exec > >(tee -a /var/tmp/jasper-node-init_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
+# http://community.jaspersoft.com/wiki/running-jasperreports-server-bundled-installer-silent-mode
 
 agentSendLogMessage "Username: $(whoami)" # Should execute as cliqruser
 agentSendLogMessage "Working Directory: $(pwd)"
