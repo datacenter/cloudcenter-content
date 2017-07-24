@@ -275,7 +275,7 @@ if cmd == "start" :
                 create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
                 #create_nic_parameters(subnet_info.id, back_end_address_pool_id)
                 )
-                print_log("Got to after set nic1 info")
+    print_log("Got to after set nic1 info")
         
     nic1_info = async_nic1_creation.result()
         
