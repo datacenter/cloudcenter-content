@@ -29,11 +29,13 @@ sudo su - -c "psql -c \"alter user postgres password 'postgres'\"" postgres
 
 # Can download bin.zip from https://iweb.dl.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%206.4.0/TIB_js-jrs-cp_6.4.0_bin.zip
 cd /tmp
+agentSendLogMessage "Downloading ${jasper_installer}"
 jasper_file="jasper.zip"
 curl -o ${jasper_file} "${jasper_installer}"
 
 # This gets the name of the root folder inside the zip from the output of the unzip command for later use.
 # Had to do this as two-steps process because piping the unzip to head somehow causes the zip to not fully extract.
+agentSendLogMessage "Unzipping"
 jasper_folder=`unzip -qql $jasper_file | head -n1 | awk '{print $4}'`
 sudo unzip ${jasper_file} -d /opt
 
@@ -53,7 +55,7 @@ agentSendLogMessage "Building JasperServer"
 cd /opt/${jasper_folder}buildomatic/
 sudo ./js-install-ce.sh minimal
 
-agentSendLogMessage "Starting Tomcat. JasperServer will run at :8080/jasperserver/"
+agentSendLogMessage "Starting Tomcat."
 sudo systemctl enable tomcat
 sudo systemctl start tomcat
 
@@ -80,5 +82,7 @@ else
     agentSendLogMessage "Server Started."
 fi
 
+agentSendLogMessage  "JasperServer will run at :8080/jasperserver/"
+agentSendLogMessage  "Default credentials are jasperadmin/jasperadmin"
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
