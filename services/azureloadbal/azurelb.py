@@ -71,7 +71,10 @@ PROBE_NAME_80 = os.environ['parentJobName']+'-probe-80'
 PROBE_NAME_443 = os.environ['parentJobName']+'-probe-443'
 LB_RULE_NAME_80 = os.environ['parentJobName']+'-lb-rule-80'
 LB_RULE_NAME_443 = os.environ['parentJobName']+'-lb-rule-443'
-
+NETRULE_NAME_1 = 'cc-nat-netrule1'
+FRONTEND_PORT_1 = 8080
+FRONTEND_PORT_2 = 443
+BACKEND_PORT = 80
 
 credentials = ServicePrincipalCredentials(
     client_id = client_id,
@@ -81,7 +84,7 @@ credentials = ServicePrincipalCredentials(
 
 
 print_log("Creating ARM client and network client")
-
+#network_client = NetworkManagementClient(credentials, subscription_id, api_version='2016-12-01')
 network_client = NetworkManagementClient(credentials, subscription_id)
 resource_client = ResourceManagementClient(credentials, subscription_id)
 compute_client = ComputeManagementClient(credentials, subscription_id)
@@ -118,6 +121,7 @@ def construct_probe_id(account):
             '/probes/{}').format(
                 account, GROUP_NAME, LB_NAME, PROBE_NAME_80
             )
+
 def create_nic_parameters(subnet_id, address_pool_id):
    """Create the NIC parameters structure.
    """
@@ -179,7 +183,7 @@ if cmd == "start" :
     }]
     print_log("Created BackEndIpPool configuration: " + str(backend_address_pools))
 
-   # Building a HealthProbe
+    # Building a HealthProbe
     print_log('Create HealthProbe configuration')
     probes = [{
         'name': PROBE_NAME_80,
@@ -211,7 +215,18 @@ if cmd == "start" :
             'id': construct_probe_id(account)
         }
     }]
-  
+    
+    inbound_nat_rules = [{
+        'name': NETRULE_NAME_1,
+        'protocol': 'tcp',
+        'frontend_port': FRONTEND_PORT_1,
+        'backend_port': BACKEND_PORT,
+        'enable_floating_ip': False,
+        'idle_timeout_in_minutes': 4,
+        'frontend_ip_configuration': {
+            'id': construct_fip_id(subscription_id)
+        }
+    }]
 
     # Creating Load Balancer
     print_log("Creating Load Balancer")
@@ -224,9 +239,10 @@ if cmd == "start" :
             'backend_address_pools': backend_address_pools,
             'probes': probes,
             'load_balancing_rules': load_balancing_rules,
+            'inbound_nat_rules' :inbound_nat_rules
         }
     )
-   
+
     lb_info = lb_async_creation.result()
     # print_log("Load Balancer Results: " + str(lb_info))
     print_log("Created Load Balancer:")
@@ -256,7 +272,7 @@ if cmd == "start" :
     subnet_info = async_subnet_creation.result()
 
     print_log("Got After create or update subnets")
-    
+
     # Iterate through the cluster nodes and add each nic to the backend pool
     get_nodes = APP_CLUSTER_NODES.split(",")
     for node in get_nodes:
@@ -272,11 +288,17 @@ if cmd == "start" :
         back_end_address_pool_id = lb_info.backend_address_pools[0].id
         print_log("inside back_end_address_pool_id " + back_end_address_pool_id)
         print_log("got to before async nic1 creation")
+
+        print_log("subnet_info.id " + subnet_info.id)
         async_nic1_creation = network_client.network_interfaces.create_or_update(
                 GROUP_NAME,
-                VMS_INFO[1]['nic_name'],
-                create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
+                #VMS_INFO[1]['nic_name'],
+                'primary',
+                #create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
                 #create_nic_parameters(subnet_info.id, back_end_address_pool_id)
+
+                create_nic_parameters(str(subnet_info.id), str(back_end_address_pool_id))
+
                 )
     print_log("Got to after set nic1 info")
         
