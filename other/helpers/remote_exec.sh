@@ -5,6 +5,23 @@
 # Should be URL of script to download and execute on the node remotely.
 script=$1
 
+###########
+# All this blob is just to get my own host index so I can pull my IP address from the list.
+
+# The variable name that will hold the list of hostnames in this tier.
+hostname_list_variable_name="CliqrTier_${cliqrAppTierName}_HOSTNAME"
+
+# Set internal separator to ',' since they're comma-delimited lists.
+temp_ifs=${IFS}
+# Iterate through list of hosts to increment
+host_index=0
+for host in ${!hostname_list_variable_name} ; do
+    let host_index=${host_index}+1
+done
+# Set internal separator back to original.
+IFS=${temp_ifs}
+############
+
 if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
 
