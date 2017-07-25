@@ -10,7 +10,7 @@ exec > >(tee -a /var/tmp/jaspesoft-init_$$.log) 2>&1
 # iptables -I INPUT 1 -d 0.0.0.0/0  -j ACCEPT -p tcp --dport 5432
 
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
-pre_reqs="tomcat postgresql postgresql-server unzip openjdk java-1.8.0-openjdk-devel"
+pre_reqs="tomcat postgresql postgresql-server unzip java-1.8.0-openjdk java-1.8.0-openjdk-devel"
 agentSendLogMessage "Installing pre-reqs: ${pre_reqs}"
 sudo yum install -y ${pre_reqs}
 
@@ -33,18 +33,20 @@ jasper_file="jasper.zip"
 curl -o ${jasper_file} "${jasper_installer}"
 
 # This gets the name of the root folder inside the zip from the output of the unzip command for later use.
-jasper_folder=`unzip ${jasper_file} | head -n2 | tail -n1 | awk '{print $2}'`
+# Had to do this as two-steps process because piping the unzip to head somehow causes the zip to not fully extract.
+jasper_folder=`unzip -qql $jasper_file | head -n1 | awk '{print $4}'`
+sudo unzip ${jasper_file} -d /opt
 
-sudo mv ${jasper_folder} /opt
+# sudo mv ${jasper_folder} /opt
 rm -f ${jasper_file}
 
 # Copy postgreq config example to build config file.
 sudo cp /opt/${jasper_folder}buildomatic/sample_conf/postgresql_master.properties /opt/${jasper_folder}buildomatic/default_master.properties
 
 # Append properties to build config file and comment unneeded line
-echo "CATALINA_HOME = /usr/share/tomcat" >> /opt/${jasper_folder}buildomatic/default_master.properties
-echo "CATALINA_BASE = /var/lib/tomcat" >> /opt/${jasper_folder}buildomatic/default_master.properties
-sed -i.bak -e 's%^appServerDir%# appServerDir%g' /opt/${jasper_folder}buildomatic/default_master.properties
+sudo su -c "echo 'CATALINA_HOME = /usr/share/tomcat' >> /opt/${jasper_folder}buildomatic/default_master.properties"
+sudo su -c "echo 'CATALINA_BASE = /var/lib/tomcat' >> /opt/${jasper_folder}buildomatic/default_master.properties"
+sudo sed -i.bak -e 's%^appServerDir%# appServerDir%g' /opt/${jasper_folder}buildomatic/default_master.properties
 
 #Build and Install Jasper Server
 agentSendLogMessage "Building JasperServer"
