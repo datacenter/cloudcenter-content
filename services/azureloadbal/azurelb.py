@@ -262,6 +262,7 @@ if cmd == "start" :
     for node in get_nodes:
         print_log("inside loop to add nic to backend pool " + node)
         IP_CONFIG_NAME = node + '-ipconfig-0'
+        print_log("inside IP_CONFIG_NAME " + IP_CONFIG_NAME)
         VMS_INFO = {
                 1: {
                         'name': node,
@@ -269,6 +270,8 @@ if cmd == "start" :
                     },
                 }
         back_end_address_pool_id = lb_info.backend_address_pools[0].id
+        print_log("inside back_end_address_pool_id " + back_end_address_pool_id)
+        print_log("got to before async nic1 creation")
         async_nic1_creation = network_client.network_interfaces.create_or_update(
                 GROUP_NAME,
                 VMS_INFO[1]['nic_name'],
