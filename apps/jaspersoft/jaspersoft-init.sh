@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -x
+#!/bin/bash -x
 exec > >(tee -a /var/tmp/jaspesoft-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
