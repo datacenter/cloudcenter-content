@@ -1,0 +1,33 @@
+en:
+  cloudcenter:
+    already_created:
+      The machine is already created.
+    already_running:
+      The machine is already running.
+    already_stopped:
+      The machine is already stopped.
+    deploying: 
+      VM is currently being deployed.
+    not_created: 
+      Instance is not created. Please run `vagrant up` first.
+    waiting_for_ssh: 
+      Waiting for SSH to become available...
+    ready:
+      Machine is booted and ready for use!
+    starting: 
+      Starting the instance...
+    stopped: 
+      Machine is now stopped...
+    terminated: 
+      Machine has been removed...
+    stopping: 
+      Stopping the instance...
+    terminating:
+      Terminating the instance...
+    waiting_for_ready: 
+      Waiting for instance to become "ready"...
+    waiting_for_ssh:
+      Waiting for SSH to become available... 
+    will_not_destroy: |-
+      The instance '%{name}' will not be destroyed, since the confirmation
+      was declined.
