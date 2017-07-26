@@ -277,7 +277,7 @@ if cmd == "start" :
     get_nodes = APP_CLUSTER_NODES.split(",")
     for node in get_nodes:
         print_log("inside loop to add nic to backend pool " + node)
-        IP_CONFIG_NAME = node + '-ipconfig-0'
+        IP_CONFIG_NAME = 'primary'
         print_log("inside IP_CONFIG_NAME " + IP_CONFIG_NAME)
         VMS_INFO = {
                 1: {
@@ -292,8 +292,7 @@ if cmd == "start" :
         print_log("subnet_info.id " + subnet_info.id)
         async_nic1_creation = network_client.network_interfaces.create_or_update(
                 GROUP_NAME,
-                #VMS_INFO[1]['nic_name'],
-                'primary',
+                VMS_INFO[1]['nic_name'],
                 #create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
                 #create_nic_parameters(subnet_info.id, back_end_address_pool_id)
 
@@ -302,7 +301,7 @@ if cmd == "start" :
                 )
     print_log("Got to after set nic1 info")
         
-    nic1_info = async_nic1_creation.result()
+    #nic1_info = async_nic1_creation.result()
         
     print_log("Got to after nic1 creation")
 
@@ -331,7 +330,7 @@ elif cmd == "update" :
     #Iterate through the cluster nodes and add each nic to the backend pool
     get_nodes = APP_CLUSTER_NODES.split(",")
     for node in get_nodes:
-            IP_CONFIG_NAME = node + '-ipconfig-0'
+            IP_CONFIG_NAME = 'primary'
             VMS_INFO = {
                     1: {
                             'name': node,
