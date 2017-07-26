@@ -28,4 +28,9 @@ ln -s ~/${spark_folder} ~/spark
 
 echo "export SPARK_HOME=~/spark" >> ~/.bashrc
 echo 'export PATH=${SPARK_HOME}/bin:${PATH}' >> ~/.bashrc
+source ~/.bashrc
+
+
+
+
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
