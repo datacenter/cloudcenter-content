@@ -1,11 +1,6 @@
 #!/usr/bin/env python
-import os.path
 import sys
 import os
-import json
-import random
-import re
-import string
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.storage import StorageManagementClient
 from azure.mgmt.compute import ComputeManagementClient
@@ -17,30 +12,34 @@ from azure.mgmt.network import NetworkManagementClient
 
 haikunator = Haikunator()
 
+
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
+
 
 def print_error(msg):
     print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
 
+
 def print_ext_service_result(msg):
     print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
+
 
 cmd = sys.argv[1]
 
 # Dict that maps keys of CloudCenter's region names to values of Azure's region names.
 # Used below to control where something is deployed
 regionmap = {
-    "us-west" : "westus",
-    "us-southcentral" : "southcentralus",
-    "us-east" : "eastus",
-    "us-east-2" : "eastus2"
+    "us-west": "westus",
+    "us-southcentral": "southcentralus",
+    "us-east": "eastus",
+    "us-east-2": "eastus2"
 }
 
 # Set variable from service and custom parameters
@@ -56,49 +55,50 @@ GROUP_NAME = os.environ['CliqrTier_AppCluster_Cloud_Setting_ResourceGroup']
 VNET_NAME = os.environ['CliqrTier_AppCluster_Cloud_Setting_VirtualNetwork'].split()[1]
 SUBNET_NAME = os.environ['CliqrTier_AppCluster_Cloud_Setting_subnetId']
 DOMAIN_LABEL_NAME = os.environ['parentJobName']
-PUBLIC_IP_NAME = os.environ['parentJobName']+'-publicip'
+PUBLIC_IP_NAME = os.environ['parentJobName'] + '-publicip'
 HEALTH_PROBE_FILE = os.environ['health_probe_file']
-#App Cluster - load balanced nodes
+# App Cluster - load balanced nodes
 APP_CLUSTER_NODES = os.environ['CliqrTier_AppCluster_NODE_ID']
-#Subscription
+# Subscription
 subscription_id = os.environ['CliqrCloudAccountId']
 
 # Load balancer
-LB_NAME = os.environ['parentJobName']+'-loadbalancer'
-FIP_NAME = os.environ['parentJobName']+'-frontendipname'
-ADDRESS_POOL_NAME = os.environ['parentJobName']+'-addr-pool'
-PROBE_NAME_80 = os.environ['parentJobName']+'-probe-80'
-PROBE_NAME_443 = os.environ['parentJobName']+'-probe-443'
-LB_RULE_NAME_80 = os.environ['parentJobName']+'-lb-rule-80'
-LB_RULE_NAME_443 = os.environ['parentJobName']+'-lb-rule-443'
+LB_NAME = os.environ['parentJobName'] + '-loadbalancer'
+FIP_NAME = os.environ['parentJobName'] + '-frontendipname'
+ADDRESS_POOL_NAME = os.environ['parentJobName'] + '-addr-pool'
+PROBE_NAME_80 = os.environ['parentJobName'] + '-probe-80'
+PROBE_NAME_443 = os.environ['parentJobName'] + '-probe-443'
+LB_RULE_NAME_80 = os.environ['parentJobName'] + '-lb-rule-80'
+LB_RULE_NAME_443 = os.environ['parentJobName'] + '-lb-rule-443'
 NETRULE_NAME_1 = 'cc-nat-netrule1'
 FRONTEND_PORT_1 = 8080
 FRONTEND_PORT_2 = 443
 BACKEND_PORT = 80
 
 credentials = ServicePrincipalCredentials(
-    client_id = client_id,
-    secret = secret,
-    tenant = tenant
+    client_id=client_id,
+    secret=secret,
+    tenant=tenant
 )
 
-
 print_log("Creating ARM client and network client")
-#network_client = NetworkManagementClient(credentials, subscription_id, api_version='2016-12-01')
+# network_client = NetworkManagementClient(credentials, subscription_id, api_version='2016-12-01')
 network_client = NetworkManagementClient(credentials, subscription_id)
 resource_client = ResourceManagementClient(credentials, subscription_id)
 compute_client = ComputeManagementClient(credentials, subscription_id)
 storage_client = StorageManagementClient(credentials, subscription_id)
 
-#Functions
+
+# Functions
 def construct_fip_id(account):
     return ('/subscriptions/{}'
             '/resourceGroups/{}'
             '/providers/Microsoft.Network'
             '/loadBalancers/{}'
             '/frontendIPConfigurations/{}').format(
-                account, GROUP_NAME, LB_NAME, FIP_NAME
-            )
+        account, GROUP_NAME, LB_NAME, FIP_NAME
+    )
+
 
 def construct_bap_id(account):
     """Build the future BackEndId based on components name.
@@ -108,8 +108,9 @@ def construct_bap_id(account):
             '/providers/Microsoft.Network'
             '/loadBalancers/{}'
             '/backendAddressPools/{}').format(
-                account, GROUP_NAME, LB_NAME, ADDRESS_POOL_NAME
-            )
+        account, GROUP_NAME, LB_NAME, ADDRESS_POOL_NAME
+    )
+
 
 def construct_probe_id(account):
     """Build the future ProbeId based on components name.
@@ -119,28 +120,28 @@ def construct_probe_id(account):
             '/providers/Microsoft.Network'
             '/loadBalancers/{}'
             '/probes/{}').format(
-                account, GROUP_NAME, LB_NAME, PROBE_NAME_80
-            )
+        account, GROUP_NAME, LB_NAME, PROBE_NAME_80
+    )
+
 
 def create_nic_parameters(subnet_id, address_pool_id):
-   """Create the NIC parameters structure.
-   """
-   return {
-       'location': azureRegion,
-       'ip_configurations': [{
-           'name': IP_CONFIG_NAME,
-           'subnet': {
-               'id': subnet_id
-           },
-           'load_balancer_backend_address_pools': [{
-               'id': address_pool_id
-           }]
-       }]
-   }
+    """Create the NIC parameters structure.
+    """
+    return {
+        'location': azureRegion,
+        'ip_configurations': [{
+            'name': IP_CONFIG_NAME,
+            'subnet': {
+                'id': subnet_id
+            },
+            'load_balancer_backend_address_pools': [{
+                'id': address_pool_id
+            }]
+        }]
+    }
 
 
-
-if cmd == "start" :
+if cmd == "start":
     print_log("Initiation service start.")
 
     print_log("Beginning Load Balancer Component Creation...")
@@ -163,7 +164,6 @@ if cmd == "start" :
     public_ip_info = async_publicip_creation.result()
     print_log("Created Public IP: " + str(public_ip_info))
 
-
     # Building a FrontEndIpPool
     print_log("Create FrontEndIpPool configuration")
     frontend_ip_configurations = [{
@@ -174,7 +174,6 @@ if cmd == "start" :
         }
     }]
     print_log("Created FrontEndIpPool configuration: " + str(public_ip_info.id))
-
 
     # Building a BackEnd address pool
     print_log("Create BackEndAddressPool configuration")
@@ -193,7 +192,6 @@ if cmd == "start" :
         'number_of_probes': 60,
         'request_path': HEALTH_PROBE_FILE
     }]
-
 
     # Building a LoadBalancer rule
     print_log('Create LoadBalancerRule configuration')
@@ -215,7 +213,7 @@ if cmd == "start" :
             'id': construct_probe_id(account)
         }
     }]
-    
+
     inbound_nat_rules = [{
         'name': NETRULE_NAME_1,
         'protocol': 'tcp',
@@ -239,7 +237,7 @@ if cmd == "start" :
             'backend_address_pools': backend_address_pools,
             'probes': probes,
             'load_balancing_rules': load_balancing_rules,
-            'inbound_nat_rules' :inbound_nat_rules
+            'inbound_nat_rules': inbound_nat_rules
         }
     )
 
@@ -280,37 +278,37 @@ if cmd == "start" :
         IP_CONFIG_NAME = 'primary'
         print_log("inside IP_CONFIG_NAME " + IP_CONFIG_NAME)
         VMS_INFO = {
-                1: {
-                        'name': node,
-                        'nic_name': node + '-nic-0'
-                    },
-                }
+            1: {
+                'name': node,
+                'nic_name': node + '-nic-0'
+            },
+        }
         back_end_address_pool_id = lb_info.backend_address_pools[0].id
         print_log("inside back_end_address_pool_id " + back_end_address_pool_id)
         print_log("got to before async nic1 creation")
 
         print_log("subnet_info.id " + subnet_info.id)
         async_nic1_creation = network_client.network_interfaces.create_or_update(
-                GROUP_NAME,
-                VMS_INFO[1]['nic_name'],
-                #create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
-                #create_nic_parameters(subnet_info.id, back_end_address_pool_id)
+            GROUP_NAME,
+            VMS_INFO[1]['nic_name'],
+            # create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
+            # create_nic_parameters(subnet_info.id, back_end_address_pool_id)
 
-                create_nic_parameters(str(subnet_info.id), str(back_end_address_pool_id))
+            create_nic_parameters(str(subnet_info.id), str(back_end_address_pool_id))
 
-                )
+        )
     print_log("Got to after set nic1 info")
-        
-    #nic1_info = async_nic1_creation.result()
-        
+
+    # nic1_info = async_nic1_creation.result()
+
     print_log("Got to after nic1 creation")
 
     print_log("Finished Creating Load Balancer Components")
 
     print_log("LoadBalancer DNS Name: " + DOMAIN_LABEL_NAME + "." + azureRegion + ".cloudapp.azure.com")
 
-elif cmd == "update" :
-# update backend pool with new nic's
+elif cmd == "update":
+    # update backend pool with new nic's
     # Updating Load Balancer
     print_log("Updating Load Balancer")
 
@@ -324,32 +322,32 @@ elif cmd == "update" :
         GROUP_NAME,
         LB_NAME,
     )
-   
+
     # lb_info = lb_async_creation.result()
 
-    #Iterate through the cluster nodes and add each nic to the backend pool
+    # Iterate through the cluster nodes and add each nic to the backend pool
     get_nodes = APP_CLUSTER_NODES.split(",")
     for node in get_nodes:
-            IP_CONFIG_NAME = 'primary'
-            VMS_INFO = {
-                    1: {
-                            'name': node,
-                            'nic_name': node + '-nic-0'
-                        },
-                    }
-            back_end_address_pool_id = lb_info.backend_address_pools[0].id
-            async_nic1_creation = network_client.network_interfaces.create_or_update(
-                    GROUP_NAME,
-                    VMS_INFO[1]['nic_name'],
+        IP_CONFIG_NAME = 'primary'
+        VMS_INFO = {
+            1: {
+                'name': node,
+                'nic_name': node + '-nic-0'
+            },
+        }
+        back_end_address_pool_id = lb_info.backend_address_pools[0].id
+        async_nic1_creation = network_client.network_interfaces.create_or_update(
+            GROUP_NAME,
+            VMS_INFO[1]['nic_name'],
             # create_nic_parameters(subnet_info.id, back_end_address_pool_id)
-                    create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
-                    )
-            nic1_info = async_nic1_creation.result()
+            create_nic_parameters(async_subnet_get.id, back_end_address_pool_id)
+        )
+        nic1_info = async_nic1_creation.result()
 
     print_log("Finished updating Load Balancer Components")
 
 
-elif cmd == "stop" :
+elif cmd == "stop":
 
     # Destroy the load balancer components
 
@@ -380,5 +378,5 @@ elif cmd == "stop" :
     print_log("Deleted Public IP: " + str(pubip_info))
 
 
-elif cmd == "reload" :
+elif cmd == "reload":
     pass
