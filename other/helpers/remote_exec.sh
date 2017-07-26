@@ -2,6 +2,8 @@
 # Utility script to run arbitrary script remotely with lifecycle action.
 . /utils.sh
 
+env
+
 # Should be URL of script to download and execute on the node remotely.
 script=$1
 
@@ -13,14 +15,26 @@ hostname_list_variable_name="CliqrTier_${cliqrAppTierName}_HOSTNAME"
 
 # Set internal separator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
+IFS=','
 # Iterate through list of hosts to increment
 host_index=0
 for host in ${!hostname_list_variable_name} ; do
+    if [ ${host} = ${cliqrNodeHostname} ]; then
+        # INDEX for this host is current position in array.
+        echo "Index: ${host_index}"
+        break
+    fi
     let host_index=${host_index}+1
 done
+
+tier_ip_varname=CliqrTier_${cliqrAppTierName}_PUBLIC_IP
+ipArr=(${!tier_ip_varname}) # Array of IPs in my tier.
+node_ip=${ipArr[${host_index}]}
+
 # Set internal separator back to original.
 IFS=${temp_ifs}
 ############
+
 
 if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
@@ -30,8 +44,6 @@ if [ "${osName}" == "Linux" ]; then
     chmod 400 key
 
     # Get the IP Address of the node from variable name that includes the name of the tier.
-    tier_ip_varname=CliqrTier_${cliqrAppTierName}_IP
-    node_ip=${!tier_ip_varname}
 
     # Add the node's ssh key to our list of known hosts to avoid being prompted.
     mkdir -p ~/.ssh/
