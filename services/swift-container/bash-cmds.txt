@@ -1,0 +1,10 @@
+yum install -y python-setuptools;easy_install pip;pip install --upgrade pip;pip install --upgrade setuptools;pip install python-swiftclient;swift -A http://184.94.251.119/auth/v1.0 -U Bill -K harper post Bills-Dev
+
+
+sudo docker run -it --entrypoint=bash cliqr/worker
+
+[root@05022eb2795d /]# swift -A http://184.94.251.119/auth/v1.0 -U Bill -K harper list
+.swiftstack-web-console-metadata
+Bills-Dev
+cisco-abc
+cloudcenter
