@@ -26,6 +26,7 @@ rm -f ${spark_file}
 
 ln -s ~/${spark_folder} ~/spark
 
+echo "export JAVA_HOME=/usr/lib/jvm/jre-1.8.0" >> ~/.bashrc
 echo "export SPARK_HOME=~/spark" >> ~/.bashrc
 echo 'export PATH=${SPARK_HOME}/bin:${PATH}' >> ~/.bashrc
 source ~/.bashrc
