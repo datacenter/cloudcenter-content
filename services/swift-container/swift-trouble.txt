@@ -1,0 +1,27 @@
+CONTAINER ID        IMAGE                 COMMAND              CREATED             STATUS                  PORTS               NAMES
+a00ce117029f        cliqr/worker:latest   "/worker.sh START"   1 seconds ago       Up Less than a second                       jolly_hopper
+[centos@cco-4-7 ~]$ sudo docker ps
+CONTAINER ID        IMAGE                 COMMAND              CREATED             STATUS                  PORTS               NAMES
+a00ce117029f        cliqr/worker:latest   "/worker.sh START"   2 seconds ago       Up Less than a second                       jolly_hopper
+[centos@cco-4-7 ~]$ sudo docker ps
+CONTAINER ID        IMAGE                 COMMAND              CREATED             STATUS              PORTS               NAMES
+a00ce117029f        cliqr/worker:latest   "/worker.sh START"   3 seconds ago       Up 1 seconds                            jolly_hopper
+[centos@cco-4-7 ~]$ sudo docker ps
+CONTAINER ID        IMAGE                 COMMAND              CREATED             STATUS              PORTS               NAMES
+a00ce117029f        cliqr/worker:latest   "/worker.sh START"   4 seconds ago       Up 2 seconds                            jolly_hopper
+[centos@cco-4-7 ~]$ sudo docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[centos@cco-4-7 ~]$ sudo docker ps
+
+
+
+
+sudo docker run -it --entrypoint=bash cliqr/worker
+
+
+run service script here, its ok. 
+
+swift -A http://184.94.251.119/auth/v1.0 -U Bill -K harper post Bills-Dev
+
+cliqrContainerExecuteScriptTimeout
+

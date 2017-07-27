@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+#
+# This is a Cisco Cloud Center external service example to deploy an OpenStack "heat" template
+# Heat is much like cloud formation from AWS, excepted tailored to OpenStack. 
+# 
+# This service leverages the default OpenStack CLI Heat command as well as the default ENV vars that OpenStack uses
+# for login, password, Tenant, API endpoint and Region.  I have defined them below. 
+#
+# We will pass in several environment variables listed below from the Cisco Cloud Center GUI
+# 
+#		$OS_HEAT_TEMPLATE_URL - URL of Heat Template to deploy (Entered on Cloud Center GUI)
+#		$HEAT_TEMPLATE - file name from url string above to deploy (Extracted from above URL)
+# 		$STACK - The name of the heat stack to create (Entered from Cloud Center GUI)
+# 		$OS_AUTH_URL - The IP or URL of the object storage API (OpenStack)
+#		$OS_TENANT_NAME - The name of the Tenant or Project (OpenStack)
+#		$OS_TENANT_ID - UUID of Tenant (OpenStack)
+#		$OS_REGION_NAME - Name of the OpenStack Region, default is RegionOne (OpenStack)
+#		$OS_USERNAME - The user ID to login swift stack with (OpenStack)
+# 		$OS_PASSWORD - Your Password given to you earlier (OpenStack)
+#		
+# Locally we will use a few also
+# 
+#		$PASSWDHIDE - Hidden password to ************
+#		cmd for our case statement is the first parameter passed in is either start or stop
+# 		to run: service <start> or <stop> 
+#
+#
+#
+
+yum update -y
+
+. /utils.sh
+
+
+env
+
+print_log "$(env)"
+
+cmd=$1
+serviceStatus=""
+export PASSWDHIDE=xxxxxxxxxx
+
+if [ -n "$gitTag" ]; then
+    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
+else
+     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
+     gitTag="Heat stack create service"
+fi
+print_log "EXTERNAL SERVICE - Heat Service to make an application stack started"
+# print_log "Yum epel package install"
+print_log "INSTALL - Installing epl-release"
+yum install -y epel-release
+# gnu "c" compiler and python header files for compiling
+print_log "INSTALL - Installing gcc and development tools needed"
+yum install -y gcc git python-pip python-devel
+print_log "INSTALL - Installing wget for template download"
+yum install -y wget
+# Installing python pip, setup tools ...
+print_log "INSTALL - Installing Python tools, Pip and his followers ... and minons" 
+yum install -y python-setuptools
+easy_install pip
+pip install --upgrade pip
+pip install --upgrade setuptools
+print_log "INSTALL - Installing OpenStack HEAT CLI client ..."
+pip install python-heatclient
+
+# Run the Service
+case $cmd in
+        start)
+          print_log "Logging in as User" $OS_USERNAME
+#         print_log "Executing Password" $OS_PASSWORD
+          print_log "Executing Password" $PASSWDHIDE
+          print_log "OpenStack URL Endpoint is" $OS_AUTH_URL
+          print_log "OpenStack Tenant is" $OS_TENANT_NAME
+          print_log "OpenStack Tenant ID is " $OS_TENANT_ID
+          print_log "OpenStack Region is" $OS_REGION_NAME
+          print_log "Heat Stack name to create is "$STACK
+          print_log "Heat Template URL is " $OS_HEAT_TEMPLATE_URL
+          print_log "Strip off the file name off the heat template URL using sed ..."
+          HEAT_TEMPLATE=$(echo $OS_HEAT_TEMPLATE_URL | sed 's/.*\///')
+          print_log "Heat Template file name to deploy is " $HEAT_TEMPLATE     
+          print_log "START - Downloading ... the Heat Template $OS_HEAT_TEMPLATE_URL and saving locally"
+          wget -N $OS_HEAT_TEMPLATE_URL
+          print_log "Heat Template Filename to process is: " $HEAT_TEMPLATE
+          print_log "START - Heat Stack to create in OpenStack is "$STACK 
+          print_log "START - OpenStack API Endpoint is" $OS_AUTH_URL
+          # This is the Meat of the service, call openstack to give it the heat template to process
+          heat stack-create -f $HEAT_TEMPLATE $STACK
+          print_log "Heat Stack now deployed"
+          serviceStatus="Started"
+        ;;
+        stop)   
+          print_log "REMOVE - delete a stack called "$STACK
+          heat stack-delete $STACK
+          serviceStatus="Stopped"
+        ;;
+        *)
+          serviceStatus="Error: Not a valid argument"
+        exit 127
+        ;;
+esac
