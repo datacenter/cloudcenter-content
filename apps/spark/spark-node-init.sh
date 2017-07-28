@@ -69,6 +69,7 @@ IFS=${temp_ifs}
 
 node_ip=${ipArr[${my_host_index}]}
 master=${nodeArr[0]} # Let the first node in the service tier be the master.
+masterIP=${ipArr[0]}
 
 # Added the SSH fingerprint of all the other nodes. To avoid being prompted for this.
 host_index=0
@@ -97,6 +98,6 @@ if [ "${master}" == "${cliqrNodeId}" ]; then
     agentSendLogMessage "${output}"
 fi
 
-agentSendLogMessage "Cluster will show up at the Master's IP address on port 8080, which might not correspond to the Accesss Link."
+agentSendLogMessage "View master at http://${masterIP}:8080 - this may not match the access link."
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
