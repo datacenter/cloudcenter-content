@@ -91,11 +91,12 @@ done
 
 if [ "${master}" == "${cliqrNodeId}" ]; then
     # I'm the master
-    $SPARK_HOME/sbin/start-all.sh
+    agentSendLogMessage "Master - starting master and all slaves..."
+    output=`$SPARK_HOME/sbin/start-all.sh`
+    agentSendLogMessage "Startup Complete:"
+    agentSendLogMessage "${output}"
 fi
 
-
-
-
+agentSendLogMessage "Cluster will show up at the Master's IP address on port 8080, which might not correspond to the Accesss Link."
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
