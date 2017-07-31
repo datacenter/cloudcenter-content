@@ -7,12 +7,12 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("cmd", help="add or remove node")
-parser.add_argument("tower_ip", help="IP or hostname of Tower")
-parser.add_argument("tower_username", help="Tower username")
-parser.add_argument("tower_password", help="Tower password")
-parser.add_argument("node_name", help="Name of the node you want to add or remove.")
-parser.add_argument("inventory_id", help="Inventory ID to add or remove the node to/from.")
+parser.add_argument("-c", "--cmd", help="add or remove node")
+parser.add_argument("-h", "--tower_ip", help="IP or hostname of Tower")
+parser.add_argument("-u", "--tower_username", help="Tower username")
+parser.add_argument("-p", "--tower_password", help="Tower password")
+parser.add_argument("-n", "--node_name", help="Name of the node you want to add or remove.")
+parser.add_argument("-i", "--inventory_id", help="Inventory ID to add or remove the node to/from.")
 
 args = parser.parse_args()
 parser.parse_args()
