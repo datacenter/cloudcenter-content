@@ -4,6 +4,7 @@ import sys
 import requests
 from requests.auth import HTTPBasicAuth
 import argparse
+import json
 
 
 parser = argparse.ArgumentParser()
@@ -72,7 +73,7 @@ def add_host(host_name, inventory):
         "inventory": inventory
     }
 
-    s.request("POST", url, headers=headers, data=payload, verify=False,
+    s.request("POST", url, headers=headers, data=json.dumps(payload), verify=False,
               auth=HTTPBasicAuth(args.tower_username, args.tower_password))
 
 if __name__ == "__main__":
