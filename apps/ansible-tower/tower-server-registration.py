@@ -7,7 +7,7 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-c", "--cmd", help="add or remove node")
+parser.add_argument("-c", "--cmd", help="add or remove node", choices=['add', 'remove'])
 parser.add_argument("-h", "--tower_ip", help="IP or hostname of Tower")
 parser.add_argument("-u", "--tower_username", help="Tower username")
 parser.add_argument("-p", "--tower_password", help="Tower password")
@@ -56,5 +56,8 @@ def remove_host(host_id):
     s.request("DELETE", url, headers=headers, verify=False,
               auth=HTTPBasicAuth(args.tower_username, args.tower_password))
 
-my_host_id = get_host_id(args.node_name)
-remove_host(my_host_id)
+if args.cmd == 'add':
+    pass
+elif args.cmd == 'remove':
+    my_host_id = get_host_id(args.node_name)
+    remove_host(my_host_id)
