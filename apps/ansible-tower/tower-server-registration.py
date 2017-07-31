@@ -7,12 +7,12 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-c", "--cmd", help="add or remove node", choices=['add', 'remove'])
-parser.add_argument("-h", "--tower_ip", help="IP or hostname of Tower")
-parser.add_argument("-u", "--tower_username", help="Tower username")
-parser.add_argument("-p", "--tower_password", help="Tower password")
-parser.add_argument("-n", "--node_name", help="Name of the node you want to add or remove.")
-parser.add_argument("-i", "--inventory_id", help="Inventory ID to add or remove the node to/from.")
+parser.add_argument("cmd", help="add or remove node", choices=['add', 'remove'])
+parser.add_argument("tower_ip", help="IP or hostname of Tower")
+parser.add_argument("tower_username", help="Tower username")
+parser.add_argument("tower_password", help="Tower password")
+parser.add_argument("node_name", help="Name of the node you want to add or remove.")
+parser.add_argument("inventory_id", help="Inventory ID to add or remove the node to/from.")
 
 args = parser.parse_args()
 parser.parse_args()
@@ -56,8 +56,28 @@ def remove_host(host_id):
     s.request("DELETE", url, headers=headers, verify=False,
               auth=HTTPBasicAuth(args.tower_username, args.tower_password))
 
+
+def add_host(host_name, inventory):
+    s = requests.Session()
+
+    url = tower_base_url+"hosts/"
+
+    headers = {
+        'content-type': "application/json"
+    }
+
+    payload = {
+        "name": host_name,
+        "enabled": True,
+        "inventory": inventory
+    }
+
+    s.request("POST", url, headers=headers, data=payload, verify=False,
+              auth=HTTPBasicAuth(args.tower_username, args.tower_password))
+
+
 if args.cmd == 'add':
-    pass
+    add_host(args.node_name, args.inventory_id)
 elif args.cmd == 'remove':
     my_host_id = get_host_id(args.node_name)
     remove_host(my_host_id)
