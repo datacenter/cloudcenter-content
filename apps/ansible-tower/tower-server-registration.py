@@ -75,9 +75,9 @@ def add_host(host_name, inventory):
     s.request("POST", url, headers=headers, data=payload, verify=False,
               auth=HTTPBasicAuth(args.tower_username, args.tower_password))
 
-
-if args.cmd == 'add':
-    add_host(args.node_name, args.inventory_id)
-elif args.cmd == 'remove':
-    my_host_id = get_host_id(args.node_name)
-    remove_host(my_host_id)
+if __name__ == "__main__":
+    if args.cmd == 'add':
+        add_host(args.node_name, args.inventory_id)
+    elif args.cmd == 'remove':
+        my_host_id = get_host_id(args.node_name)
+        remove_host(my_host_id)
