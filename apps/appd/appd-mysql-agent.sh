@@ -20,6 +20,8 @@ fi
 pip install --upgrade pip
 pip install --upgrade requests
 
+script_file="appd-mysql-agent.py"
+
 #wget -N $serviceDef -O /serviceDef.json
-curl -o appd-mysql-agent.py https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/apps/appd/appd-mysql-agent.py
-python appd-mysql-agent.py ${cmd}
+curl -o ${script_file} https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/apps/appd/appd-mysql-agent.py
+python ${script_file} ${cmd}

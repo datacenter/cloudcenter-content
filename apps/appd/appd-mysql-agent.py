@@ -29,8 +29,10 @@ coll_name = os.getenv('parentJobName', None)
 
 s = requests.Session()
 
-username = "admin"
+username = "admin@customer1"
 password = "pa55word"
+tier_name = os.getenv('cliqrAppTierName')
+host_ip = os.getenv("CliqrTier_{}_PUBLIC_IP".format(tier_name))
 
 base_url = "http://172.16.204.34:8090/controller/rest"
 
@@ -39,7 +41,7 @@ if cmd == "add":
         payload = {
             "name": coll_name,
             "type": "MYSQL",
-            "hostname": "172.16.204.105",
+            "hostname": host_ip,
             "username": "root",
             "password": "welcome2cliqr",
             "port": 3306,
