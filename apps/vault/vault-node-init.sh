@@ -38,6 +38,7 @@ listener "tcp" {
 
 disable_mlock = true
 EOF
+sudo mv example.hcl /etc/vault.conf
 
 cat > consul.service <<-'EOF'
 [Unit]
@@ -61,12 +62,12 @@ sleep 10
 cat > vault.service <<-'EOF'
 [Unit]
 Description=vault server
-Requires=network-online.target
+Requires=network-online.target consul.service
 After=network-online.target consul.service
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/bin/vault server -config=/tmp/example.hcl
+ExecStart=/usr/bin/vault server -config=/etc/vault.conf
 EOF
 sudo mv vault.service /etc/systemd/system/
 sudo systemctl start vault.service
