@@ -25,7 +25,7 @@ def print_ext_service_result(msg):
     print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
 cmd = sys.argv[1]
-coll_name = os.getenv('parentJobName', None)
+coll_name = os.getenv('parentJobName', None)+"-dbcoll"
 
 s = requests.Session()
 
@@ -53,7 +53,10 @@ if cmd == "add":
             "agentName": "DB Agent a2",
             "enabled": True
         }
-        r = s.request("POST", "{}/databases/collectors/create".format(base_url), data=json.dumps(payload), verify=False,
+        headers = {
+            "Content-Type": "application/json"
+        }
+        r = s.request("POST", url="{}/databases/collectors/create".format(base_url), headers=headers, data=json.dumps(payload), verify=False,
                       auth=HTTPBasicAuth(username, password))
         print_log(r.status_code)
         print_log(json.dumps(r.json(), indent=2))
