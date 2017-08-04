@@ -59,15 +59,15 @@ if cmd == "add":
         r = s.request("POST", url="{}/databases/collectors/create".format(base_url), headers=headers, data=json.dumps(payload), verify=False,
                       auth=HTTPBasicAuth(username, password))
         print_log(r.status_code)
-        print_log(json.dumps(r.json(), indent=2))
+        # print_log(json.dumps(r.json(), indent=2))
         r.raise_for_status()
     except Exception as err:
         print_log("Error Adding DB Collector to AppDynamics: {0}.".format(err))
-        sys.exit(1)
+        # sys.exit(1)
 
 elif cmd == "remove":
     try:
         pass
     except Exception as err:
         print_log("Error Removing DB Collector from AppDynamics: {0}.".format(err))
-        sys.exit(1)
+        # sys.exit(1)
