@@ -4,15 +4,15 @@
 
 . /utils.sh
 
-#print_log "$(env)"
+print_log "$(env)"
 
 cmd=$1
 serviceStatus=""
 
-if [ -n "${gitTag}" ]; then
-    tag="${gitTag}"
+if [ -n "${appd_db_git_tag}" ]; then
+    tag="${appd_db_git_tag}"
 else
-    tag="master"
+    tag="appd"
 fi
 
 # Setup a bunch of prerequisits
@@ -21,5 +21,5 @@ pip install --upgrade pip
 pip install --upgrade requests
 
 #wget -N $serviceDef -O /serviceDef.json
-wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/services/swarm/deployToSwarm/swarm.py
-python swarm.py ${cmd}
+curl -o appd-mysql-agent.py https://raw.githubusercontent.com/datacenter/cloudcenter-content/${tag}/apps/appd/appd-mysql-agent.py
+python appd-mysql-agent.py ${cmd}
