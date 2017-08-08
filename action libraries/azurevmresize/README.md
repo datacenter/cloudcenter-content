@@ -14,7 +14,7 @@ Action Library configuration.  Since there is no import/export for action librar
 7) Toggle the "Sync VM Info" to "YES" - This is optional and only works if there is a wait command in the shell script to make sure the VM is up and running.  You can toggle this to "NO" and issue a manual sync after the resize runs as well.
 8) The Object Mapping settings will vary dependingon your environment but should only include Azure cloud regions for "CloudCenter Deployed VM's"
 9) Within the Action Definition the "Execute from Bundle" should be disabled
-10) The executable command should be: https://cliqrdemo-repo.s3.amazonaws.com/joey/azurevmresize/azurevmresize.sh
+10) The executable command should be: https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/action%20libraries/azurevmresize/azurevmresize.sh
 11) There are three required custom fields
 	a) Instance Size
 		Display Name: Instance Size
