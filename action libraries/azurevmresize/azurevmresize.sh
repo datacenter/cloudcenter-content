@@ -9,7 +9,7 @@
 	yum install -y gcc libffi-devel python-devel openssl-devel
 	yum install -y expect
 
-	wget https://cliqrdemo-repo.s3.amazonaws.com/joey/azurevmresize/azcli2.py -O /tmp/azcli2.py
+	wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/action%20libraries/azurevmresize/azcli2.py -O /tmp/azcli2.py
 	chmod 755 /tmp/azcli2.py
 	python /tmp/azcli2.py
 
