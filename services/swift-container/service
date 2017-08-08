@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+#
+# Swiftstack service SS02 example using swift clients
+#
+# We will pass in several environment variables listed below
+# 		$CONTAINER - The name of the object store container to create
+# 		$ENDPOINT - The IP or URL of the object storage API
+#		$USER - The user ID to login swift stack with
+# 		$PASSWD - Your Password given to you earlier
+#		
+# Locally we will use a few also
+# 
+#		$PASSWDHIDE - Hidden password to ************
+#		cmd for our case statement
+#
+#
+#
+
+yum update -y
+
+. /utils.sh
+
+
+env
+
+print_log "$(env)"
+
+cmd=$1
+serviceStatus=""
+export PASSWDHIDE=xxxxxxxxxx
+
+if [ -n "$gitTag" ]; then
+    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
+else
+     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
+     gitTag="swiftstack container create"
+fi
+print_log "INVOKE - Swift Service to make a container"
+#print_log "Yum epel package install"
+print_log "INSTALL - Installing epl-release"
+yum install -y epel-release
+
+#yum install -y python-pip
+
+#sudo pip install pip --upgrade
+
+#sudo yum install -y python-swiftclient
+print_log "INSTALL - Installing Python tools, Pip and his followers" 
+yum install -y python-setuptools
+easy_install pip
+pip install --upgrade pip
+pip install --upgrade setuptools
+print_log "INSTALL - Installing Swift CLI package"
+pip install python-swiftclient
+print_log "Logging in as User" $USER
+print_log "Executing Password" $PASSWDHIDE
+print_log "Swiftstack URL Endpoint is" $ENDPOINT
+print_log "Container name to create is "$CONTAINER
+print_log "RUN - Now lets START and run the service"
+# Run the Service
+
+case $cmd in
+        start)
+		print_log "START - Swiftstack Object Store container created is called "$CONTAINER
+		print_log "START - Provisioned to SwiftStack Endpoint" $ENDPOINT
+#		swift -A http://184.94.251.119/auth/v1.0 -U Bill -K harper post $CONTAINER
+		swift -A $ENDPOINT -U $USER -K $PASSWD post $CONTAINER
+                serviceStatus="Started"
+                ;;
+        stop)   
+                print_log "REMOVE - delete a container called "$CONTAINER
+				swift -A $ENDPOINT -U $USER -K $PASSWD delete $CONTAINER
+                serviceStatus="Stopped"
+                ;;
+        *)
+                serviceStatus="Error: Not a valid argument"
+                exit 127
+                ;;
+esac

@@ -44,7 +44,7 @@
             "scope": null,
             "systemParam": true,
             "collectionList": [],
-            "defaultValue": "clean",
+            "defaultValue": "clean0.3",
             "pathSuffixValue": "",
             "webserviceListParams": null
         },
