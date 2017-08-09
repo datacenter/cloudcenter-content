@@ -29,7 +29,7 @@
 
 
 	# Delete App Service
-	/home/cliqruser/bin/azwebapp delete --name $webappname --resource-group $resourceGroup
+	/home/cliqruser/bin/az webapp delete --name $webappname --resource-group $resourceGroup
 	if [ $? -ne 0 ];
 	then
 		print_log "Web App Delete failed";
@@ -37,3 +37,15 @@
 		print_log "Web App Delete Successful";
 	fi
 
+	az appservice plan delete --name
+                          --resource-group
+                          [--yes]
+
+	# Delete Plan
+	/home/cliqruser/bin/az appservice plan delete --name $webappname --resource-group $resourceGroup --yes
+	if [ $? -ne 0 ];
+	then
+		print_log "Plan Delete failed";
+	else
+		print_log "Plan Delete Successful";
+	fi
