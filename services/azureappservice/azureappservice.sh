@@ -24,8 +24,7 @@
 
 
 	# Replace the following URL with a public GitHub repo URL
-	gitrepo=https://github.com/Azure-Samples/php-docs-hello-world
-	# webappname=mywebapp$RANDOM
+	#gitrepo=https://github.com/Azure-Samples/php-docs-hello-world
 
 	# Create an App Service plan in `FREE` tier.
 	/home/cliqruser/bin/az appservice plan create --name $webappname --resource-group $resourceGroup --sku FREE
@@ -46,7 +45,7 @@
 	fi
 
 	# Deploy code from a public GitHub repository.
-	/home/cliqruser/bin/az webapp deployment source config --name $webappname --resource-group $resourceGroup --repo-url $gitrepo --branch master --manual-integration
+	/home/cliqruser/bin/az webapp deployment source config --name $webappname --resource-group $resourceGroup --repo-url $coderepo --branch master --manual-integration
 	if [ $? -ne 0 ];
 	then
 		print_log "Deploy failed";
