@@ -1,8 +1,13 @@
 #!/bin/bash -x
-(
+exec > >(tee -a /var/tmp/sensu-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
+. /usr/local/osmosix/service/utils/cfgutil.sh
+. /usr/local/osmosix/service/utils/agent_util.sh
+
+# Move our cliqr repo out of the way.
+sudo mv /etc/yum.repos.d/cliqr.repo /tmp/
 
 # Install Erlang & RabbitMQ
 sudo wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
@@ -73,4 +78,6 @@ sudo wget -O /etc/sensu/uchiwa.json https://raw.githubusercontent.com/datacenter
 
 # Enable start uichwa
 sudo /etc/init.d/uchiwa start
-) 2>&1 | while IFS= read -r line; do echo "$(date) | $line"; done | tee -a /var/tmp/sensu-server_$$.log
+
+# Put our cliqr repo back.
+sudo mv /tmp/cliqr.repo /etc/yum.repos.d/
