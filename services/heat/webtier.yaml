@@ -1,0 +1,94 @@
+heat_template_version: 2013-05-23
+
+description: three VMs (web, app, database) and one volume for each
+
+parameters:
+  key:
+    type: string
+    description: Name of your key-pair
+    default: bh-keypair
+  flavor:
+    type: string
+    default: m1.small
+  image:
+    type: string
+    default: ubuntu_1404_server_cloudimg_amd64
+  private_net:
+    type: string
+    default: d0bc373b-44a3-4b98-93aa-6844d1919f98
+
+
+
+
+resources:
+  database_vol:
+    type: OS::Cinder::Volume
+    properties:
+      size: 10
+  database_vol_att:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: database }
+      volume_id: { get_resource: database_vol }
+
+  database:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      key_name: { get_param: key }
+      networks:
+        - network: { get_param: private_net }
+      user_data: |
+        #!/bin/sh
+        echo "Hello, I'm a Database!"
+      user_data_format: RAW
+
+
+  web_vol:
+    type: OS::Cinder::Volume
+    properties:
+      size: 5
+  web_data_vol:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: web }
+      volume_id: { get_resource: web_vol }
+
+  web:
+    type: OS::Nova::Server
+    depends_on: database
+    properties:
+      image: LampStack-13.0.raw
+      flavor: { get_param: flavor }
+      key_name: { get_param: key }
+      networks:
+        - network: { get_param: private_net }
+      user_data: |
+        #!/bin/sh
+        echo "Hello, I'm a Web!"
+      user_data_format: RAW
+
+  app_vol:
+    type: OS::Cinder::Volume
+    properties:
+      size: 5
+  app_data_vol:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      instance_uuid: { get_resource: app }
+      volume_id: { get_resource: app_vol }
+
+  app:
+    type: OS::Nova::Server
+    depends_on: [ database, web ]
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      key_name: { get_param: key }
+      networks:
+        - network: { get_param: private_net }
+      user_data: |
+        #!/bin/sh
+        echo "Hello, I'm an App Server!"
+      user_data_format: RAW

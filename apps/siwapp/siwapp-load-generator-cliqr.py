@@ -26,9 +26,8 @@ while True:
         session = requests.session()
         resp = session.get(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN,timeout=10)
         break
-    except:
+    except requests.exceptions.ConnectTimeout:
         print("Get Timed Out")
-        continue
 
 while True:
     for server in SIWAPP_APP_SERVERS:
@@ -37,26 +36,22 @@ while True:
             'SERVERID':server
         })
 
-        try:
-            login_page = session.get(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN)
-            tree = html.fromstring(login_page.content)
-            csrf_token = tree.xpath('//input[@name="signin[_csrf_token]"]/@value')
-            print csrf_token
-            payload = {
-                'signin[_csrf_token]': csrf_token[0],
-                'signin[username]': 'siwapp',
-                'signin[password]': 'siwapp'
-            }
-            login = session.post(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN,data=payload)
+        login_page = session.get(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN)
+        tree = html.fromstring(login_page.content)
+        csrf_token = tree.xpath('//input[@name="signin[_csrf_token]"]/@value')
+        print csrf_token
+        payload = {
+            'signin[_csrf_token]': csrf_token[0],
+            'signin[username]': 'siwapp',
+            'signin[password]': 'siwapp'
+        }
+        login = session.post(SIWAPP_FRONTEND_PROXY_URL + SIWAPP_LOGIN,data=payload)
 
-            print session.cookies
-            for page in SIWAPP_PAGES:
-                response = session.get(SIWAPP_FRONTEND_PROXY_URL + '/' + page)
-                print response.status_code
-
-            response = session.get(SIWAPP_FRONTEND_PROXY_URL + '/logout')
+        print session.cookies
+        for page in SIWAPP_PAGES:
+            response = session.get(SIWAPP_FRONTEND_PROXY_URL + '/' + page)
             print response.status_code
-        except:
-            print("Error polling Server")
-            continue
+
+        response = session.get(SIWAPP_FRONTEND_PROXY_URL + '/logout')
+        print response.status_code
     time.sleep(2)

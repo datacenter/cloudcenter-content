@@ -1,0 +1,24 @@
+Pick a file name from a URL string with SED.
+
+cloud@jump-cli-14:~$ echo "ftp://ftp.bla.com/path/to/a-file.tar.gz" | sed 's/.*\///'
+a-file.tar.gz
+cloud@jump-cli-14:~$ export TEST=ftp://ftp.bla.com/path/to/a-file.tar.gz
+cloud@jump-cli-14:~$ echo $TEST | sed 's/.*\///'
+a-file.tar.gz
+
+
+** http://www.linuxquestions.org/questions/programming-9/sed-and-how-to-get-the-file-name-from-an-url-191137/
+FOO=$(echo $TEST | sed 's/.*\///') 
+cloud@jump-cli-14:~$ echo $FOO
+a-file.tar.gz
+
+issue, error codes:
+
+ gcc -pthread -fno-strict-aliasing -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv -DNDEBUG -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv -fPIC -DNETIFACES_VERSION=0.10.6 -I/usr/include/python2.7 -c netifaces.c -o build/temp.linux-x86_64-2.7/netifaces.o
+    unable to execute gcc: No such file or directory
+    error: command 'gcc' failed with exit status 1
+    
+    ----------------------------------------
+Command "/usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-mm42Z7/netifaces/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" install --record /tmp/pip-ShKAKl-record/install-record.txt --single-version-externally-managed --compile" failed with error code 1 in /tmp/pip-build-mm42Z7/netifaces/
+
+export VAR=value
