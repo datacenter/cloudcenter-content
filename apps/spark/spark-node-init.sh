@@ -84,7 +84,7 @@ for host in "${hostnameArr[@]}"; do
     if [ "${master}" == "${cliqrNodeId}" ]; then
         # I'm the master
         agentSendLogMessage "Master"
-        echo "${host}" >> $SPARK_HOME/conf/slaves
+        echo "${host}.${domain}" >> $SPARK_HOME/conf/slaves
     fi
 
     let host_index=${host_index}+1
