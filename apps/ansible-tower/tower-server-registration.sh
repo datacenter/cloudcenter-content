@@ -32,7 +32,7 @@ while getopts ":h:u:p:n:i:o:" opt; do
 done
 
 
-case $cmd in
+case ${cmd} in
     add)
         curl -k -X POST \
           https://${tower_ip}/api/v1/hosts/ \
@@ -49,4 +49,3 @@ case $cmd in
     *)
         ;;
 esac
-;;

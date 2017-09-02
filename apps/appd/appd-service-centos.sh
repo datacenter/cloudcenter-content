@@ -2,9 +2,7 @@
 # Place this script into the INSTALL lifecycle action in your CentOS service.
 exec > >(tee -a /var/tmp/appd-service-centos-init_$$.log) 2>&1
 
-. /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
-. /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
 appd_controller_ip="172.16.204.34"
