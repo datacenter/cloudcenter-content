@@ -13,7 +13,7 @@ SLEEP_TIME=10
 ERR=0
 
 # Keep checking for haproxy to give proper 401 return to login
-until [$(curl --write-out %{http_code} --silent --output /dev/null ${CliqrTier_siwapp_haproxy_app_PUBLIC_IP}) -eq 401]; do
+until [ "$(curl --write-out %{http_code} --silent --output /dev/null ${CliqrTier_siwapp_haproxy_app_PUBLIC_IP})" -eq "401" ]; do
     sleep ${SLEEP_TIME}
     let "COUNT++"
     echo ${COUNT}
