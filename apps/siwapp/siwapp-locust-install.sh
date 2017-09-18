@@ -15,8 +15,8 @@ sudo yum install -y python-devel gcc
 sudo pip install pip --upgrade
 sudo pip install locustio lxml requests
 
-sudo curl -o /usr/share/systemd/siwapp-locust-file.py https://raw.githubusercontent.com/datacenter/cloudcenter-content/${siwapp_git_tag}/apps/siwapp/siwapp-locust-file.py
-sudo curl -o /usr/share/systemd/siwapp-locust-service.sh https://raw.githubusercontent.com/datacenter/cloudcenter-content/${siwapp_git_tag}/apps/siwapp/siwapp-locust-service.sh
+sudo curl -o /usr/share/systemd/siwapp-locust-file.py https://raw.githubusercontent.com/datacenter/cloudcenter-content/siwapp/apps/siwapp/siwapp-locust-file.py
+sudo curl -o /usr/share/systemd/siwapp-locust-service.sh https://raw.githubusercontent.com/datacenter/cloudcenter-content/siwapp/apps/siwapp/siwapp-locust-service.sh
 
 sudo su -c "echo $'
 [Unit]
