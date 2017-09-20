@@ -29,7 +29,7 @@ fi
 
 nohup /usr/bin/python2 /usr/bin/locust --locustfile=/usr/share/systemd/siwapp-locust-file.py --host=http://${CliqrTier_siwapp_haproxy_app_PUBLIC_IP} &>/dev/null &
 sleep 5
-nohup curl -X POST -F "locust_count=300" -F "hatch_rate=5" http://localhost:8089/swarm &>/dev/null &
+nohup curl -X POST -F "locust_count=30" -F "hatch_rate=10" http://localhost:8089/swarm &>/dev/null &
 while :
 do
     true
