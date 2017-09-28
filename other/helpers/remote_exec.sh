@@ -53,10 +53,11 @@ if [ "${osName}" == "Linux" ]; then
     # Download the script that you want to run.
     curl -o script.sh ${script}
 
-    # Run the script.
-    ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh
+    # Run the script, passing in the command line arguments from this script, minus the first one
+    # which was the URL of this script to run.
+    ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
 else
     # Remote execution isn't supported on Windows right now.
-    print_log "Not Linux, so skipping script."
+    print_log "Not Linux, so skipping script. This helper script does not support Windows (yet)."
 fi
