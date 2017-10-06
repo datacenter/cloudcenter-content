@@ -9,4 +9,3 @@ OSSVC_HOME=/usr/local/osmosix/service
 
 
 sed -i '/jdbc.url/c\jdbc.url=jdbc:mysql://'"$CliqrTier_Database_PUBLIC_IP"'/petclinic' /usr/local/tomcat6/webapps/ROOT/WEB-INF/classes/jdbc.properties
-
