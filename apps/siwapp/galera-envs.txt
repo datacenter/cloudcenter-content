@@ -1,0 +1,8 @@
+export GALERA_DB_ROOT_PWD='!Ciscodc123'
+export GALERA_DB_USER='siwapp'
+export GALERA_DB_USER_PWD='!Ciscodc123'
+export GALERA_DB_NODE_LIST='172.17.3.3,172.17.3.4,172.17.3.5'
+export GALERA_CLUSTER_NAME='siwapp'
+export GALERA_NODE_IP='172.17.3.5'
+export GALERA_NODE_NAME='siwapp-mariadb-03'
+export GALERA_DB_ROLE='slave'

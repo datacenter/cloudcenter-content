@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2017-09-14 16:22:42">
+<sys_remote_update_set action="INSERT_OR_UPDATE">
+<application display_value="Global">global</application>
+<application_name>Global</application_name>
+<application_scope>global</application_scope>
+<application_version/>
+<collisions/>
+<commit_date/>
+<deleted/>
+<description/>
+<inserted/>
+<name>CloudCenter CMDB Update</name>
+<origin_sys_id/>
+<parent display_value=""/>
+<release_date/>
+<remote_base_update_set display_value=""/>
+<remote_parent_id/>
+<remote_sys_id>887ddeb10f01030015e609bce1050e66</remote_sys_id>
+<state>loaded</state>
+<summary/>
+<sys_class_name>sys_remote_update_set</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>b6d4de000f11030015e609bce1050ef8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<update_set display_value=""/>
+<update_source display_value=""/>
+<updated/>
+</sys_remote_update_set>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_transform_entry_15e366b50f01030015e609bce1050e66</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_transform_entry"&gt;&lt;sys_transform_entry action="INSERT_OR_UPDATE"&gt;&lt;choice_action&gt;create&lt;/choice_action&gt;&lt;coalesce&gt;false&lt;/coalesce&gt;&lt;coalesce_case_sensitive&gt;false&lt;/coalesce_case_sensitive&gt;&lt;coalesce_empty_fields&gt;false&lt;/coalesce_empty_fields&gt;&lt;date_format&gt;yyyy-MM-dd HH:mm:ss&lt;/date_format&gt;&lt;map display_value="CloudCenter Transform VMs"&gt;53a162750f01030015e609bce1050eca&lt;/map&gt;&lt;reference_value_field/&gt;&lt;source_field&gt;u_os_type&lt;/source_field&gt;&lt;source_script&gt;&lt;![CDATA[answer = (function transformEntry(source) {
+
+	// Add your code here
+	return ""; // return the value to be put into the target field
+
+})(source);]]&gt;&lt;/source_script&gt;&lt;source_table&gt;u_cloudcenter_import_vms&lt;/source_table&gt;&lt;sys_class_name&gt;sys_transform_entry&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:42:26&lt;/sys_created_on&gt;&lt;sys_id&gt;15e366b50f01030015e609bce1050e66&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;u_os_type&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_transform_entry_15e366b50f01030015e609bce1050e66&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:42:26&lt;/sys_updated_on&gt;&lt;target_field&gt;os&lt;/target_field&gt;&lt;target_table&gt;cmdb_ci_server&lt;/target_table&gt;&lt;use_source_script&gt;false&lt;/use_source_script&gt;&lt;/sys_transform_entry&gt;&lt;/record_update&gt;</payload>
+<payload_hash>492882070</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>32d4d2440f51030015e609bce1050ea9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d6f91390000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_os_type</target_name>
+<type>Field Map</type>
+<update_domain>global</update_domain>
+<update_guid>aaf362b585010300d1e511e96a485a53</update_guid>
+<update_guid_history>aaf362b585010300d1e511e96a485a53:492882070</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_u_public_ip</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="u_public_ip" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label&gt;Public IP&lt;/column_label&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;false&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element&gt;u_public_ip&lt;/element&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value=""&gt;string_full_utf8&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;255&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:22:02&lt;/sys_created_on&gt;&lt;sys_id&gt;a5ae1af10f01030015e609bce1050e78&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;Public IP&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_u_public_ip&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:22:52&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>1691604841</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>32d4de000f11030015e609bce1050efb</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5da71a0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Public IP</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>737f92353a010300d05f3b67477f45a0</update_guid>
+<update_guid_history>737f92353a010300d05f3b67477f45a0:1691604841,7b7f9235c4010300d9362b35a1526a7d:-1637259878,334f1235f3010300e124f0339d611d3a:1691604841</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_role_6d2e96f10f01030015e609bce1050ec0</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role"><sys_security_acl_role action="INSERT_OR_UPDATE"><sys_class_name>sys_security_acl_role</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>6d2e96f10f01030015e609bce1050ec0</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_security_acl display_value="u_cloudcenter_import_vms">652e96f10f01030015e609bce1050ebe</sys_security_acl><sys_update_name>sys_security_acl_role_6d2e96f10f01030015e609bce1050ec0</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><sys_user_role display_value="u_cloudcenter_import_vms_user" name="u_cloudcenter_import_vms_user">912eda310f01030015e609bce1050ebc</sys_user_role><transaction_id/></sys_security_acl_role></record_update>]]></payload>
+<payload_hash>457104475</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>36d4d2440f51030015e609bce1050ea8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5843130000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</target_name>
+<type>Access Roles</type>
+<update_domain>global</update_domain>
+<update_guid>a92e96f173010300ff2b6308cdae09c2</update_guid>
+<update_guid_history>a92e96f173010300ff2b6308cdae09c2:457104475</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_u_hostname</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="u_hostname" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label&gt;Hostname&lt;/column_label&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;false&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element&gt;u_hostname&lt;/element&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value=""&gt;string_full_utf8&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;255&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:22:02&lt;/sys_created_on&gt;&lt;sys_id&gt;c76e1af10f01030015e609bce1050e6c&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;Hostname&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_u_hostname&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:22:51&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-562015391</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>36d4de000f11030015e609bce1050efa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5da3f10000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Hostname</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>737f9235c0010300a14d07e51812435c</update_guid>
+<update_guid_history>737f9235c0010300a14d07e51812435c:-562015391,e77f9235c70103009bd13300050dbf52:-548739508,bf4f1235a301030067a411d6b6b31d30:-562015391</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_652e96f10f01030015e609bce1050ebe</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl"><sys_security_acl action="INSERT_OR_UPDATE"><active>true</active><admin_overrides>true</admin_overrides><advanced>false</advanced><condition/><description>Default access control on u_cloudcenter_import_vms</description><name>u_cloudcenter_import_vms</name><operation display_value="read">read</operation><script/><sys_class_name>sys_security_acl</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_id>652e96f10f01030015e609bce1050ebe</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_security_acl_652e96f10f01030015e609bce1050ebe</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:58</sys_updated_on><type display_value="record">record</type></sys_security_acl></record_update>]]></payload>
+<payload_hash>1965375679</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>3ad4d2440f51030015e609bce1050ea7</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5842f10000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms</target_name>
+<type>Access Control</type>
+<update_domain>global</update_domain>
+<update_guid>212e96f1fa01030056896374ef56e6c0</update_guid>
+<update_guid_history>212e96f1fa01030056896374ef56e6c0:1965375679</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>ua_table_licensing_config_312e96f10f01030015e609bce1050ef3</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="ua_table_licensing_config"><ua_table_licensing_config action="INSERT_OR_UPDATE"><is_fulfillment>false</is_fulfillment><license_condition/><license_model>none</license_model><license_roles/><name>u_cloudcenter_import_vms</name><op_delete>true</op_delete><op_insert>true</op_insert><op_update>true</op_update><owner_condition/><sys_class_name>ua_table_licensing_config</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>312e96f10f01030015e609bce1050ef3</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>ua_table_licensing_config_312e96f10f01030015e609bce1050ef3</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on></ua_table_licensing_config></record_update>]]></payload>
+<payload_hash>-401876876</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>3ad4d2440f51030015e609bce1050eaa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5845920000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_cloudcenter_import_vms</target_name>
+<type>Table Subscription Configuration</type>
+<update_domain>global</update_domain>
+<update_guid>712e96f10f01030002c3a095129f1af4</update_guid>
+<update_guid_history>712e96f10f01030002c3a095129f1af4:-401876876</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_choice_cmdb_ci_server_operational_status</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_choice action="INSERT_OR_UPDATE" field="operational_status" table="cmdb_ci_server" version="3"><sys_choice action="INSERT_OR_UPDATE"><dependent_value/><element>operational_status</element><hint/><inactive>false</inactive><label>Terminated</label><language>en</language><name>cmdb_ci_server</name><sequence>0</sequence><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 18:04:40</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>501962790f01030015e609bce1050ebc</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 18:04:40</sys_updated_on><value>0</value></sys_choice><sys_choice action="INSERT_OR_UPDATE"><dependent_value/><element>operational_status</element><hint/><inactive>false</inactive><label>Operational</label><language>en</language><name>cmdb_ci_server</name><sequence>1</sequence><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 18:07:31</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>4eb9a6790f01030015e609bce1050e09</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 18:07:31</sys_updated_on><value>1</value></sys_choice><sys_choice_set action="INSERT_OR_UPDATE"><element>operational_status</element><name>cmdb_ci_server</name><sys_class_name>sys_choice_set</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 18:04:40</sys_created_on><sys_id>941962790f01030015e609bce1050ec3</sys_id><sys_mod_count>0</sys_mod_count><sys_name>operational_status</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_choice_cmdb_ci_server_operational_status</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 18:04:40</sys_updated_on></sys_choice_set></sys_choice></record_update>]]></payload>
+<payload_hash>-911465461</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>3ad4de000f11030015e609bce1050ef9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d868ac00000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>cmdb_ci_server</table>
+<target_name>Server.Operational status</target_name>
+<type>Choice list</type>
+<update_domain>global</update_domain>
+<update_guid>8ab9a67940010300505908fa921cc012</update_guid>
+<update_guid_history>8ab9a67940010300505908fa921cc012:-911465461,90196279d1010300fb473bcb01089ac4:-1887404171</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms_u_public_ip_en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="u_public_ip" label="Public IP" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element>u_public_ip</element><help/><hint/><label>Public IP</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>Public IPs</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:22:03</sys_created_on><sys_id>bf4f12350f01030015e609bce1050e46</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Public IP</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms_u_public_ip_en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:22:03</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>1653555239</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>3ed4d2440f51030015e609bce1050ea6</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5ce9de0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Public IP</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>c05f1235b9010300c5bde994b82fe45f</update_guid>
+<update_guid_history>c05f1235b9010300c5bde994b82fe45f:1653555239</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_transform_map_53a162750f01030015e609bce1050eca</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_transform_map"&gt;&lt;sys_transform_map action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;copy_empty_fields&gt;false&lt;/copy_empty_fields&gt;&lt;enforce_mandatory_fields&gt;No&lt;/enforce_mandatory_fields&gt;&lt;name&gt;CloudCenter Transform VMs&lt;/name&gt;&lt;order&gt;100&lt;/order&gt;&lt;run_business_rules&gt;true&lt;/run_business_rules&gt;&lt;run_script&gt;true&lt;/run_script&gt;&lt;script&gt;&lt;![CDATA[(function transformRow(source, target, map, log, isUpdate) {
+
+    var operating_system = source.u_os_type.toString();
+
+
+    //This if statement uses JavaScript regular expressions to search the operating system
+    if ( operating_system.match(/linux/i) != null ){
+        target.sys_class_name="cmdb_ci_linux_server";
+    } else if ( operating_system.match(/win/i) != null ){
+        target.sys_class_name="cmdb_ci_win_server";
+    }
+    
+})(source, target, map, log, action==="update");
+]]&gt;&lt;/script&gt;&lt;source_table&gt;u_cloudcenter_import_vms&lt;/source_table&gt;&lt;sys_class_name&gt;sys_transform_map&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:34:03&lt;/sys_created_on&gt;&lt;sys_id&gt;53a162750f01030015e609bce1050eca&lt;/sys_id&gt;&lt;sys_mod_count&gt;1&lt;/sys_mod_count&gt;&lt;sys_name&gt;CloudCenter Transform VMs&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_transform_map_53a162750f01030015e609bce1050eca&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:41:11&lt;/sys_updated_on&gt;&lt;target_table&gt;cmdb_ci_server&lt;/target_table&gt;&lt;/sys_transform_map&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-1680145313</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>3ed4d2440f51030015e609bce1050ea9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d6e6d660000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>CloudCenter Transform VMs</target_name>
+<type>Table Transform Map</type>
+<update_domain>global</update_domain>
+<update_guid>5cb32a7580010300707966f1d029c7a2</update_guid>
+<update_guid_history>5cb32a7580010300707966f1d029c7a2:-1680145313,e3026675df010300ac6506e10b9bfa38:2064477599</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms_u_os_type_en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="u_os_type" label="OS Type" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element>u_os_type</element><help/><hint/><label>OS Type</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>OS Types</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:22:03</sys_created_on><sys_id>bb4f12350f01030015e609bce1050e45</sys_id><sys_mod_count>0</sys_mod_count><sys_name>OS Type</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms_u_os_type_en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:22:03</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>536030791</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>3ed4de000f11030015e609bce1050efb</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5cea060000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.OS Type</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>485f123567010300dcfe6eebb9e76b61</update_guid>
+<update_guid_history>485f123567010300dcfe6eebb9e76b61:536030791</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_role_612e96f10f01030015e609bce1050ecb</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role"><sys_security_acl_role action="INSERT_OR_UPDATE"><sys_class_name>sys_security_acl_role</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>612e96f10f01030015e609bce1050ecb</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_security_acl display_value="u_cloudcenter_import_vms">692e96f10f01030015e609bce1050ec8</sys_security_acl><sys_update_name>sys_security_acl_role_612e96f10f01030015e609bce1050ecb</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><sys_user_role display_value="u_cloudcenter_import_vms_user" name="u_cloudcenter_import_vms_user">912eda310f01030015e609bce1050ebc</sys_user_role><transaction_id/></sys_security_acl_role></record_update>]]></payload>
+<payload_hash>1632525009</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>72d4d2440f51030015e609bce1050ea8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5843b10000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</target_name>
+<type>Access Roles</type>
+<update_domain>global</update_domain>
+<update_guid>ad2e96f121010300bd93225a71f2c2cc</update_guid>
+<update_guid_history>ad2e96f121010300bd93225a71f2c2cc:1632525009</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_null</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label/&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;false&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element/&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value="Collection"&gt;collection&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;40&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:16:59&lt;/sys_created_on&gt;&lt;sys_id&gt;612e96f10f01030015e609bce1050eda&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;u_cloudcenter_import_vms&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_null&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:16:59&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-1479160734</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>72d4de000f11030015e609bce1050efa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5845b70000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>f52e96f1aa010300fb6e9d50e187edf5</update_guid>
+<update_guid_history>f52e96f1aa010300fb6e9d50e187edf5:-1479160734</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_252e96f10f01030015e609bce1050eb8</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl"><sys_security_acl action="INSERT_OR_UPDATE"><active>true</active><admin_overrides>true</admin_overrides><advanced>false</advanced><condition/><description>Default access control on u_cloudcenter_import_vms</description><name>u_cloudcenter_import_vms</name><operation display_value="create">create</operation><script/><sys_class_name>sys_security_acl</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_id>252e96f10f01030015e609bce1050eb8</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_security_acl_252e96f10f01030015e609bce1050eb8</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:58</sys_updated_on><type display_value="record">record</type></sys_security_acl></record_update>]]></payload>
+<payload_hash>2127018227</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>76d4d2440f51030015e609bce1050ea7</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5842800000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms</target_name>
+<type>Access Control</type>
+<update_domain>global</update_domain>
+<update_guid>652e96f104010300757c93ad113ac3ba</update_guid>
+<update_guid_history>652e96f104010300757c93ad113ac3ba:2127018227</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_user_role_912eda310f01030015e609bce1050ebc</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role"><sys_user_role action="INSERT_OR_UPDATE"><assignable_by/><can_delegate>true</can_delegate><description/><elevated_privilege>false</elevated_privilege><grantable>true</grantable><includes_roles/><name>u_cloudcenter_import_vms_user</name><suffix/><sys_class_name>sys_user_role</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_id>912eda310f01030015e609bce1050ebc</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms_user</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_user_role_912eda310f01030015e609bce1050ebc</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:58</sys_updated_on></sys_user_role></record_update>]]></payload>
+<payload_hash>976034037</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>76d4d2440f51030015e609bce1050eaa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d583fbe0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_cloudcenter_import_vms_user</target_name>
+<type>Role</type>
+<update_domain>global</update_domain>
+<update_guid>5d2eda31fe01030057b5b8d0b90c2dbe</update_guid>
+<update_guid_history>5d2eda31fe01030057b5b8d0b90c2dbe:976034037</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_app_module_b715e6b50f01030015e609bce1050e94</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module"><sys_app_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="CloudCenter">a52e96f10f01030015e609bce1050eae</application><assessment/><content_page/><device_type/><filter table="sys_transform_map">nameSTARTSWITHCloudCenter Transform VMs^EQ<item endquery="false" field="name" goto="false" newquery="false" operator="STARTSWITH" or="false" value="CloudCenter Transform VMs"/><item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/></filter><hint/><homepage/><image/><link_type>DETAIL</link_type><map_page/><mobile_title>VM Transform Map</mobile_title><mobile_view_name>Mobile</mobile_view_name><name>sys_transform_map</name><order/><override_menu_roles>false</override_menu_roles><query/><report/><roles/><survey/><survey_overwrite>true</survey_overwrite><sys_class_name>sys_app_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:49:14</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>b715e6b50f01030015e609bce1050e94</sys_id><sys_mod_count>1</sys_mod_count><sys_name>VM Transform Map</sys_name><sys_overrides/><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_app_module_b715e6b50f01030015e609bce1050e94</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:50:26</sys_updated_on><timeline_page/><title>VM Transform Map</title><uncancelable>false</uncancelable><view_name/><window_name/></sys_app_module></record_update>]]></payload>
+<payload_hash>-771398802</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>76d4de000f11030015e609bce1050ef9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d76e5970000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>sys_transform_map</table>
+<target_name>VM Transform Map</target_name>
+<type>Module</type>
+<update_domain>global</update_domain>
+<update_guid>bfc52af51d010300bec62de431405fd9</update_guid>
+<update_guid_history>bfc52af51d010300bec62de431405fd9:-771398802,52852e750c010300e11c889c59bc5528:1685205234</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms_u_private_ip_en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="u_private_ip" label="Private IP" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element>u_private_ip</element><help/><hint/><label>Private IP</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>Private IPs</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:22:03</sys_created_on><sys_id>b74f12350f01030015e609bce1050e49</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Private IP</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms_u_private_ip_en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:22:03</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>203687195</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>7ad4d2440f51030015e609bce1050ea6</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5ce9f20000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Private IP</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>845f1235a2010300ebb29d3a6bc88560</update_guid>
+<update_guid_history>845f1235a2010300ebb29d3a6bc88560:203687195</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_transform_entry_f7f3e6b50f01030015e609bce1050e63</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_transform_entry"&gt;&lt;sys_transform_entry action="INSERT_OR_UPDATE"&gt;&lt;choice_action&gt;create&lt;/choice_action&gt;&lt;coalesce&gt;false&lt;/coalesce&gt;&lt;coalesce_case_sensitive&gt;false&lt;/coalesce_case_sensitive&gt;&lt;coalesce_empty_fields&gt;false&lt;/coalesce_empty_fields&gt;&lt;date_format&gt;yyyy-MM-dd HH:mm:ss&lt;/date_format&gt;&lt;map display_value="CloudCenter Transform VMs"&gt;53a162750f01030015e609bce1050eca&lt;/map&gt;&lt;reference_value_field/&gt;&lt;source_field&gt;u_status&lt;/source_field&gt;&lt;source_script&gt;&lt;![CDATA[answer = (function transformEntry(source) {
+
+	// Add your code here
+	return ""; // return the value to be put into the target field
+
+})(source);]]&gt;&lt;/source_script&gt;&lt;source_table&gt;u_cloudcenter_import_vms&lt;/source_table&gt;&lt;sys_class_name&gt;sys_transform_entry&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:42:50&lt;/sys_created_on&gt;&lt;sys_id&gt;f7f3e6b50f01030015e609bce1050e63&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;u_status&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_transform_entry_f7f3e6b50f01030015e609bce1050e63&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:42:50&lt;/sys_updated_on&gt;&lt;target_field&gt;operational_status&lt;/target_field&gt;&lt;target_table&gt;cmdb_ci_server&lt;/target_table&gt;&lt;use_source_script&gt;false&lt;/use_source_script&gt;&lt;/sys_transform_entry&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-1551064599</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>7ad4d2440f51030015e609bce1050ea9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d6ff0af0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_status</target_name>
+<type>Field Map</type>
+<update_domain>global</update_domain>
+<update_guid>24146e75370103002dc8b581d0f9de0d</update_guid>
+<update_guid_history>24146e75370103002dc8b581d0f9de0d:-1551064599</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms_u_node_id_en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="u_node_id" label="Node ID" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element>u_node_id</element><help/><hint/><label>Node ID</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>Node IDs</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:22:03</sys_created_on><sys_id>bb4f12350f01030015e609bce1050e4a</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Node ID</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms_u_node_id_en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:22:03</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>1744320923</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>7ad4de000f11030015e609bce1050efb</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5ce9cc0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Node ID</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>005f12359701030029508004f95b155e</update_guid>
+<update_guid_history>005f12359701030029508004f95b155e:1744320923</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_transform_entry_06b3e2f10f01030015e609bce1050ef8</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_transform_entry"&gt;&lt;sys_transform_entry action="INSERT_OR_UPDATE"&gt;&lt;choice_action&gt;create&lt;/choice_action&gt;&lt;coalesce&gt;false&lt;/coalesce&gt;&lt;coalesce_case_sensitive&gt;false&lt;/coalesce_case_sensitive&gt;&lt;coalesce_empty_fields&gt;false&lt;/coalesce_empty_fields&gt;&lt;date_format&gt;yyyy-MM-dd HH:mm:ss&lt;/date_format&gt;&lt;map display_value="CloudCenter Transform VMs"&gt;53a162750f01030015e609bce1050eca&lt;/map&gt;&lt;reference_value_field/&gt;&lt;source_field&gt;u_public_ip&lt;/source_field&gt;&lt;source_script&gt;&lt;![CDATA[answer = (function transformEntry(source) {
+
+	// Add your code here
+	return ""; // return the value to be put into the target field
+
+})(source);]]&gt;&lt;/source_script&gt;&lt;source_table&gt;u_cloudcenter_import_vms&lt;/source_table&gt;&lt;sys_class_name&gt;sys_transform_entry&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:42:00&lt;/sys_created_on&gt;&lt;sys_id&gt;06b3e2f10f01030015e609bce1050ef8&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;u_public_ip&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_transform_entry_06b3e2f10f01030015e609bce1050ef8&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:42:00&lt;/sys_updated_on&gt;&lt;target_field&gt;ip_address&lt;/target_field&gt;&lt;target_table&gt;cmdb_ci_server&lt;/target_table&gt;&lt;use_source_script&gt;false&lt;/use_source_script&gt;&lt;/sys_transform_entry&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-1878059234</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>7ed4d2440f51030015e609bce1050ea8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d6f2ade0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_public_ip</target_name>
+<type>Field Map</type>
+<update_domain>global</update_domain>
+<update_guid>c8e32675850103009b351b8190228bfd</update_guid>
+<update_guid_history>c8e32675850103009b351b8190228bfd:-1878059234</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_u_private_ip</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="u_private_ip" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label&gt;Private IP&lt;/column_label&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;false&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element&gt;u_private_ip&lt;/element&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value=""&gt;string_full_utf8&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;255&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:22:02&lt;/sys_created_on&gt;&lt;sys_id&gt;4bae9af10f01030015e609bce1050e33&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;Private IP&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_u_private_ip&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:22:52&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>985859903</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>7ed4de000f11030015e609bce1050efa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5da64e0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Private IP</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>f77f9235e1010300d6d75ebbdb26c67c</update_guid>
+<update_guid_history>f77f9235e1010300d6d75ebbdb26c67c:985859903,7f7f9235d30103007fbc290750139572:-1573943092,7b4f1235d0010300652e268a071ee43e:985859903</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms__en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="" label="CloudCenter Import VMs" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element/><help/><hint/><label>CloudCenter Import VMs</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>CloudCenter Import VMs</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>f12e96f10f01030015e609bce1050ee1</sys_id><sys_mod_count>0</sys_mod_count><sys_name>CloudCenter Import VMs</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms__en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>-282325758</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>b2d4d2440f51030015e609bce1050ea7</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5845df0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>f92e96f193010300270199daf64c2cf7</update_guid>
+<update_guid_history>f92e96f193010300270199daf64c2cf7:-282325758</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_ui_module_e92e96f10f01030015e609bce1050eb5</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module"><sys_ui_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="CloudCenter Import VMs">292e96f10f01030015e609bce1050eb3</application><filter/><name>CloudCenter Import VMs</name><order/><path/><path_relative_to_root>false</path_relative_to_root><roles>u_cloudcenter_import_vms_user</roles><sys_class_name>sys_ui_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_domain>global</sys_domain><sys_domain_path/><sys_id>e92e96f10f01030015e609bce1050eb5</sys_id><sys_mod_count>0</sys_mod_count><sys_name>CloudCenter Import VMs</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_ui_module_e92e96f10f01030015e609bce1050eb5</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:58</sys_updated_on><table>u_cloudcenter_import_vms</table><uncancelable>false</uncancelable><view_name/></sys_ui_module></record_update>]]></payload>
+<payload_hash>-60034757</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>b2d4d2440f51030015e609bce1050eaa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5842200000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs</target_name>
+<type>Module</type>
+<update_domain>global</update_domain>
+<update_guid>e12e96f187010300fef891337a833eb7</update_guid>
+<update_guid_history>e12e96f187010300fef891337a833eb7:-60034757</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_app_module_ad2e96f10f01030015e609bce1050eb0</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module"><sys_app_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="CloudCenter">a52e96f10f01030015e609bce1050eae</application><assessment/><content_page/><device_type/><filter/><hint/><homepage/><image/><link_type>LIST</link_type><map_page/><mobile_title>CloudCenter Import VMs</mobile_title><mobile_view_name>Mobile</mobile_view_name><name>u_cloudcenter_import_vms</name><order/><override_menu_roles>false</override_menu_roles><query/><report/><roles>u_cloudcenter_import_vms_user</roles><survey/><survey_overwrite>true</survey_overwrite><sys_class_name>sys_app_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>ad2e96f10f01030015e609bce1050eb0</sys_id><sys_mod_count>2</sys_mod_count><sys_name>CloudCenter Import Set VMs</sys_name><sys_overrides/><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_app_module_ad2e96f10f01030015e609bce1050eb0</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:47:04</sys_updated_on><timeline_page/><title>CloudCenter Import Set VMs</title><uncancelable>false</uncancelable><view_name/><window_name/></sys_app_module></record_update>]]></payload>
+<payload_hash>-1043821293</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>b2d4de000f11030015e609bce1050ef9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d73ce430000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import Set VMs</target_name>
+<type>Module</type>
+<update_domain>global</update_domain>
+<update_guid>56052ab5510103006d789dfcfa1a73ef</update_guid>
+<update_guid_history>56052ab5510103006d789dfcfa1a73ef:-1043821293,04d46eb531010300ed0515a112ff5dc1:1109420594,292e96f185010300a538a3691ac177b2:1578695663</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_transform_entry_73e266750f01030015e609bce1050e68</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_transform_entry"&gt;&lt;sys_transform_entry action="INSERT_OR_UPDATE"&gt;&lt;choice_action&gt;create&lt;/choice_action&gt;&lt;coalesce&gt;false&lt;/coalesce&gt;&lt;coalesce_case_sensitive&gt;false&lt;/coalesce_case_sensitive&gt;&lt;coalesce_empty_fields&gt;false&lt;/coalesce_empty_fields&gt;&lt;date_format&gt;yyyy-MM-dd HH:mm:ss&lt;/date_format&gt;&lt;map display_value="CloudCenter Transform VMs"&gt;53a162750f01030015e609bce1050eca&lt;/map&gt;&lt;reference_value_field/&gt;&lt;source_field&gt;u_node_id&lt;/source_field&gt;&lt;source_script&gt;&lt;![CDATA[answer = (function transformEntry(source) {
+
+	// Add your code here
+	return ""; // return the value to be put into the target field
+
+})(source);]]&gt;&lt;/source_script&gt;&lt;source_table&gt;u_cloudcenter_import_vms&lt;/source_table&gt;&lt;sys_class_name&gt;sys_transform_entry&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:38:26&lt;/sys_created_on&gt;&lt;sys_id&gt;73e266750f01030015e609bce1050e68&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;u_node_id&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_transform_entry_73e266750f01030015e609bce1050e68&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:38:26&lt;/sys_updated_on&gt;&lt;target_field&gt;name&lt;/target_field&gt;&lt;target_table&gt;cmdb_ci_server&lt;/target_table&gt;&lt;use_source_script&gt;false&lt;/use_source_script&gt;&lt;/sys_transform_entry&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-1062958269</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>b6d4d2440f51030015e609bce1050ea9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d6be8530000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_node_id</target_name>
+<type>Field Map</type>
+<update_domain>global</update_domain>
+<update_guid>8413aeb1e301030057de7732094f8fbc</update_guid>
+<update_guid_history>8413aeb1e301030057de7732094f8fbc:-1062958269</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms_u_hostname_en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="u_hostname" label="Hostname" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element>u_hostname</element><help/><hint/><label>Hostname</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>Hostnames</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:22:03</sys_created_on><sys_id>b34f12350f01030015e609bce1050e48</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Hostname</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms_u_hostname_en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:22:03</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>483921727</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>b6d4de000f11030015e609bce1050efb</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5ce9b50000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Hostname</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>4c5f123580010300fd2f78cf799ae55c</update_guid>
+<update_guid_history>4c5f123580010300fd2f78cf799ae55c:483921727</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_role_ed2e96f10f01030015e609bce1050ec5</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role"><sys_security_acl_role action="INSERT_OR_UPDATE"><sys_class_name>sys_security_acl_role</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>ed2e96f10f01030015e609bce1050ec5</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_security_acl display_value="u_cloudcenter_import_vms">e52e96f10f01030015e609bce1050ec3</sys_security_acl><sys_update_name>sys_security_acl_role_ed2e96f10f01030015e609bce1050ec5</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><sys_user_role display_value="u_cloudcenter_import_vms_user" name="u_cloudcenter_import_vms_user">912eda310f01030015e609bce1050ebc</sys_user_role><transaction_id/></sys_security_acl_role></record_update>]]></payload>
+<payload_hash>406891961</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>bad4d2440f51030015e609bce1050ea8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5843600000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</target_name>
+<type>Access Roles</type>
+<update_domain>global</update_domain>
+<update_guid>2d2e96f1510103009cbd3963c2de3dc7</update_guid>
+<update_guid_history>2d2e96f1510103009cbd3963c2de3dc7:406891961</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_app_application_a52e96f10f01030015e609bce1050eae</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_application"><sys_app_application action="INSERT_OR_UPDATE"><active>true</active><category display_value="Custom Applications">e0355b31ef303000a61d5a3615c0fb78</category><description/><device_type>browser</device_type><hint/><name>CloudCenter Import VMs</name><order>100</order><roles>u_cloudcenter_import_vms_user</roles><sys_class_name>sys_app_application</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>a52e96f10f01030015e609bce1050eae</sys_id><sys_mod_count>1</sys_mod_count><sys_name>CloudCenter</sys_name><sys_overrides/><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_app_application_a52e96f10f01030015e609bce1050eae</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:46:35</sys_updated_on><title>CloudCenter</title><view_name/></sys_app_application></record_update>]]></payload>
+<payload_hash>-1835581137</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>bad4de000f11030015e609bce1050ef8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d735e8f0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table/>
+<target_name>CloudCenter</target_name>
+<type>Application Menu</type>
+<update_domain>global</update_domain>
+<update_guid>d3e4e2f57a01030032edf81cb4555a7e</update_guid>
+<update_guid_history>d3e4e2f57a01030032edf81cb4555a7e:-1835581137,612e96f12f010300bc51c67876321db0:456336402</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_u_os_type</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="u_os_type" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label&gt;OS Type&lt;/column_label&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;false&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element&gt;u_os_type&lt;/element&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value=""&gt;string_full_utf8&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;255&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:22:03&lt;/sys_created_on&gt;&lt;sys_id&gt;18be9eb10f01030015e609bce1050eb8&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;OS Type&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_u_os_type&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:22:51&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>479136057</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>bad4de000f11030015e609bce1050efa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5da5750000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.OS Type</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>fb7f923583010300c2dd7da5a6391d71</update_guid>
+<update_guid_history>fb7f923583010300c2dd7da5a6391d71:479136057,737f92355b010300862005fd78a41168:-1743507350,b34f1235ca0103002eef062e201e0643:479136057</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_e52e96f10f01030015e609bce1050ec3</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl"><sys_security_acl action="INSERT_OR_UPDATE"><active>true</active><admin_overrides>true</admin_overrides><advanced>false</advanced><condition/><description>Default access control on u_cloudcenter_import_vms</description><name>u_cloudcenter_import_vms</name><operation display_value="write">write</operation><script/><sys_class_name>sys_security_acl</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>e52e96f10f01030015e609bce1050ec3</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_security_acl_e52e96f10f01030015e609bce1050ec3</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><type display_value="record">record</type></sys_security_acl></record_update>]]></payload>
+<payload_hash>1011089027</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>bed4d2440f51030015e609bce1050ea7</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d58433b0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms</target_name>
+<type>Access Control</type>
+<update_domain>global</update_domain>
+<update_guid>a12e96f1cf0103001ed892ae6c0492c5</update_guid>
+<update_guid_history>a12e96f1cf0103001ed892ae6c0492c5:1011089027</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_db_object_4b9d92f10f01030015e609bce1050e67</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_db_object"><sys_db_object action="INSERT_OR_UPDATE"><access>public</access><actions_access>false</actions_access><alter_access>false</alter_access><client_scripts_access>false</client_scripts_access><configuration_access>false</configuration_access><create_access>false</create_access><create_access_controls>true</create_access_controls><delete_access>false</delete_access><extension_model/><is_extendable>false</is_extendable><label>CloudCenter Import VMs</label><live_feed_enabled>false</live_feed_enabled><name>u_cloudcenter_import_vms</name><number_ref/><provider_class/><read_access>true</read_access><super_class display_value="Import Set Row" name="sys_import_set_row">3437eb45dd2003003399d83d70be02e5</super_class><sys_class_code/><sys_class_name>sys_db_object</sys_class_name><sys_class_path/><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_id>4b9d92f10f01030015e609bce1050e67</sys_id><sys_mod_count>1</sys_mod_count><sys_name>CloudCenter Import VMs</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_db_object_4b9d92f10f01030015e609bce1050e67</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:22:03</sys_updated_on><update_access>false</update_access><user_role display_value="u_cloudcenter_import_vms_user" name="u_cloudcenter_import_vms_user">912eda310f01030015e609bce1050ebc</user_role><ws_access>true</ws_access></sys_db_object></record_update>]]></payload>
+<payload_hash>1087979459</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>bed4de000f11030015e609bce1050ef9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5cea920000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs</target_name>
+<type>Table</type>
+<update_domain>global</update_domain>
+<update_guid>045f12352d0103009a21f2d6a2704b67</update_guid>
+<update_guid_history>045f12352d0103009a21f2d6a2704b67:1087979459,bd2e96f10b010300d75e5739977cc3f8:1087979459</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_transform_entry_35622a750f01030015e609bce1050e81</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_transform_entry"&gt;&lt;sys_transform_entry action="INSERT_OR_UPDATE"&gt;&lt;choice_action&gt;create&lt;/choice_action&gt;&lt;coalesce&gt;true&lt;/coalesce&gt;&lt;coalesce_case_sensitive&gt;false&lt;/coalesce_case_sensitive&gt;&lt;coalesce_empty_fields&gt;false&lt;/coalesce_empty_fields&gt;&lt;date_format&gt;yyyy-MM-dd HH:mm:ss&lt;/date_format&gt;&lt;map display_value="CloudCenter Transform VMs"&gt;53a162750f01030015e609bce1050eca&lt;/map&gt;&lt;reference_value_field/&gt;&lt;source_field&gt;u_hostname&lt;/source_field&gt;&lt;source_script&gt;&lt;![CDATA[answer = (function transformEntry(source) {
+
+	// Add your code here
+	return ""; // return the value to be put into the target field
+
+})(source);]]&gt;&lt;/source_script&gt;&lt;source_table&gt;u_cloudcenter_import_vms&lt;/source_table&gt;&lt;sys_class_name&gt;sys_transform_entry&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:36:22&lt;/sys_created_on&gt;&lt;sys_id&gt;35622a750f01030015e609bce1050e81&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;u_hostname&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_transform_entry_35622a750f01030015e609bce1050e81&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:36:22&lt;/sys_updated_on&gt;&lt;target_field&gt;host_name&lt;/target_field&gt;&lt;target_table&gt;cmdb_ci_server&lt;/target_table&gt;&lt;use_source_script&gt;false&lt;/use_source_script&gt;&lt;/sys_transform_entry&gt;&lt;/record_update&gt;</payload>
+<payload_hash>1997831343</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>f2d4d2440f51030015e609bce1050ea9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d6a03260000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>u_hostname</target_name>
+<type>Field Map</type>
+<update_domain>global</update_domain>
+<update_guid>a19226f1ac010300dca76d0440dc6b1d</update_guid>
+<update_guid_history>a19226f1ac010300dca76d0440dc6b1d:1997831343</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_u_status</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="u_status" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label&gt;Status&lt;/column_label&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;true&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element&gt;u_status&lt;/element&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value=""&gt;string_full_utf8&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;40&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:16:58&lt;/sys_created_on&gt;&lt;sys_id&gt;fb9ddeb10f01030015e609bce1050e6a&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;Status&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_u_status&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:22:52&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>-1176385110</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>f2d4de000f11030015e609bce1050efb</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5da7320000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Status</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>f37f9235bb010300600a0244349f27a1</update_guid>
+<update_guid_history>f37f9235bb010300600a0244349f27a1:-1176385110,b34fd2b192010300b00fddf12ceab869:791663793,a12e96f18301030065be959e0c240eaa:497421440</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_role_e12e96f10f01030015e609bce1050ebb</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role"><sys_security_acl_role action="INSERT_OR_UPDATE"><sys_class_name>sys_security_acl_role</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_id>e12e96f10f01030015e609bce1050ebb</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_security_acl display_value="u_cloudcenter_import_vms">252e96f10f01030015e609bce1050eb8</sys_security_acl><sys_update_name>sys_security_acl_role_e12e96f10f01030015e609bce1050ebb</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:58</sys_updated_on><sys_user_role display_value="u_cloudcenter_import_vms_user" name="u_cloudcenter_import_vms_user">912eda310f01030015e609bce1050ebc</sys_user_role><transaction_id/></sys_security_acl_role></record_update>]]></payload>
+<payload_hash>1826964082</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>f6d4d2440f51030015e609bce1050ea8</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5842c60000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms.u_cloudcenter_import_vms_user</target_name>
+<type>Access Roles</type>
+<update_domain>global</update_domain>
+<update_guid>e52e96f11e010300794e3e8aa545d5bd</update_guid>
+<update_guid_history>e52e96f11e010300794e3e8aa545d5bd:1826964082</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_dictionary_u_cloudcenter_import_vms_u_node_id</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update&gt;&lt;sys_dictionary action="INSERT_OR_UPDATE" element="u_node_id" table="u_cloudcenter_import_vms"&gt;&lt;active&gt;true&lt;/active&gt;&lt;array&gt;false&lt;/array&gt;&lt;array_denormalized&gt;false&lt;/array_denormalized&gt;&lt;attributes/&gt;&lt;audit&gt;false&lt;/audit&gt;&lt;calculation&gt;&lt;![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]&gt;&lt;/calculation&gt;&lt;choice/&gt;&lt;choice_field/&gt;&lt;choice_table/&gt;&lt;column_label&gt;Node ID&lt;/column_label&gt;&lt;comments/&gt;&lt;create_roles/&gt;&lt;default_value/&gt;&lt;defaultsort/&gt;&lt;delete_roles/&gt;&lt;dependent/&gt;&lt;dependent_on_field/&gt;&lt;display&gt;false&lt;/display&gt;&lt;dynamic_creation&gt;false&lt;/dynamic_creation&gt;&lt;dynamic_creation_script/&gt;&lt;dynamic_default_value/&gt;&lt;dynamic_ref_qual/&gt;&lt;element&gt;u_node_id&lt;/element&gt;&lt;element_reference&gt;false&lt;/element_reference&gt;&lt;foreign_database/&gt;&lt;internal_type display_value=""&gt;string_full_utf8&lt;/internal_type&gt;&lt;mandatory&gt;false&lt;/mandatory&gt;&lt;max_length&gt;255&lt;/max_length&gt;&lt;name&gt;u_cloudcenter_import_vms&lt;/name&gt;&lt;next_element/&gt;&lt;primary&gt;false&lt;/primary&gt;&lt;read_only&gt;false&lt;/read_only&gt;&lt;read_roles/&gt;&lt;reference/&gt;&lt;reference_cascade_rule/&gt;&lt;reference_floats&gt;false&lt;/reference_floats&gt;&lt;reference_key/&gt;&lt;reference_qual/&gt;&lt;reference_qual_condition/&gt;&lt;reference_type/&gt;&lt;sizeclass/&gt;&lt;spell_check&gt;false&lt;/spell_check&gt;&lt;staged&gt;false&lt;/staged&gt;&lt;sys_class_name&gt;sys_dictionary&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2017-09-07 17:22:02&lt;/sys_created_on&gt;&lt;sys_id&gt;5b9e9eb10f01030015e609bce1050ed2&lt;/sys_id&gt;&lt;sys_mod_count&gt;2&lt;/sys_mod_count&gt;&lt;sys_name&gt;Node ID&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_dictionary_u_cloudcenter_import_vms_u_node_id&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2017-09-07 17:22:51&lt;/sys_updated_on&gt;&lt;table_reference&gt;false&lt;/table_reference&gt;&lt;text_index&gt;false&lt;/text_index&gt;&lt;unique&gt;false&lt;/unique&gt;&lt;use_dependent_field&gt;false&lt;/use_dependent_field&gt;&lt;use_dynamic_default&gt;false&lt;/use_dynamic_default&gt;&lt;use_reference_qualifier&gt;simple&lt;/use_reference_qualifier&gt;&lt;virtual&gt;false&lt;/virtual&gt;&lt;widget/&gt;&lt;write_roles/&gt;&lt;xml_view&gt;false&lt;/xml_view&gt;&lt;/sys_dictionary&gt;&lt;/record_update&gt;</payload>
+<payload_hash>1704910867</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>f6d4de000f11030015e609bce1050efa</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5da4be0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Node ID</target_name>
+<type>Dictionary</type>
+<update_domain>global</update_domain>
+<update_guid>bf7f9235e8010300f47a8a0bcffa7b66</update_guid>
+<update_guid_history>bf7f9235e8010300f47a8a0bcffa7b66:1704910867,377f92353e010300a38e62639229125d:-960993788,f74f123587010300dd2e04789ab48235:1704910867</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_security_acl_692e96f10f01030015e609bce1050ec8</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl"><sys_security_acl action="INSERT_OR_UPDATE"><active>true</active><admin_overrides>true</admin_overrides><advanced>false</advanced><condition/><description>Default access control on u_cloudcenter_import_vms</description><name>u_cloudcenter_import_vms</name><operation display_value="delete">delete</operation><script/><sys_class_name>sys_security_acl</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>692e96f10f01030015e609bce1050ec8</sys_id><sys_mod_count>0</sys_mod_count><sys_name>u_cloudcenter_import_vms</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_security_acl_692e96f10f01030015e609bce1050ec8</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><type display_value="record">record</type></sys_security_acl></record_update>]]></payload>
+<payload_hash>1843862101</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>fad4d2440f51030015e609bce1050ea7</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d58438b0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>u_cloudcenter_import_vms</target_name>
+<type>Access Control</type>
+<update_domain>global</update_domain>
+<update_guid>252e96f1c80103002b87a3289e9457ca</update_guid>
+<update_guid_history>252e96f1c80103002b87a3289e9457ca:1843862101</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_choice_cmdb_ci_server_os</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_choice action="INSERT_OR_UPDATE" field="os" table="cmdb_ci_server" version="3"><sys_choice action="INSERT_OR_UPDATE"><dependent_value/><element>os</element><hint/><inactive>false</inactive><label>Linux</label><language>en</language><name>cmdb_ci_server</name><sequence>0</sequence><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 18:04:40</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>1819aa310f01030015e609bce1050e25</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 18:04:40</sys_updated_on><value>Linux</value></sys_choice><sys_choice_set action="INSERT_OR_UPDATE"><element>os</element><name>cmdb_ci_server</name><sys_class_name>sys_choice_set</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 18:04:40</sys_created_on><sys_id>981962790f01030015e609bce1050eb9</sys_id><sys_mod_count>0</sys_mod_count><sys_name>os</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_choice_cmdb_ci_server_os</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 18:04:40</sys_updated_on></sys_choice_set></sys_choice></record_update>]]></payload>
+<payload_hash>-1351585688</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:41</sys_created_on>
+<sys_id>fad4de000f11030015e609bce1050ef9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d83eccf0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:41</sys_updated_on>
+<table>cmdb_ci_server</table>
+<target_name>Server.Operating System</target_name>
+<type>Choice list</type>
+<update_domain>global</update_domain>
+<update_guid>d81962790a010300a0b9b2c6d43bf9ba</update_guid>
+<update_guid_history>d81962790a010300a0b9b2c6d43bf9ba:-1351585688</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_documentation_u_cloudcenter_import_vms_u_status_en</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update><sys_documentation element="u_status" label="Status" language="en" table="u_cloudcenter_import_vms"><sys_documentation action="INSERT_OR_UPDATE"><element>u_status</element><help/><hint/><label>Status</label><language>en</language><name>u_cloudcenter_import_vms</name><plural>Status</plural><sys_class_name>sys_documentation</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:59</sys_created_on><sys_id>3d2e96f10f01030015e609bce1050ee2</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Status</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_documentation_u_cloudcenter_import_vms_u_status_en</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:59</sys_updated_on><url/><url_target/></sys_documentation></sys_documentation></record_update>]]></payload>
+<payload_hash>-1581327994</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>fed4d2440f51030015e609bce1050ea6</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5845cf0000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table>u_cloudcenter_import_vms</table>
+<target_name>CloudCenter Import VMs.Status</target_name>
+<type>Field Label</type>
+<update_domain>global</update_domain>
+<update_guid>f92e96f1180103005f55552183912ef6</update_guid>
+<update_guid_history>f92e96f1180103005f55552183912ef6:-1581327994</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_ui_application_292e96f10f01030015e609bce1050eb3</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_application"><sys_ui_application action="INSERT_OR_UPDATE"><active>true</active><hint/><name>CloudCenter Import VMs</name><order/><roles>u_cloudcenter_import_vms_user</roles><sys_class_name>sys_ui_application</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2017-09-07 17:16:58</sys_created_on><sys_domain>global</sys_domain><sys_domain_path/><sys_id>292e96f10f01030015e609bce1050eb3</sys_id><sys_mod_count>0</sys_mod_count><sys_name>CloudCenter Import VMs</sys_name><sys_overrides/><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_ui_application_292e96f10f01030015e609bce1050eb3</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2017-09-07 17:16:58</sys_updated_on></sys_ui_application></record_update>]]></payload>
+<payload_hash>1178292391</payload_hash>
+<remote_update_set display_value="CloudCenter CMDB Update">b6d4de000f11030015e609bce1050ef8</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2017-09-14 16:22:42</sys_created_on>
+<sys_id>fed4d2440f51030015e609bce1050ea9</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_recorded_at>15e5d5841e60000001</sys_recorded_at>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2017-09-14 16:22:42</sys_updated_on>
+<table/>
+<target_name>CloudCenter Import VMs</target_name>
+<type>Application Menu</type>
+<update_domain>global</update_domain>
+<update_guid>ad2e96f134010300cdf625dbf45f1db4</update_guid>
+<update_guid_history>ad2e96f134010300cdf625dbf45f1db4:1178292391</update_guid_history>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+</unload>
