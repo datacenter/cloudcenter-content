@@ -87,10 +87,27 @@ case ${cmd} in
 
         ;;
     stop)
-        print_log "Deleting all resources in namespace ${namespace}"
+        print_log "Deleting namespace ${namespace} and all resources in it."
 
-        msg=$(kubectl delete  --all all --namespace=${namespace}) || \
+        msg=$(kubectl delete namespace ${namespace}) || \
             error "Failed to delete the resources: ${msg}"
+
+        print_log "Waiting for namespace to terminate."
+        COUNT=0
+        MAX=50
+        SLEEP_TIME=5
+        ERR=0
+
+        #status=`kubectl get namespace | grep ${namespace} | awk '{print $2}'`
+        while bash -c "kubectl get namespace | grep '${namespace}'"; do
+          sleep ${SLEEP_TIME}
+          let "COUNT++"
+          echo ${COUNT}
+          if [ ${COUNT} -gt 50 ]; then
+            error "Never got IP address for service."
+            break
+          fi
+        done
         print_log "Service Stopped."
         ;;
     update)
