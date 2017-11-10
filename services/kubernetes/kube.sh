@@ -71,7 +71,7 @@ case ${cmd} in
 
         pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
 
-        while [ ${pub_ip} == "<pending>" ]; do
+        while [ "${pub_ip}" == "<pending>" ]; do
           sleep ${SLEEP_TIME}
           let "COUNT++"
           echo ${COUNT}
