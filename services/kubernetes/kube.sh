@@ -2,7 +2,7 @@
 . /utils.sh
 
 # Use for debugging only!
-# print_log "$(env)"
+print_log "$(env)"
 
 cmd=$1
 serviceStatus=""
@@ -19,31 +19,49 @@ error () {
 }
 
 # Input env variables used by this service.
-dep_name="${parentJobName}"
 image="${kube_image}"
+# Public port on load balancer to access service
 public_port="${kube_public_port}"
+# Port exposed on containers/pods that LB points to
+target_port="${kube_target_port}"
 config="${kube_config}"
 reps="${kube_reps}"
+
+dep_name="dep${parentJobName}"
+namespace="ns${parentJobName}"
+service_name="svc${parentJobName}"
 
 # Copied from https://kubernetes.io/docs/tasks/kubectl/install/
 print_log "Installing kubectl"
 msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl) || \
             error "Failed to install kubectl: ${msg}"
 chmod +x kubectl
+mv kubectl /usr/local/bin/
 print_log "kubectl installed"
 
 mkdir -p ~/.kube
 echo "${config}" > ~/.kube/config
 
+# kubectl config set-context $(kubectl config current-context) --namespace=${namespace}
+
 case ${cmd} in
     start)
 
-        msg=$(./kubectl run ${dep_name} --image ${image} --replicas=${reps}) || \
+        # Create namespace
+        msg=$(kubectl create namespace ${namespace}) || \
+            error "Failed to create namespace: ${msg}"
+        print_log "Namespace ${namespace} created"
+
+        # Create deployment
+        msg=$(kubectl run --namespace ${namespace} ${dep_name} --image ${image} --replicas=${reps}) || \
             error "Failed to create the deployment: ${msg}"
         print_log "Deployment created"
-        msg=$(./kubectl expose deployments ${dep_name} --port=${public_port} --type=LoadBalancer) || \
+
+        # Create service
+        msg=$(kubectl expose --namespace=${namespace} deployment ${dep_name} --port=${public_port} \
+        --target-port=${target_port} --type=LoadBalancer --name=${service_name}) || \
             error "Failed to expose the deployment: ${msg}"
-        print_log "Deployment exposed on port "
+        print_log "Deployment exposed on port ${public_port}"
 
         print_log "Waiting for service to start."
         COUNT=0
@@ -51,7 +69,7 @@ case ${cmd} in
         SLEEP_TIME=5
         ERR=0
 
-        pub_ip=`./kubectl get service ${dep_name} | sed -n 2p | awk {'print $3'}`
+        pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
 
         while [ ${pub_ip} == "<pending>" ]; do
           sleep ${SLEEP_TIME}
@@ -61,19 +79,18 @@ case ${cmd} in
             error "Never got IP address for service."
             break
           fi
-          pub_ip=`./kubectl get service ${dep_name} | sed -n 2p | awk {'print $3'}`
+          pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
         done
 
-        print_log "URL: http://${pub_ip}:${public_port}"
+        print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
         print_log "Service Started."
 
         ;;
     stop)
+        print_log "Deleting all resources in namespace ${namespace}"
 
-        msg=$(./kubectl delete service ${dep_name}) || \
-            error "Failed to delete the service: ${msg}"
-        msg=$(./kubectl delete deployment ${dep_name}) || \
-            error "Failed to delete the deployment: ${msg}"
+        msg=$(kubectl delete  --all all --namespace=${namespace}) || \
+            error "Failed to delete the resources: ${msg}"
         print_log "Service Stopped."
         ;;
     update)
