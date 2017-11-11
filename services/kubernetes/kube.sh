@@ -88,23 +88,31 @@ case ${cmd} in
 
         print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
 
-        print_log  "Waiting for service to start by checking for port ${public_port} open on ${pub_ip}."
-        COUNT=0
-        MAX=50
-        SLEEP_TIME=5
-        ERR=0
-
-        until $(nmap -p "${public_port}" "${pub_ip}" | grep "open" -q); do
-          sleep ${SLEEP_TIME}
-          let "COUNT++"
-          echo $COUNT
-          if [ $COUNT -gt 50 ]; then
-            ERR=1
-            break
-          fi
-        done
-
-        print_log "Service Started."
+#        # Failed trying to get this check working properly and reliably. nmap isn't able to determine whether
+#        # the port is actually open.
+#        print_log  "Waiting for service to start by checking for port ${public_port} open on ${pub_ip}."
+#        COUNT=0
+#        MAX=50
+#        SLEEP_TIME=5
+#        ERR=0
+#
+#        until $(nmap -p "${public_port}" "${pub_ip}" | grep "open" -q); do
+#          sleep ${SLEEP_TIME}
+#          let "COUNT++"
+#          echo ${COUNT}
+#          if [ ${COUNT} -gt 50 ]; then
+#            ERR=1
+#            break
+#          fi
+#        done
+#        if [ ${ERR} -eq 0 ]; then
+#            print_log "Service Started."
+#        else
+#            print_log "Timed out waiting for service to start after about 5min."
+#            exit 1
+#        fi
+        print_log "Deployment finished, but it may still take a few minutes for the
+        service to become available through the load balancer."
 
         ;;
     stop)
