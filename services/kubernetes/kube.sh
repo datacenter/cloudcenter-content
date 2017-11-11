@@ -18,6 +18,10 @@ error () {
     exit 1
 }
 
+prereqs="nmap"
+print_log "Installing prereqs: ${prereqs}"
+yum install -y ${prereqs}
+
 # Input env variables used by this service.
 image="${kube_image}"
 # Public port on load balancer to access service
@@ -83,6 +87,23 @@ case ${cmd} in
         done
 
         print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
+
+        print_log  "Waiting for service to start by checking for port ${public_port} open on ${pub_ip}."
+        COUNT=0
+        MAX=50
+        SLEEP_TIME=5
+        ERR=0
+
+        until $(nmap -p "${public_port}" "${pub_ip}" | grep "open" -q); do
+          sleep ${SLEEP_TIME}
+          let "COUNT++"
+          echo $COUNT
+          if [ $COUNT -gt 50 ]; then
+            ERR=1
+            break
+          fi
+        done
+
         print_log "Service Started."
 
         ;;
