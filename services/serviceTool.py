@@ -141,22 +141,22 @@ def validate_category(tenant_id, category_id):
 
 def get_service_id(tenant_id, service_name):
     logging.info("Getting ID for service {}".format(service_name))
-    # params = {
-    #     'parentService': True
-    # }
+    params = {
+        'parentService': True
+    }
     url = baseUrl+"/v1/tenants/" + str(tenant_id) + "/services/"
-    response = api_call("GET", url)
+    response = api_call("GET", url, params=params)
     j = response.json()
     service_id = None
-    # for parent_service in j['services']:
-    #     for service in parent_service['childServices']:
-    #         logging.debug(service['name'])
-    #         if service['name'] == service_name:
-    #             service_id = service['id']
-    for service in j['services']:
-        logging.debug(service['name'])
-        if service['name'] == service_name:
-            service_id = service['id']
+    for parent_service in j['services']:
+        for service in parent_service['childServices']:
+            logging.debug(service['name'])
+            if service['name'] == service_name:
+                service_id = service['id']
+    # for service in j['services']:
+    #     logging.debug(service['name'])
+    #     if service['name'] == service_name:
+    #         service_id = service['id']
     if service_id:
         logging.info("Found ID {} for service {}".format(service_id, service_name))
     else:
