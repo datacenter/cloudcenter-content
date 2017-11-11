@@ -85,7 +85,7 @@
       "userVisible": true,
       "systemParam": true,
       "type": "string",
-      "defaultValue": "kubernetes",
+      "defaultValue": "kube1.0",
       "collectionList": [],
       "dataUnit": null,
       "webserviceListParams": null,
