@@ -52,3 +52,26 @@ kube_config_path="${s3bucket}/${clusterName}/kube_config"
 aws s3 cp /root/.kube/config ${kube_config_path}
 print_log "Kube config file uploaded to ${kube_config_path}"
 
+# Installing Istio Client and misc files
+# https://istio.io/docs/setup/kubernetes/quick-start.html
+# Downloading latest Istio version
+curl -L https://git.io/getLatestIstio | sh -
+# Add istio bin dir to path
+cd istio-*
+export PATH=$PWD/bin:$PATH
+
+# Installing Istio into Kube cluster, without TLS
+kubectl apply -f install/kubernetes/istio.yaml
+
+# Installing kubefed
+# https://kubernetes.io/docs/tasks/federation/set-up-cluster-federation-kubefed/
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/kubernetes-client-linux-amd64.tar.gz
+tar -xzvf kubernetes-client-linux-amd64.tar.gz
+cp kubernetes/client/bin/kubefed /usr/local/bin
+chmod +x /usr/local/bin/kubefed
+
+# Initializing the cluster
+#kubefed init fellowship \
+#    --host-cluster-context=rivendell \
+#    --dns-provider="google-clouddns" \
+#    --dns-zone-name="example.com."
