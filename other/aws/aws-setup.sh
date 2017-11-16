@@ -6,7 +6,7 @@ exec > >(tee -a /var/tmp/aws-setup_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 cd ~
 
- #Install S3
+#Install S3
 sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
 sudo ./awscli-bundle/install -b /root/bin/aws

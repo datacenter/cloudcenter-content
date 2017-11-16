@@ -33,13 +33,14 @@ usage = {
     "depenv3": "S"
 }
 
-# Allow the admin to set a role custom parameter to control that part of the name, but if it's not set then just use "SRV"
+# Allow the admin to set a role custom parameter to control that part of the name,
+# but if it's not set then just use "SRV"
 role = os.getenv('role', "SRV")[:3] # Look for a role parameter, return SRV as a default. Cut to first 3 chars only.
 
 # Generate a random sequence of uppercase letters and didgits of length 4
 rand = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
 
-#Start with an empty name and build it up.
+# Start with an empty name and build it up.
 name = "{location}-{platform}{role}{usage}{rand}".format(
     location = loc[region],
     platform = platform[osType],

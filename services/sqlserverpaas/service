@@ -28,12 +28,21 @@ case $CloudFamily in
         pip install msrest msrestazure pyodbc dnspython
         pip install --pre azure
 
-        print_log "Downloading and installing ODBC driver for python: msodbcsql-13.0.0.0"
-        wget https://download.microsoft.com/download/B/C/D/BCDD264C-7517-4B7D-8159-C99FC5535680/msodbcsql-13.0.0.0.tar.gz
-        tar xvzf msodbcsql-13.0.0.0.tar.gz
-        cd msodbcsql-13.0.0.0
-        ./install.sh install --accept-license
-        cd ..
+#        print_log "Downloading and installing ODBC driver for python: msodbcsql-13.0.0.0"
+#        wget https://download.microsoft.com/download/B/C/D/BCDD264C-7517-4B7D-8159-C99FC5535680/msodbcsql-13.0.0.0.tar.gz
+#        tar xvzf msodbcsql-13.0.0.0.tar.gz
+#        cd msodbcsql-13.0.0.0
+#        ./install.sh install --accept-license
+#        cd ..
+
+        print_log "Installing Microsoft SQL Server ODBC Driver for Linux"
+        # sudo su
+        curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
+        # exit
+        yum update -y
+        yum remove -y unixODBC #to avoid conflicts
+        ACCEPT_EULA=Y yum install -y msodbcsql mssql-tools
+        yum install -y unixODBC-utf16-devel #this step is optional but recommended*
 
         wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/sqlserverpaas-arm.py
         wget -N https://raw.githubusercontent.com/datacenter/cloudcenter-content/$tag/services/sqlserverpaas/template.json
