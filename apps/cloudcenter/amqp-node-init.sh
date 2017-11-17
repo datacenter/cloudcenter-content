@@ -1,7 +1,10 @@
 #!/bin/bash -x
 exec > >(tee -a /var/tmp/amqp-node-init_$$.log) 2>&1
 
-. /usr/local/osmosix/etc/.osmosix.sh
+# . /usr/local/osmosix/etc/.osmosix.sh
+# TODO: fix this so that it comes from env variable.
+OSMOSIX_CLOUD="vmware"
+
 . /usr/local/osmosix/etc/userenv
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
@@ -42,11 +45,7 @@ agentSendLogMessage "Working Directory: $(pwd)"
 
 # agentSendLogMessage  "Installing OS Prerequisits wget vim java-1.8.0-openjdk nmap"
 sudo mv /etc/yum.repos.d/cliqr.repo ~
-#sudo yum update -y
-#sudo yum install -y wget
-#sudo yum install -y vim
-#sudo yum install -y java-1.8.0-openjdk
-#sudo yum install -y nmap
+sudo mv /usr/local/osmosix/etc/userenv ~ # Move it back at end of script.
 
 # Download necessary files
 cd /tmp
@@ -65,8 +64,8 @@ fi
 sudo rm -f /etc/cliqr_modules.conf
 
 # Install packages not present in cliqr repo.
-sudo yum install -y python-setuptools
-sudo yum install -y jbigkit-libs
+# sudo yum install -y python-setuptools
+# sudo yum install -y jbigkit-libs
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"
@@ -80,14 +79,17 @@ agentSendLogMessage  "Running rabbit_config.sh"
 sudo /usr/local/osmosix/bin/rabbit_config.sh
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
-sudo sed -i -e "s?dnsName=?dnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/osmosix/etc/gateway_config.properties
-sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/local/tomcatgua/webapps/access/WEB-INF/gua.properties
+#sudo sed -i -e "s?dnsName=?dnsName=${CliqrTier_ccm_PUBLIC_IP}?g" /usr/local/osmosix/etc/gateway_config.properties
+#sudo sed -i -e "s?gatewayHost=?gatewayHost=${CliqrTier_cco_PUBLIC_IP}?g" /usr/local/tomcatgua/webapps/access/WEB-INF/gua.properties
 
-sudo /etc/init.d/guacd start
-sudo -E /etc/init.d/tomcatgua restart
+#sudo /etc/init.d/guacd start
+#sudo -E /etc/init.d/tomcatgua restart
+sudo systemctl start cliqr-connection-broker.service
+sudo systemctl start cliqr-guacamole-client.service
 
 rm -f core_installer.bin
 rm -f cco-installer.jar
 rm -f conn_broker-response.xml
 
+sudo mv ~/userenv /usr/local/osmosix/etc/
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
