@@ -60,8 +60,9 @@ if [ -n "$cc_custom_repo" ]; then
     export CUSTOM_REPO=${cc_custom_repo}
 fi
 
-# Remove list of installed modules residual from worker installer.
-sudo rm -f /etc/cliqr_modules.conf
+# Remove list of installed modules and logs residual from worker installer.
+sudo rm -f /root/cliqr_modules.log
+sudo rm -f /etc/cliqr*
 
 # Install packages not present in cliqr repo.
 # sudo yum install -y python-setuptools
