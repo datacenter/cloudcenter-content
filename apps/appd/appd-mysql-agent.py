@@ -24,6 +24,7 @@ def print_ext_service_result(msg):
     print(msg)
     print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
+
 cmd = sys.argv[1]
 coll_name = os.getenv('parentJobName', None)+"-dbcoll"
 
@@ -63,8 +64,10 @@ if cmd == "add":
         r.raise_for_status()
     except Exception as err:
         print_log("Error Adding DB Collector to AppDynamics: {0}.".format(err))
+        print_log("Request Payload:\n {}".format(json.dumps(payload, indent=2)))
         # sys.exit(1)
 
+# TODO: Implement MySQL collector delete from AppD
 elif cmd == "remove":
     try:
         pass
