@@ -46,11 +46,9 @@ agentSendLogMessage "Working Directory: $(pwd)"
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
 sudo mv /usr/local/osmosix/etc/userenv ~ # Move it back at end of script.
 
-#sudo yum update -y
-#sudo yum install -y wget
-#sudo yum install -y vim
-#sudo yum install -y java-1.8.0-openjdk
-sudo yum install -y nmap # Used below to check AMQP for open port.
+prereqs="nmap"  # Used below to check AMQP for open port.
+agentSendLogMessage "Installing Prereqs: ${prereqs}"
+sudo yum install -y ${prereqs}
 
 # Download necessary files
 cd /tmp
@@ -65,12 +63,10 @@ if [ -n "$cc_custom_repo" ]; then
     export CUSTOM_REPO=${cc_custom_repo}
 fi
 
-# Remove list of installed modules residual from worker installer.
-sudo rm -f /etc/cliqr_modules.conf
-
-# Install packages not present in cliqr repo.
-#sudo yum install -y python-setuptools
-#sudo yum install -y jbigkit-libs
+# Remove list of installed modules and logs residual from worker installer.
+sudo rm -f /root/cliqr_modules.log
+sudo rm -f /etc/cliqr*
+sudo rm -rf /usr/local/cliqr
 
 sudo chmod +x core_installer.bin
 agentSendLogMessage  "Running core installer"

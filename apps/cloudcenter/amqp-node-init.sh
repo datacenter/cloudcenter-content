@@ -63,6 +63,7 @@ fi
 # Remove list of installed modules and logs residual from worker installer.
 sudo rm -f /root/cliqr_modules.log
 sudo rm -f /etc/cliqr*
+sudo rm -rf /usr/local/cliqr
 
 # Install packages not present in cliqr repo.
 # sudo yum install -y python-setuptools
