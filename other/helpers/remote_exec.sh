@@ -12,6 +12,12 @@ script=$1
 
 # The variable name that will hold the list of hostnames in this tier.
 hostname_list_variable_name="CliqrTier_${cliqrAppTierName}_HOSTNAME"
+print_log "Hostname List Variable: ${hostname_list_variable_name}"
+print_log "Hostname List: ${!hostname_list_variable_name}"
+if [ "${hostname_list_variable_name}" == "" ]; then
+    print_log "Hostname list variable appears empty, not running script. Exiting normally anyway."
+    exit 0
+fi
 
 # Set internal separator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
