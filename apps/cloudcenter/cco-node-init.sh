@@ -76,6 +76,14 @@ agentSendLogMessage  "Running jar installer"
 sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-sun/bin/java 1
 sudo java -jar cco-installer.jar cco-response.xml
 
+########## For amqp config
+#[root@cco482 ~]# cat /etc/sysconfig/gateway.conf
+## auto generated. please use config wizard to config.
+## For Rabiit
+#export RABBIT_GATEWAY_BROKERHOST=amqp482
+#export RABBIT_GATEWAY_BROKERPORT=5671
+## For Guacamole
+#export CONNECTION_BROKER_HOST=amqp482
 
 # Use "?" as sed delimiter to avoid escaping all the slashes
 #sudo sed -i -e "s?host=?host=${CliqrTier_amqp_PUBLIC_IP}?g" /usr/local/osmosix/etc/rev_connection.properties
