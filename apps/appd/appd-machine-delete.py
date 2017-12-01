@@ -29,22 +29,29 @@ s = requests.Session()
 
 username = "admin@customer1"
 password = "pa55word"
-hostname = os.getenv('cliqrNodeHostname')
+
 base_url = "http://172.16.204.34:8090/sim/v2/user"
 
 try:
+    hostname = os.getenv('cliqrNodeHostname')
+    print("Looking for hostname: {}".format(hostname))
     # Get the list of all the machines in AppD
     r = s.request("GET", url="{}/machines/".format(base_url), verify=False, auth=HTTPBasicAuth(username, password))
+    print(r.json())
 
     # Filter the list to get the machine that matches the hostname of the machine we want to remove.
     machine = list(filter(lambda x: x['name'] == hostname, r.json()))
-
+    if len(machine) < 1:
+        print("Machine with hostname {} not found in AppD".format(hostname))
+    print(machine)
     # Get the id of that machine
     machine_id = machine[0]['id']
+    print()
 
     # Delete the machine
     r = s.request("DELETE", url="{}/machines/{}".format(base_url, machine_id), verify=False,
                   auth=HTTPBasicAuth(username, password))
+    print(r.json())
 
 except Exception as err:
     print_log("Error Removing Machine from AppDynamics: {0}.".format(err))
