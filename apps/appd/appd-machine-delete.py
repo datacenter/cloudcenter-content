@@ -29,7 +29,7 @@ s = requests.Session()
 
 username = "admin@customer1"
 password = "pa55word"
-hostname = os.getenv('cliqrNodeHostname ')
+hostname = os.getenv('cliqrNodeHostname')
 base_url = "http://172.16.204.34:8090/sim/v2/user"
 
 try:
