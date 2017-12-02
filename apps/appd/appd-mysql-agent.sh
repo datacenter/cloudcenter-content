@@ -12,7 +12,7 @@ serviceStatus=""
 if [ -n "${appd_db_git_tag}" ]; then
     tag="${appd_db_git_tag}"
 else
-    tag="appd"
+    tag="appd0.1"
 fi
 
 # Setup a bunch of prerequisits
