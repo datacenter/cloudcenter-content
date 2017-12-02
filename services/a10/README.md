@@ -1,3 +1,6 @@
 # A10 Load Balancer integration
 
-Converted to external service, but not tested.
+## Usage
+- Import into your CloudCenter instance using the servicetool.py script,
+found in this repo in the services folder.
+- 

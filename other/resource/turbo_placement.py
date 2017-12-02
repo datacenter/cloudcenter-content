@@ -4,6 +4,9 @@ import json
 import requests
 import os
 import random
+import time
+
+s = requests.Session()
 
 # Turbonomic login location and credentials.
 turbo_ip = "1.2.3.4"
@@ -85,17 +88,13 @@ def create_reservation_from_template(name, template):
             }
         ]
     }
-    attempts = 5
-    for i in range(attempts):
-        print("Trying to get a reservation. Attempt {}.".format(i+1))
-        resp = s.request("POST", url=url, headers=headers, data=json.dumps(data), verify=False, 
-            auth=(turbo_user, turbo_pass))
-        reservation = resp.json()
-        if reservation['status'] == "PLACEMENT_SUCCEEDED":
-            print(reservation)
-            return reservation
-    print("Failed to get a reservation after {} attempts.".format(attempts))
-    return None
+    resp = s.request("POST", url=url, headers=headers, data=json.dumps(data), verify=False,
+                     auth=(turbo_user, turbo_pass))
+    res = resp.json()
+    print(json.dumps(res, indent=2))
+    if res['status'] != "PLACEMENT_SUCCEEDED":
+        res = None
+    return res
 
 
 def get_market(name):
@@ -147,8 +146,6 @@ def get_datacenter_from_host(host):
                     return datacenter_name
     return None
 
-
-s = requests.Session()
 
 # Get the name of the tier for this VM.
 tier_name = os.getenv("eNV_cliqrAppName")
@@ -209,6 +206,7 @@ content = {
     # Port Group. Must be in form "<port group> (<DV Switch>)" If no DV switch, use empty parenthesis.
     # In my case I want to distribute across 4 equivalent port groups.
     "networkList": deploy_network,
+    "UserHost": suggested_host,
 
     # These values will show up in the UI for the node being created.
     # Value should be a single string, not a nested dict.

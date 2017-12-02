@@ -66,13 +66,11 @@ def dict_merge(dict1=None, dict2=None):
 
 
 def api_call(method, url, headers=None, params=None, data=None, files=None):
-
     if method == "GET":
         my_params = {
             "size": 0
         }
         params = dict_merge(my_params, params)
-
     my_headers = {
         'x-cliqr-api-key-auth': "true",
         'accept': "application/json",
@@ -113,15 +111,41 @@ def get_tenant_id():
     return tenant_id
 
 
+def validate_category(tenant_id, category_id):
+    category_id = str(category_id)
+    params = {
+        'parentService': True
+    }
+    url = baseUrl+"/v1/tenants/" + str(tenant_id) + "/services/"
+    response = api_call("GET", url, params=params)
+    j = response.json()
+    category_name = None
+    categories = []
+    for parent_service in j['services']:
+        logging.debug(parent_service['name'])
+        categories.append({
+            'Name': parent_service['displayName'],
+            'ID': parent_service['id']
+        })
+        if parent_service['id'] == category_id:
+            category_name = parent_service['displayName']
+    if category_name:
+        return True
+    else:
+        logging.info("Failed to find category matching ID: {}".format(category_id))
+        logging.info("Valid categories are:"
+                     "{}"
+                     "You should update your servicemanifest file accordingly.".format(json.dumps(categories, indent=2)))
+        return False
+
+
 def get_service_id(tenant_id, service_name):
     logging.info("Getting ID for service {}".format(service_name))
     params = {
         'parentService': True
     }
-    url = baseUrl+"/v1/tenants/" + tenant_id + "/services/"
-
+    url = baseUrl+"/v1/tenants/" + str(tenant_id) + "/services/"
     response = api_call("GET", url, params=params)
-
     j = response.json()
     service_id = None
     for parent_service in j['services']:
@@ -129,9 +153,14 @@ def get_service_id(tenant_id, service_name):
             logging.debug(service['name'])
             if service['name'] == service_name:
                 service_id = service['id']
-
-    logging.info("Found ID {} for service {}".format(service_id, service_name))
-
+    # for service in j['services']:
+    #     logging.debug(service['name'])
+    #     if service['name'] == service_name:
+    #         service_id = service['id']
+    if service_id:
+        logging.info("Found ID {} for service {}".format(service_id, service_name))
+    else:
+        logging.info("Did not find ID for service {}".format(service_name))
     return service_id
 
 
@@ -275,6 +304,11 @@ def import_service(service):
         port.pop("id", None)
         port.pop("resource", None)
 
+    if not validate_category(tenant_id, service.get('parentServiceId')):
+        logging.critical("Unable to validate category. Update your servicemanifest with a valid"
+                         "parentServiceId that matches a category.")
+        exit(1)
+
     # Update all the imageIds in the service to match the ones in the instance that you're importing into.
     if len(service.get('images', [])) > 0:
         for image in service['images']:
@@ -387,6 +421,7 @@ def import_service(service):
             exit(1)
 
 # TODO: Check for existing file and properly use the overwrite flag.
+
 
 if args.e:
     serviceName = args.e
