@@ -12,6 +12,12 @@ script=$1
 
 # The variable name that will hold the list of hostnames in this tier.
 hostname_list_variable_name="CliqrTier_${cliqrAppTierName}_HOSTNAME"
+print_log "Hostname List Variable: ${hostname_list_variable_name}"
+print_log "Hostname List: ${!hostname_list_variable_name}"
+if [ "${hostname_list_variable_name}" == "" ]; then
+    print_log "Hostname list variable appears empty, not running script. Exiting normally anyway."
+    exit 0
+fi
 
 # Set internal separator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
@@ -53,10 +59,11 @@ if [ "${osName}" == "Linux" ]; then
     # Download the script that you want to run.
     curl -o script.sh ${script}
 
-    # Run the script.
-    ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh
+    # Run the script, passing in the command line arguments from this script, minus the first one
+    # which was the URL of this script to run.
+    ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
 else
     # Remote execution isn't supported on Windows right now.
-    print_log "Not Linux, so skipping script."
+    print_log "Not Linux, so skipping script. This helper script does not support Windows (yet)."
 fi

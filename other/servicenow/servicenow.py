@@ -29,7 +29,7 @@ instance_creds = get_snow_credential()
 instance = instance_creds['instance']
 username = instance_creds['username']
 password = instance_creds['password']
-table = "u_cloudcenter_vms"
+table = "u_cloudcenter_import_vms"
 
 url = "https://{instance}/api/now/table/{table}".format(instance=instance, table=table)
 

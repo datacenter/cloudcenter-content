@@ -23,10 +23,15 @@ sudo sed -i.bak -e "s%<controller-host>%<controller-host>${appd_controller_ip}%g
 -e "s%<account-access-key>%<account-access-key>${appd_access_key}%g" \
 ${db_agent_home}/conf/controller-info.xml
 
-echo "
-" > start_agent.sh
-sudo mv start_agent.sh
+echo '
+#!/bin/bash -x
+exec > >(tee -a /var/tmp/appd-database-agent-startup_$$.log) 2>&1
+. /usr/local/osmosix/etc/userenv
 
+db_agent_home="/opt/appdynamics/db_agent"
+
+java -Ddbagent.name="DB Agent ${parentJobName}" -jar ${db_agent_home}/db-agent.jar
+' > run_db_agent.sh
 
 echo "
 [Unit]
@@ -36,13 +41,13 @@ After=network-online.target
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/bin/java -Ddbagent.name='DB Agent ${parentJobName}' -jar ${db_agent_home}/db-agent.jar
+ExecStart=/root/run_db_agent.sh
 " > appd-db-agent.service
 
+sudo mv run_db_agent.sh /root/
 sudo mv appd-db-agent.service /etc/systemd/system/
+sudo systemctl daemon-reload
 sudo systemctl enable appd-db-agent
 sudo systemctl start appd-db-agent.service
-
-java -Ddbagent.name="DB Agent ${parentJobName}" -jar ${db_agent_home}/db-agent.jar
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
