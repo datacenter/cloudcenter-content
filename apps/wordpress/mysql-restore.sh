@@ -17,6 +17,10 @@ else
      gitTag=${defaultGitTag}
 fi
 
+prereqs="mysql-community-client unzip"
+agentSendLogMessage "Installing prereqs: ${prereqs}"
+sudo yum install -y ${prereqs}
+
  #Install S3
 sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
