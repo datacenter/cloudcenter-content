@@ -46,6 +46,8 @@ sudo sysctl --system
 
 # https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 sudo swapoff -a
+
+# Need to set pod-network subnet, but this is Calico specific
 join_command=$(sudo kubeadm init --pod-network-cidr=192.168.0.0/16 | grep "kubeadm join")
 echo ${join_command} > /home/cliqruser/join_command
 mkdir -p $HOME/.kube
