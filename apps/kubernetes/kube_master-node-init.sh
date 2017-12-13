@@ -1,5 +1,4 @@
 #!/bin/bash -x
-# https://kubernetes.io/docs/setup/independent/install-kubeadm/
 exec > >(tee -a /var/tmp/kube_master-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
@@ -11,8 +10,7 @@ env
 
 cd /tmp/
 
-#prereqs=""
-#agentSendLogMessage  "Installing OS Prerequisits ${prereqs}"
+# https://kubernetes.io/docs/setup/independent/install-kubeadm/
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
 sudo yum install -y docker-engine
 
@@ -46,13 +44,23 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sudo sysctl --system
 
+# https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 sudo swapoff -a
 join_command=$(sudo kubeadm init --pod-network-cidr=192.168.0.0/16 | grep "kubeadm join")
 echo ${join_command} > /home/cliqruser/join_command
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# Using Calico for pod network, but other choices are available.
 kubectl apply -f https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml --validate=false
 
+# Install Istio
+# https://istio.io/docs/setup/kubernetes/quick-start.html
+curl -L https://git.io/getLatestIstio | sh -
+cd istio*
+export PATH=$PWD/bin:$PATH
+
+kubectl apply -f install/kubernetes/istio-auth.yaml
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
