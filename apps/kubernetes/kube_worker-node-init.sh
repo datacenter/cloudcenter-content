@@ -9,6 +9,8 @@ exec > >(tee -a /var/tmp/kube_worker-node-init_$$.log) 2>&1
 
 env
 
+cd /tmp/
+
 #prereqs=""
 #agentSendLogMessage  "Installing OS Prerequisits ${prereqs}"
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
