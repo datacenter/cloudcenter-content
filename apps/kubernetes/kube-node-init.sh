@@ -67,7 +67,7 @@ else
     sleep 30
 
     ssh-keyscan ${master_ip} >> ~/.ssh/known_hosts
-    scp cliqruser@${master_ip}:/home/cliqruser/join_command ./join_command
+    scp cliqruser@${master_ip}:/home/cliqruser/join_command join_command
     cat join_command | sudo bash
 
 #
