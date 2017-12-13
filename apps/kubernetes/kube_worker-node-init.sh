@@ -1,6 +1,6 @@
 #!/bin/bash -x
 # https://kubernetes.io/docs/setup/independent/install-kubeadm/
-exec > >(tee -a /var/tmp/kube-node-init_$$.log) 2>&1
+exec > >(tee -a /var/tmp/kube_worker-node-init_$$.log) 2>&1
 
 . /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
@@ -20,7 +20,7 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 }
 EOF
 sudo systemctl enable docker
-sudo systemctl start docker
+sudo systemctl restart docker
 
 sudo tee /etc/yum.repos.d/kubernetes.repo <<-'EOF'
 [kubernetes]
@@ -36,7 +36,7 @@ sudo setenforce 0
 agentSendLogMessage "Installing kubelet kubeadm kubectl"
 sudo yum install -y kubelet kubeadm kubectl
 sudo systemctl enable kubelet
-sudo systemctl start kubelet
+sudo systemctl restart kubelet
 
 sudo tee /etc/sysctl.d/k8s.conf <<-'EOF'
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -44,31 +44,14 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sudo sysctl --system
 
-IFS=','
-nodeArr=(${CliqrTier_kube_NODE_ID}) # Array of nodes in my tier.
-ipArr=(${CliqrTier_kube_PUBLIC_IP}) # Array of IPs in my tier.
-master=${nodeArr[0]} # Let the first node in the service tier be the master.
-master_ip=${ipArr[0]}
+ssh-keyscan ${CliqrTier_kube_master_IP} >> ~/.ssh/known_hosts
+scp cliqruser@${CliqrTier_kube_master_IP}:/home/cliqruser/join_command join_command
+sudo swapoff -a
+cat join_command | sudo bash
+mkdir -p $HOME/.kube
+scp cliqruser@${CliqrTier_kube_master_IP}:/home/cliqruser/.kube/config $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-if [ "${master}" == "${cliqrNodeId}" ]; then
-    # Master code
-    agentSendLogMessage "Master"
-    sudo swapoff -a
-    join_command=$(sudo kubeadm init --pod-network-cidr=192.168.0.0/16 | grep "kubeadm join")
-    echo ${join_command} > /home/cliqruser/join_command
-    mkdir -p $HOME/.kube
-    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    sudo chown $(id -u):$(id -g) $HOME/.kube/config
-    kubectl apply -f https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml --validate=false
-else
-    # Slave code
-    agentSendLogMessage "Slave"
-    sleep 30
-
-    ssh-keyscan ${master_ip} >> ~/.ssh/known_hosts
-    scp cliqruser@${master_ip}:/home/cliqruser/join_command join_command
-    cat join_command | sudo bash
-fi
 
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
