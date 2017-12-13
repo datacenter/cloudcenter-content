@@ -60,7 +60,6 @@ if [ "${master}" == "${cliqrNodeId}" ]; then
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
     kubectl apply -f https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml --validate=false
-
 else
     # Slave code
     agentSendLogMessage "Slave"
@@ -69,21 +68,6 @@ else
     ssh-keyscan ${master_ip} >> ~/.ssh/known_hosts
     scp cliqruser@${master_ip}:/home/cliqruser/join_command join_command
     cat join_command | sudo bash
-
-#
-#    for host in "${hostnameArr[@]}"; do
-#        # Add each host and IP to /etc/hosts file so Spark can SSH to them
-#        sudo su -c "echo '${ipArr[${host_index}]} ${host}.${domain}' >> /etc/hosts"
-#
-#        # Add each host's key to known hosts so that we aren't prompted to add the key interactively.
-#        ssh-keyscan ${host}.${domain} >> ~/.ssh/known_hosts
-#
-#        if [ ${host} != ${cliqrNodeHostname} ]; then
-#            ssh -i key cliqruser@${host} ${join_command}
-#        fi
-#
-#        let host_index=${host_index}+1
-#    done
 fi
 
 
