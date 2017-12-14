@@ -32,11 +32,11 @@ echo "[default]" | sudo tee --append /root/.aws/config
 echo "region=us-west-1" | sudo tee --append /root/.aws/config
 echo "output=json" | sudo tee --append /root/.aws/config
 echo "[default]" | sudo tee --append /root/.aws/credentials
-echo "aws_access_key_id=$aws_access_key_id" | sudo tee --append /root/.aws/credentials
-echo "aws_secret_access_key=$aws_secret_access_key" | sudo tee --append /root/.aws/credentials
+echo "aws_access_key_id=${aws_access_key_id}" | sudo tee --append /root/.aws/credentials
+echo "aws_secret_access_key=${aws_secret_access_key}" | sudo tee --append /root/.aws/credentials
 
 #Download and restore old database
-sudo /root/bin/aws s3 cp s3://$s3path/$migrateFromDepId/dbbak.sql dbbak.sql
+sudo /root/bin/aws s3 cp s3://${s3path}/${migrateFromDepId}/dbbak.sql dbbak.sql
 sudo su -c "mysql -u wordpress -pwelcome2cliqr < dbbak.sql"
 
 #Use simple DB commands to replace old front-end IP with new front-end IP in database
