@@ -57,10 +57,13 @@ if [ "${osName}" == "Linux" ]; then
     ssh-keyscan ${node_ip} >> ~/.ssh/known_hosts
 
     # Download the script that you want to run.
+    print_log "Downloading script: ${script}"
     curl -o script.sh ${script}
+    cat script.sh
 
     # Run the script, passing in the command line arguments from this script, minus the first one
     # which was the URL of this script to run.
+    echo "Node IP: ${node_ip}"
     ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
 else
