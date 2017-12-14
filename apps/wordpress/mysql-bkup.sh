@@ -33,3 +33,5 @@ echo "aws_secret_access_key=${aws_secret_access_key}" | sudo tee --append /root/
 sudo su -c "mysqldump --host=127.0.0.1 --all-databases -u wordpress -pwelcome2cliqr > dbbak.sql"
 
 sudo /root/bin/aws s3 cp dbbak.sql s3://${s3path}/${CliqrDeploymentId}/dbbak.sql
+
+rm -f dbbak.sql

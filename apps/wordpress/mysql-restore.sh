@@ -37,7 +37,7 @@ echo "aws_secret_access_key=${aws_secret_access_key}" | sudo tee --append /root/
 
 #Download and restore old database
 sudo /root/bin/aws s3 cp s3://${s3path}/${migrateFromDepId}/dbbak.sql dbbak.sql
-sudo su -c "mysql --host=127.0.0.1 -u wordpress -pwelcome2cliqr < dbbak.sql"
+sudo su -c "mysql --host=127.0.0.1 -u root -pwelcome2cliqr < dbbak.sql"
 
 #Use simple DB commands to replace old front-end IP with new front-end IP in database
 sudo mysql -u wordpress -pwelcome2cliqr -e "update wordpress.wp_options set option_value = 'http://${CliqrTier_haproxy_2_PUBLIC_IP}/wordpress' where option_name = 'siteurl';"
