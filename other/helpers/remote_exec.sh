@@ -77,6 +77,7 @@ elif [ "${osName}" == "Windows" ]; then
 
     echo "username=cliqruser" > authfile
     echo "password=${cliqrWindowsPassword}" >> authfile
+    chmod a+x authfile
 
     ./winexe --authentication-file=authfile //${node_ip} "powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; Invoke-WebRequest -Uri "${script}" -OutFile script.ps1; ./script.ps1; rm -f script.ps1"
 else
