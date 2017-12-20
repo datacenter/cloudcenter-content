@@ -41,7 +41,6 @@ node_ip=${ipArr[${host_index}]}
 IFS=${temp_ifs}
 ############
 
-
 if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
 
@@ -66,7 +65,7 @@ if [ "${osName}" == "Linux" ]; then
     echo "Node IP: ${node_ip}"
     ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
-else
+elif [ "${osName}" == "Windows" ]; then
     prereqs="glibc zlib glibc.i686 which zlib.i686 unzip"
     print_log "Installing prereqs: ${prereqs}"
     yum install -y ${prereqs}
@@ -79,5 +78,6 @@ else
     echo "password=${cliqrWindowsPassword}" >> authfile
 
     ./winexe --authentication-file=authfile //${node_ip} "powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; Invoke-WebRequest -Uri "${script}" -OutFile script.ps1; ./script.ps1; rm -f script.ps1"
-
+else
+    print_log "No supported osName found. Only Windows and Linux are valid."
 fi
