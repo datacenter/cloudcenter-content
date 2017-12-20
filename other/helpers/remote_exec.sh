@@ -73,6 +73,7 @@ elif [ "${osName}" == "Windows" ]; then
     # Get prebuilt winexe from this zip file.
     wget http://cdn.cliqr.com/release-4.8.1.2-20171117.2/bundle/actions/agent-lite-action.zip
     unzip agent-lite-action.zip
+    chmod a+x winexe
 
     echo "username=cliqruser" > authfile
     echo "password=${cliqrWindowsPassword}" >> authfile
