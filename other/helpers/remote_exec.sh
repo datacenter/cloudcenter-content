@@ -67,6 +67,17 @@ if [ "${osName}" == "Linux" ]; then
     ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
 else
-    # Remote execution isn't supported on Windows right now.
-    print_log "Not Linux, so skipping script. This helper script does not support Windows (yet)."
+    prereqs="glibc zlib glibc.i686 which zlib.i686 unzip"
+    print_log "Installing prereqs: ${prereqs}"
+    yum install -y ${prereqs}
+
+    # Get prebuilt winexe from this zip file.
+    wget http://cdn.cliqr.com/release-4.8.1.2-20171117.2/bundle/actions/agent-lite-action.zip
+    unzip agent-lite-action.zip
+
+    echo "username=cliqruser" > authfile
+    echo "password=${cliqrWindowsPassword}" >> authfile
+
+    ./winexe --authentication-file=authfile //${node_ip} "powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; Invoke-WebRequest -Uri "${script}" -OutFile script.ps1; ./script.ps1; rm -f script.ps1"
+
 fi
