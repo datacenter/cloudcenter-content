@@ -68,6 +68,13 @@ if [ "${osName}" == "Linux" ]; then
     ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
 elif [ "${osName}" == "Windows" ]; then
+    if [ -z "${cliqrWindowsPassword}" ];
+    then
+            print_log "Password for user 'cliqr' not found (cliqrWindowsPassword).
+                Perhaps you are running this script to early in the VM lifecycle.
+                The password is assigned during node init, so try that or later."
+            exit -1
+    fi
     prereqs="glibc zlib glibc.i686 which zlib.i686 unzip"
     print_log "Installing prereqs: ${prereqs}"
     yum install -y ${prereqs}
@@ -77,11 +84,20 @@ elif [ "${osName}" == "Windows" ]; then
     unzip agent-lite-action.zip
     chmod a+x winexe
 
-    echo "username=cliqruser" > authfile
+    echo "username=cliqr" > authfile
     echo "password=${cliqrWindowsPassword}" >> authfile
     chmod a+x authfile
 
-    ./winexe --authentication-file=authfile //${node_ip} "powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; Invoke-WebRequest -Uri "${script}" -OutFile script.ps1; ./script.ps1; rm -f script.ps1"
+    ./winexe --authentication-file=authfile //${node_ip} "powershell -ExecutionPolicy bypass
+    -noninteractive -noprofile -Command pwd; Invoke-WebRequest -Uri "${script}" -OutFile script.ps1;
+    ./script.ps1; rm -f script.ps1"
+    if [ $? -ne 0 ];
+    then
+        echo "Failed to execute winexe command. Please check to ensure that smb ports 139 and 445 are
+        allowed on the guest OS. Try running
+        'netsh advfirewall firewall add rule name=winexe dir=in action=allow protocol=TCP localport=\"139,445\"' on your template VM."
+        exit -1
+    fi
 else
     print_log "No supported osName found. Only Windows and Linux are valid."
 fi
