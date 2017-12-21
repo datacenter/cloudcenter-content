@@ -2,9 +2,6 @@
 # Utility script to run arbitrary script remotely with lifecycle action.
 . /utils.sh
 
-# TODO: Remove env
-env
-
 # Should be URL of script to download and execute on the node remotely.
 script=$1
 print_log "Script for remote execution: ${script}"
@@ -89,8 +86,6 @@ elif [ "${osName}" == "Windows" ]; then
     echo "username=cliqr" > authfile
     echo "password=${cliqrWindowsPassword}" >> authfile
     chmod a+x authfile
-    # TODO: Remove cat authfile
-    cat authfile
 
     wincommand="powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; \
     Invoke-WebRequest -Uri ${script} -OutFile script.ps1; ./script.ps1; rm script.ps1"
