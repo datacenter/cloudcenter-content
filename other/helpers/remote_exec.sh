@@ -2,10 +2,12 @@
 # Utility script to run arbitrary script remotely with lifecycle action.
 . /utils.sh
 
+# TODO: Remove env
 env
 
 # Should be URL of script to download and execute on the node remotely.
 script=$1
+print_log "Script for remote execution: ${script}"
 
 ###########
 # All this blob is just to get my own host index so I can pull my IP address from the list.
@@ -87,11 +89,13 @@ elif [ "${osName}" == "Windows" ]; then
     echo "username=cliqr" > authfile
     echo "password=${cliqrWindowsPassword}" >> authfile
     chmod a+x authfile
+    # TODO: Remove cat authfile
     cat authfile
 
-    ./winexe --authentication-file=authfile //${node_ip} "powershell -ExecutionPolicy bypass
-    -noninteractive -noprofile -Command pwd; Invoke-WebRequest -Uri "${script}" -OutFile script.ps1;
-    ./script.ps1; rm -f script.ps1"
+    wincommand="powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; \
+    Invoke-WebRequest -Uri ${script} -OutFile script.ps1; ./script.ps1; rm script.ps1"
+    print_log "Command to be executed on the Windows server: ${wincommand}"
+    ./winexe --authentication-file=authfile //${node_ip} "${wincommand}"
     if [ $? -ne 0 ];
     then
         echo "Failed to execute winexe command. Please check to ensure that smb ports 139 and 445 are
