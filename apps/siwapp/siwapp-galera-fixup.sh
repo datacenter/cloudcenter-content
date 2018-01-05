@@ -16,7 +16,7 @@ master_addr=${ipArr[0]} # Let the first node in the service tier be the master.
 
 IFS=${temp_ifs}
 
-if [ "${master}" == "${HOSTNAME}" ]; then
+if [ "${master}" == "${cliqrNodeId}" ]; then
     sed -i "s/safe_to_bootstrap.*/safe_to_bootstrap: 1/" /var/lib/mysql/grastate.dat
     systemctl set-environment _WSREP_NEW_CLUSTER='--wsrep-new-cluster' && systemctl start mariadb && systemctl set-environment _WSREP_NEW_CLUSTER=''
 
