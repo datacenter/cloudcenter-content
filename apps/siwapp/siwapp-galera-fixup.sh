@@ -13,7 +13,7 @@ IFS=${temp_ifs}
 
 if [ "${master}" == "${cliqrNodeId}" ]; then
     sed -i "s/safe_to_bootstrap.*/safe_to_bootstrap: 1/" /var/lib/mysql/grastate.dat
-    systemctl set-environment _WSREP_NEW_CLUSTER='--wsrep-new-cluster' && systemctl start mariadb && systemctl set-environment _WSREP_NEW_CLUSTER=''
+    systemctl set-environment _WSREP_NEW_CLUSTER='--wsrep-new-cluster'
 
 else
     echo  "Waiting for master node to be initialized..."
