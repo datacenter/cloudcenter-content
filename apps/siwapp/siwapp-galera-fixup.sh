@@ -1,11 +1,6 @@
 #!/bin/bash -x
 
-exec > >(tee -a /var/tmp/apache-node-init_$$.log) 2>&1
-
-. /usr/local/osmosix/etc/.osmosix.sh
 . /usr/local/osmosix/etc/userenv
-. /usr/local/osmosix/service/utils/cfgutil.sh
-. /usr/local/osmosix/service/utils/agent_util.sh
 
 temp_ifs=${IFS}
 IFS=','
@@ -42,6 +37,5 @@ else
         exit 1
     else
         echo "starting slave"
-        systemctl start mariadb
     fi
 fi
