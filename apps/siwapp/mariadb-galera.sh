@@ -246,7 +246,8 @@ sudo mv ~/cliqr.repo /etc/yum.repos.d/
 sudo mkdir /usr/share/systemd/siwapp
 sudo wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/siwapp/apps/siwapp/siwapp-galera-fixup.sh -P /usr/share/systemd/siwapp
 sudo mkdir  /usr/lib/systemd/system/mariadb.service.d
-sudo cat > /usr/lib/systemd/system/mariadb.service.d/10-siwapp-edits.conf <<EOF
+sudo su -c "cat > /usr/lib/systemd/system/mariadb.service.d/10-siwapp-edits.conf <<EOF
 [Service]
 ExecStartPre=/usr/bin/bash /usr/share/systemd/siwapp/siwapp-galera-fixup.sh
 EOF
+"
