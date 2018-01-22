@@ -12,7 +12,17 @@ cd /tmp/
 
 # https://kubernetes.io/docs/setup/independent/install-kubeadm/
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
-sudo yum install -y docker-engine
+#sudo yum install -y docker-engine
+
+prereqs="yum-utils device-mapper-persistent-data lvm2"
+agentSendLogMessage "Installing prereqs: ${prereqs}"
+sudo yum install -y "${prereqs}"
+
+agentSendLogMessage "Adding official docker repo."
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+agentSendLogMessage "Installing docker-ce"
+sudo yum install -y docker-ce
 
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
