@@ -12,14 +12,17 @@ cd /tmp/
 
 # https://kubernetes.io/docs/setup/independent/install-kubeadm/
 sudo mv /etc/yum.repos.d/cliqr.repo ~ # Move it back at end of script.
-#sudo yum install -y docker-engine
 
+# https://docs.docker.com/engine/installation/linux/docker-ce/centos/#install-docker-ce-1
 prereqs="yum-utils device-mapper-persistent-data lvm2"
 agentSendLogMessage "Installing prereqs: ${prereqs}"
-sudo yum install -y "${prereqs}"
+sudo yum install -y ${prereqs}
 
 agentSendLogMessage "Adding official docker repo."
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+agentSendLogMessage "Doing yum update."
+sudo yum update -y
 
 agentSendLogMessage "Installing docker-ce"
 sudo yum install -y docker-ce
@@ -43,10 +46,16 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 EOF
 
 sudo setenforce 0
-agentSendLogMessage "Installing kubelet kubeadm kubectl"
-sudo yum install -y kubelet kubeadm kubectl
+#agentSendLogMessage "Installing kubelet kubeadm kubectl"
+#sudo yum install -y kubelet kubeadm kubectl
+prereqs="kubelet kubeadm kubectl go git"
+agentSendLogMessage "Installing prereqs: ${prereqs}"
+sudo yum install -y ${prereqs}
+#TODO: get crictl working
+go get github.com/kubernetes-incubator/cri-tools/cmd/crictl
 sudo systemctl enable kubelet
 sudo systemctl restart kubelet
+
 
 sudo tee /etc/sysctl.d/k8s.conf <<-'EOF'
 net.bridge.bridge-nf-call-ip6tables = 1
