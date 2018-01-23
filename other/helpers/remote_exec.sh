@@ -2,10 +2,9 @@
 # Utility script to run arbitrary script remotely with lifecycle action.
 . /utils.sh
 
-env
-
 # Should be URL of script to download and execute on the node remotely.
 script=$1
+print_log "Script for remote execution: ${script}"
 
 ###########
 # All this blob is just to get my own host index so I can pull my IP address from the list.
@@ -41,6 +40,7 @@ node_ip=${ipArr[${host_index}]}
 IFS=${temp_ifs}
 ############
 
+print_log "Node IP found: ${node_ip}"
 
 if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
@@ -57,13 +57,47 @@ if [ "${osName}" == "Linux" ]; then
     ssh-keyscan ${node_ip} >> ~/.ssh/known_hosts
 
     # Download the script that you want to run.
+    print_log "Downloading script: ${script}"
     curl -o script.sh ${script}
+    cat script.sh
 
     # Run the script, passing in the command line arguments from this script, minus the first one
     # which was the URL of this script to run.
+    echo "Node IP: ${node_ip}"
     ssh -i key cliqruser@${node_ip} 'bash -s' < script.sh "${@:2}"
 
+elif [ "${osName}" == "Windows" ]; then
+    if [ -z "${cliqrWindowsPassword}" ];
+    then
+            print_log "Password for user 'cliqr' not found (cliqrWindowsPassword).
+                Perhaps you are running this script to early in the VM lifecycle.
+                The password is assigned during node init, so try that or later."
+            exit -1
+    fi
+    prereqs="glibc zlib glibc.i686 which zlib.i686 unzip"
+    print_log "Installing prereqs: ${prereqs}"
+    yum install -y ${prereqs}
+
+    # Get prebuilt winexe from this zip file.
+    wget http://cdn.cliqr.com/release-4.8.1.2-20171117.2/bundle/actions/agent-lite-action.zip
+    unzip agent-lite-action.zip
+    chmod a+x winexe
+
+    echo "username=cliqr" > authfile
+    echo "password=${cliqrWindowsPassword}" >> authfile
+    chmod a+x authfile
+
+    wincommand="powershell -ExecutionPolicy bypass -noninteractive -noprofile -Command pwd; \
+    Invoke-WebRequest -Uri ${script} -OutFile script.ps1; ./script.ps1; rm script.ps1"
+    print_log "Command to be executed on the Windows server: ${wincommand}"
+    ./winexe --authentication-file=authfile //${node_ip} "${wincommand}"
+    if [ $? -ne 0 ];
+    then
+        echo "Failed to execute winexe command. Please check to ensure that smb ports 139 and 445 are
+        allowed on the guest OS. Try running
+        'netsh advfirewall firewall add rule name=winexe dir=in action=allow protocol=TCP localport=\"139,445\"' on your template VM."
+        exit -1
+    fi
 else
-    # Remote execution isn't supported on Windows right now.
-    print_log "Not Linux, so skipping script. This helper script does not support Windows (yet)."
+    print_log "No supported osName found. Only Windows and Linux are valid."
 fi
