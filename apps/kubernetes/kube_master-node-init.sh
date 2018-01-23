@@ -26,13 +26,14 @@ sudo yum update -y
 
 agentSendLogMessage "Installing docker-ce"
 sudo yum install -y docker-ce
+sudo systemctl enable docker
+sudo systemctl start docker
 
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 EOF
-sudo systemctl enable docker
 sudo systemctl restart docker
 
 sudo tee /etc/yum.repos.d/kubernetes.repo <<-'EOF'
@@ -54,7 +55,7 @@ sudo yum install -y ${prereqs}
 #TODO: get crictl working
 go get github.com/kubernetes-incubator/cri-tools/cmd/crictl
 sudo systemctl enable kubelet
-sudo systemctl restart kubelet
+# sudo systemctl restart kubelet
 
 
 sudo tee /etc/sysctl.d/k8s.conf <<-'EOF'
