@@ -40,7 +40,12 @@ node_ip=${ipArr[${host_index}]}
 IFS=${temp_ifs}
 ############
 
-print_log "Node IP found: ${node_ip}"
+if [ -z "${node_ip}" ]; then
+    print_log "Node IP not found. Exiting normally without running script."
+    exit 0
+else
+    print_log "Node IP found: ${node_ip}"
+fi
 
 if [ "${osName}" == "Linux" ]; then
     yum install -y openssh-clients
