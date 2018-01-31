@@ -26,7 +26,7 @@ def print_ext_service_result(msg):
 
 
 cmd = sys.argv[1]
-coll_name = os.getenv('parentJobName', None)+"-dbcoll"
+coll_name = os.getenv('parentJobName')+"-dbcoll"
 
 s = requests.Session()
 
@@ -57,10 +57,8 @@ if cmd == "add":
         headers = {
             "Content-Type": "application/json"
         }
-        r = s.request("POST", url="{}/databases/collectors/create".format(base_url), headers=headers, data=json.dumps(payload), verify=False,
-                      auth=HTTPBasicAuth(username, password))
-        print_log(r.status_code)
-        # print_log(json.dumps(r.json(), indent=2))
+        r = s.request("POST", url="{}/databases/collectors/create".format(base_url),headers=headers,
+                      data=json.dumps(payload), verify=False, auth=HTTPBasicAuth(username, password))
         r.raise_for_status()
     except Exception as err:
         print_log("Error Adding DB Collector to AppDynamics: {0}.".format(err))
@@ -70,7 +68,22 @@ if cmd == "add":
 # TODO: Implement MySQL collector delete from AppD
 elif cmd == "remove":
     try:
-        pass
+        headers = {
+            "Content-Type": "application/json"
+        }
+        r = s.request("GET", url="{url}/databases/collectors/".format(url=base_url), headers=headers,
+                      verify=False, auth=HTTPBasicAuth(username, password))
+        print_log(r.status_code)
+        all_colls = r.json()
+        my_colls = filter(lambda x: x['config']['name'] == coll_name, all_colls)
+
+        for coll in my_colls:
+            my_id = coll['config']['id']
+            headers = {
+                "Content-Type": "application/json"
+            }
+            r = s.request("DELETE", url="{url}/databases/collectors/{id}".format(url=base_url, id=my_id),
+                          headers=headers, verify=False, auth=HTTPBasicAuth(username, password))
+            r.raise_for_status()
     except Exception as err:
         print_log("Error Removing DB Collector from AppDynamics: {0}.".format(err))
-        # sys.exit(1)
