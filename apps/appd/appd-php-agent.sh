@@ -78,6 +78,7 @@ else
     curl -o appdynamics-php-agent.rpm ${agentUrl}
     agentSendLogMessage "Installing the AppDynamics PHP Agent."
     sudo -E rpm -i appdynamics-php-agent.rpm
-    agentSendLogMessage "The agent files are installed in opt/appdynamics/machine-agent and the agent is added as a service."
+    agentSendLogMessage "Restarting apache"
+    sudo systemctl restart httpd
     rm -f appdynamics-php-agent.rpm
 fi
