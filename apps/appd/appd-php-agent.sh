@@ -12,23 +12,23 @@ appd_controller_http_port="8090"
 appd_access_key="281c9d49-f465-426f-ab92-ba1c983d434d"
 agentUrl="http://172.16.201.244:8081/artifactory/appd/download-file/php-rpm/4.3.3.4/appdynamics-php-agent.x86_64.rpm"
 
-docker_running=False
-apache_use_docker=False
+docker_running=false
+apache_use_docker=false
 
 docker ps
-if [ $? == 0 ]; then
-    docker_running=True
+if [ $? -eq 0 ]; then
+    docker_running=true
 fi
 
-if [ docker_running ]; then
+if [ "${docker_running}" == true ]; then
     docker ps | grep apache
     if [ $? == 0 ]; then
-        apache_use_docker=True
+        apache_use_docker=true
     fi
 fi
 
-if [ apache_use_docker ]; then
-    print_log "Using docker for apache"
+if [ "${apache_use_docker}" == true ]; then
+    agentSendLogMessage "Using docker for apache"
     agentUrl="http://172.16.201.244:8081/artifactory/appd/download-file/php-tar/4.3.3.4/appdynamics-php-agent-x64-linux-4.3.3.4.tar.bz2"
     agentInstallPath="/opt/appdynamics/php-agent"
     agentDownloadPath="/tmp/agent.tar.bz"
@@ -62,6 +62,7 @@ if [ apache_use_docker ]; then
 
 
 else
+    agentSendLogMessage "Not using docker."
     agentSendLogMessage "Installing PHP CLI."
     sudo yum install -y php-cli
 
