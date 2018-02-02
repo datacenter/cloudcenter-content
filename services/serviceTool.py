@@ -365,25 +365,7 @@ def import_service(service):
 
     # Upload Logo
     if args.logo:
-        logo_file = args.logo
-        headers = {
-            'accept': "*/*",
-            'content-type': None
-        }
-        params = {
-            "type": "logo"
-        }
-        url = baseUrl+"/v1/file"
-        files = {'file': logo_file}
-        response = api_call("POST", url, files=files, headers=headers, params=params)
-
-        # After uploading the image the response contains a temporary location for the logo which
-        # has to be placed into the logo_path for the service. This gets changed behind the scenes
-        # automatically to what it should be.
-
-        j = response.json()
-        logo_path = j['params'][0]['value']
-        service['logoPath'] = logo_path
+        service['logoPath'] = logo_upload(args.logo)
     else:
         logging.critical("You must specify a logo file for new services. Use the -l switch.")
         exit(1)
@@ -419,6 +401,26 @@ def import_service(service):
         else:
             logging.critical("Failed to create service.")
             exit(1)
+
+
+def logo_upload(my_logo_file):
+    headers = {
+        'accept': "*/*",
+        'content-type': None
+    }
+    params = {
+        "type": "logo"
+    }
+    url = baseUrl + "/v1/file"
+    files = {'file': my_logo_file}
+    response = api_call("POST", url, files=files, headers=headers, params=params)
+    # After uploading the image the response contains a temporary location for the logo which
+    # has to be placed into the logo_path for the service. This gets changed behind the scenes
+    # automatically to what it should be.
+    j = response.json()
+    my_logo_path = j['params'][0]['value']
+    return my_logo_path
+
 
 # TODO: Check for existing file and properly use the overwrite flag.
 
