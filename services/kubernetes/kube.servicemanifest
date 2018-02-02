@@ -8,10 +8,10 @@
   "serviceParamSpecs": [
     {
       "scope": null,
-      "displayName": "Image",
-      "helpText": "Image to run.",
+      "displayName": "YAML File",
+      "helpText": "URL of YAML file that you want to deploy.",
       "valueList": null,
-      "paramName": "kube_image",
+      "paramName": "kube_yaml",
       "valueConstraint": {
         "maxLength": 255,
         "sizeValue": 0,
@@ -20,14 +20,14 @@
         "minValue": 0,
         "maxValue": 0,
         "regex": null,
-        "allowSpaces": true
+        "allowSpaces": false
       },
       "userEditable": true,
       "optional": false,
       "userVisible": true,
       "systemParam": true,
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml",
       "collectionList": [],
       "dataUnit": null,
       "webserviceListParams": null,
