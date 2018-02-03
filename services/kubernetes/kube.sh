@@ -23,7 +23,7 @@ print_log "Installing prereqs: ${prereqs}"
 yum install -y ${prereqs}
 
 # Input env variables used by this service.
-image="${kube_image}"
+yaml="${kube_yaml}"
 # Public port on load balancer to access service
 public_port="${kube_public_port}"
 # Port exposed on containers/pods that LB points to
@@ -50,43 +50,46 @@ echo "${config}" > ~/.kube/config
 
 case ${cmd} in
     start)
+        print_log "${yaml}"
+        kubectl apply -f ${yaml} || \
+            error "Failed applying yaml file."
 
         # Create namespace
-        msg=$(kubectl create namespace ${namespace}) || \
-            error "Failed to create namespace: ${msg}"
-        print_log "Namespace ${namespace} created"
-
-        # Create deployment
-        msg=$(kubectl run --namespace ${namespace} ${dep_name} --image ${image} --replicas=${reps}) || \
-            error "Failed to create the deployment: ${msg}"
-        print_log "Deployment created"
-
-        # Create service
-        msg=$(kubectl expose --namespace=${namespace} deployment ${dep_name} --port=${public_port} \
-        --target-port=${target_port} --type=LoadBalancer --name=${service_name}) || \
-            error "Failed to expose the deployment: ${msg}"
-        print_log "Deployment exposed on port ${public_port}"
-
-        print_log "Waiting for service to start."
-        COUNT=0
-        MAX=50
-        SLEEP_TIME=5
-        ERR=0
-
-        pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
-
-        while [ "${pub_ip}" = "<pending>" -o  "${pub_ip}" = "" ]; do
-          sleep ${SLEEP_TIME}
-          let "COUNT++"
-          echo ${COUNT}
-          if [ ${COUNT} -gt 50 ]; then
-            error "Never got IP address for service."
-            break
-          fi
-          pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
-        done
-
-        print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
+#        msg=$(kubectl create namespace ${namespace}) || \
+#            error "Failed to create namespace: ${msg}"
+#        print_log "Namespace ${namespace} created"
+#
+#        # Create deployment
+#        msg=$(kubectl run --namespace ${namespace} ${dep_name} --image ${image} --replicas=${reps}) || \
+#            error "Failed to create the deployment: ${msg}"
+#        print_log "Deployment created"
+#
+#        # Create service
+#        msg=$(kubectl expose --namespace=${namespace} deployment ${dep_name} --port=${public_port} \
+#        --target-port=${target_port} --type=LoadBalancer --name=${service_name}) || \
+#            error "Failed to expose the deployment: ${msg}"
+#        print_log "Deployment exposed on port ${public_port}"
+#
+#        print_log "Waiting for service to start."
+#        COUNT=0
+#        MAX=50
+#        SLEEP_TIME=5
+#        ERR=0
+#
+#        pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
+#
+#        while [ "${pub_ip}" = "<pending>" -o  "${pub_ip}" = "" ]; do
+#          sleep ${SLEEP_TIME}
+#          let "COUNT++"
+#          echo ${COUNT}
+#          if [ ${COUNT} -gt 50 ]; then
+#            error "Never got IP address for service."
+#            break
+#          fi
+#          pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
+#        done
+#
+#        print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
 
 #        # Failed trying to get this check working properly and reliably. nmap isn't able to determine whether
 #        # the port is actually open.
