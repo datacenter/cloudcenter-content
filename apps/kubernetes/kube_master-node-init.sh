@@ -85,4 +85,10 @@ export PATH=$PWD/bin:$PATH
 
 kubectl apply -f install/kubernetes/istio-auth.yaml
 
+sudo yum install -y nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
+sudo cp /home/cliqruser/.kube/config /usr/share/nginx/html/config
+sudo chmod 644 /usr/share/nginx/html/config
+
 sudo mv ~/cliqr.repo /etc/yum.repos.d/

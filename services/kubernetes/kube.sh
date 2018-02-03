@@ -51,99 +51,20 @@ echo "${config}" > ~/.kube/config
 case ${cmd} in
     start)
         print_log "${yaml_url}"
-        yaml_file="file.yaml"
-        curl --fail -o "${yaml_file}" "${yaml_url}" || \
-            error "Failed downloading yaml file: ${yaml_url}"
-        kubectl apply -f ${yaml_file} || \
+        kubectl apply -f ${yaml_url} || \
             error "Failed applying yaml file."
 
-        # Create namespace
-#        msg=$(kubectl create namespace ${namespace}) || \
-#            error "Failed to create namespace: ${msg}"
-#        print_log "Namespace ${namespace} created"
-#
-#        # Create deployment
-#        msg=$(kubectl run --namespace ${namespace} ${dep_name} --image ${image} --replicas=${reps}) || \
-#            error "Failed to create the deployment: ${msg}"
-#        print_log "Deployment created"
-#
-#        # Create service
-#        msg=$(kubectl expose --namespace=${namespace} deployment ${dep_name} --port=${public_port} \
-#        --target-port=${target_port} --type=LoadBalancer --name=${service_name}) || \
-#            error "Failed to expose the deployment: ${msg}"
-#        print_log "Deployment exposed on port ${public_port}"
-#
-#        print_log "Waiting for service to start."
-#        COUNT=0
-#        MAX=50
-#        SLEEP_TIME=5
-#        ERR=0
-#
-#        pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
-#
-#        while [ "${pub_ip}" = "<pending>" -o  "${pub_ip}" = "" ]; do
-#          sleep ${SLEEP_TIME}
-#          let "COUNT++"
-#          echo ${COUNT}
-#          if [ ${COUNT} -gt 50 ]; then
-#            error "Never got IP address for service."
-#            break
-#          fi
-#          pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
-#        done
-#
-#        print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
-
-#        # Failed trying to get this check working properly and reliably. nmap isn't able to determine whether
-#        # the port is actually open.
-#        print_log  "Waiting for service to start by checking for port ${public_port} open on ${pub_ip}."
-#        COUNT=0
-#        MAX=50
-#        SLEEP_TIME=5
-#        ERR=0
-#
-#        until $(nmap -p "${public_port}" "${pub_ip}" | grep "open" -q); do
-#          sleep ${SLEEP_TIME}
-#          let "COUNT++"
-#          echo ${COUNT}
-#          if [ ${COUNT} -gt 50 ]; then
-#            ERR=1
-#            break
-#          fi
-#        done
-#        if [ ${ERR} -eq 0 ]; then
-#            print_log "Service Started."
-#        else
-#            print_log "Timed out waiting for service to start after about 5min."
-#            exit 1
-#        fi
         print_log "Deployment finished, but it may still take a few minutes for the
         service to become available through the load balancer."
-
         ;;
     stop)
-        print_log "Deleting namespace ${namespace} and all resources in it."
+        # TODO: Need to figure out a bit different way to do this, since this yaml file may have changed or inaccessible
+        # or otherwise not appropriate for deleting the resources.
+        print_log "${yaml_url}"
+        kubectl delete -f ${yaml_url} || \
+            error "Failed applying yaml file."
 
-        msg=$(kubectl delete namespace ${namespace}) || \
-            error "Failed to delete the resources: ${msg}"
-
-        print_log "Waiting for namespace to terminate."
-        COUNT=0
-        MAX=50
-        SLEEP_TIME=5
-        ERR=0
-
-        #status=`kubectl get namespace | grep ${namespace} | awk '{print $2}'`
-        while bash -c "kubectl get namespace | grep '${namespace}'"; do
-          sleep ${SLEEP_TIME}
-          let "COUNT++"
-          echo ${COUNT}
-          if [ ${COUNT} -gt 50 ]; then
-            error "Never got IP address for service."
-            break
-          fi
-        done
-        print_log "Service Stopped."
+        print_log "YAML file deleted."
         ;;
     update)
         ;;
