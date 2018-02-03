@@ -23,7 +23,7 @@ print_log "Installing prereqs: ${prereqs}"
 yum install -y ${prereqs}
 
 # Input env variables used by this service.
-yaml="${kube_yaml}"
+yaml_url="${kube_yaml}"
 # Public port on load balancer to access service
 public_port="${kube_public_port}"
 # Port exposed on containers/pods that LB points to
@@ -50,8 +50,11 @@ echo "${config}" > ~/.kube/config
 
 case ${cmd} in
     start)
-        print_log "${yaml}"
-        kubectl apply -f ${yaml} || \
+        print_log "${yaml_url}"
+        yaml_file="file.yaml"
+        curl --fail -o "${yaml_file}" "${yaml_url}" || \
+            error "Failed downloading yaml file: ${yaml_url}"
+        kubectl apply -f ${yaml_file} || \
             error "Failed applying yaml file."
 
         # Create namespace
