@@ -30,7 +30,7 @@ def get_hosted_zone_id(domain):
     for hosted_zone in response_hz['HostedZones']:
         if hosted_zone['Name'] in [domain, domain+'.']:
             return hosted_zone['Id']
-    raise Exception("Unable to find hosted zone {domain} in this AWS account.".format(domain))
+    raise Exception("Unable to find hosted zone {domain} in this AWS account.".format(domain=domain))
 
 
 def get_dependent_tier():
@@ -44,19 +44,21 @@ def get_dependent_tier():
     return dependencies[0]
 
 
-def get_dependent_ips(dependent_tier):
+def get_dependent_ips(my_dependent_tier):
     # Set the new server list from the CliQr environment
-    dependent_addresses = os.environ["CliqrTier_" + dependent_tier + "_PUBLIC_IP"]
+    dependent_addresses = os.environ["CliqrTier_" + my_dependent_tier + "_PUBLIC_IP"]
     print_log("Dependent Addresses: {}".format(dependent_addresses))
 
     return dependent_addresses.split(",")
+
 
 try:
     app_domain = os.getenv("route53_appDomain")
     app_hostname = os.getenv("route53_appHostname", None)
     if not app_hostname:
         app_hostname = os.getenv('parentJobName')
-    dependent_tier = get_dependent_tier()
+    app_hostname = "".join(a for a in app_hostname if (a.isalnum() or a == '-'))
+    dependent_tier = "".join(a for a in get_dependent_tier() if (a.isalnum() or a == '-'))
 
     server_addresses = get_dependent_ips(dependent_tier)
 
