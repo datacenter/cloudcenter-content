@@ -62,7 +62,12 @@ sudo sysctl --system
 
 ssh-keyscan ${CliqrTier_kube_master_IP} >> ~/.ssh/known_hosts
 scp cliqruser@${CliqrTier_kube_master_IP}:/home/cliqruser/join_command join_command
+
+# https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 sudo swapoff -a
+# Turn swap off permanently.
+sudo sed -i.bak -e '/swap/d' /etc/fstab
+
 cat join_command | sudo bash
 mkdir -p $HOME/.kube
 scp cliqruser@${CliqrTier_kube_master_IP}:/home/cliqruser/.kube/config $HOME/.kube/config

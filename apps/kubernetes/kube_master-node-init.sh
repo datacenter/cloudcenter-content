@@ -66,6 +66,8 @@ sudo sysctl --system
 
 # https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
 sudo swapoff -a
+# Turn swap off permanently.
+sudo sed -i.bak -e '/swap/d' /etc/fstab
 
 # Need to set pod-network subnet, but this is Calico specific
 join_command=$(sudo kubeadm init --pod-network-cidr=192.168.0.0/16 | grep "kubeadm join")
@@ -90,5 +92,7 @@ sudo systemctl enable nginx
 sudo systemctl start nginx
 sudo cp /home/cliqruser/.kube/config /usr/share/nginx/html/config
 sudo chmod 644 /usr/share/nginx/html/config
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/

@@ -50,21 +50,46 @@ echo "${config}" > ~/.kube/config
 
 case ${cmd} in
     start)
+        msg=$(kubectl create namespace ${namespace}) || \
+            error "Failed to create namespace: ${msg}"
+        print_log "Namespace ${namespace} created"
+
         print_log "${yaml_url}"
-        kubectl apply -f ${yaml_url} || \
+        yaml_file="file.yaml"
+        msg=$(curl --fail -o "${yaml_file}" "${yaml_url}") || \
+            error "Failed downloading yaml file: ${yaml_url}"
+
+        print_log "Removing namespace from source yaml, if exists. Using namespace ${namespace} instead."
+        sed -i -e '/namespace:/d' ${yaml_file}
+
+        msg=$(kubectl apply --namespace ${namespace} -f ${yaml_file}) || \
             error "Failed applying yaml file."
 
         print_log "Deployment finished, but it may still take a few minutes for the
         service to become available through the load balancer."
         ;;
     stop)
-        # TODO: Need to figure out a bit different way to do this, since this yaml file may have changed or inaccessible
-        # or otherwise not appropriate for deleting the resources.
-        print_log "${yaml_url}"
-        kubectl delete -f ${yaml_url} || \
-            error "Failed applying yaml file."
+        print_log "Deleting namespace ${namespace} and all resources in it."
 
-        print_log "YAML file deleted."
+        msg=$(kubectl delete namespace ${namespace}) || \
+            error "Failed to delete the resources: ${msg}"
+
+        print_log "Waiting for namespace to terminate."
+        COUNT=0
+        MAX=50
+        SLEEP_TIME=5
+        ERR=0
+
+        while bash -c "kubectl get namespace | grep '${namespace}'"; do
+          sleep ${SLEEP_TIME}
+          let "COUNT++"
+          echo ${COUNT}
+          if [ ${COUNT} -gt 50 ]; then
+            error "Namespace still shows in list after waiting a long time. Exiting, but may be leaving residual stuff."
+            break
+          fi
+        done
+        print_log "Service Stopped."
         ;;
     update)
         ;;
