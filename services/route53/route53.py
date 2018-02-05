@@ -57,8 +57,10 @@ try:
     app_hostname = os.getenv("route53_appHostname", None)
     if not app_hostname:
         app_hostname = os.getenv('parentJobName')
-    app_hostname = "".join(a for a in app_hostname if (a.isalnum() or a == '-'))
-    dependent_tier = "".join(a for a in get_dependent_tier() if (a.isalnum() or a == '-'))
+
+    # Valid DNS names are lower-alphanumeric, digits and dashes. Nothing else.
+    app_hostname = "".join(a for a in app_hostname if (a.isalnum() or a == '-')).lower()
+    dependent_tier = "".join(a for a in get_dependent_tier() if (a.isalnum() or a == '-')).lower()
 
     server_addresses = get_dependent_ips(dependent_tier)
 
