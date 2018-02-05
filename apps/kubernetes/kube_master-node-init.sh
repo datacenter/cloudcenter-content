@@ -93,6 +93,8 @@ sudo systemctl start nginx
 sudo cp /home/cliqruser/.kube/config /usr/share/nginx/html/config
 sudo chmod 644 /usr/share/nginx/html/config
 
+agentSendLogMessage "Kube config file: http://${CliqrTier_kube_master_PUBLIC_IP}/config"
+
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
