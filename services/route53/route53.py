@@ -99,8 +99,11 @@ try:
             ChangeBatch=change_batch
         )
     except Exception as err:
-        print_log("Error while trying to update the record set: {}".format(err))
-        exit(1)
+        print_log("Error  {}".format(err))
+        template = "An exception of type {0} occurred while trying to update the record set. Arguments:\n{1!r}"
+        message = template.format(type(err).__name__, err.args)
+        print_log(message)
+        raise
 
     result = {
         'hostName': fqdn,
@@ -110,6 +113,7 @@ try:
     }
     print_ext_service_result(json.dumps(result))
 except Exception as err:
-    print_log("Something went wrong: {}".format(err))
-    exit(1)
-
+    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+    message = template.format(type(err).__name__, err.args)
+    print_log(message)
+    raise
