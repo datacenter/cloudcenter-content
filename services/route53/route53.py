@@ -44,9 +44,9 @@ def get_dependent_tier():
     return dependencies[0]
 
 
-def get_dependent_ips(my_dependent_tier):
+def get_dependent_ips():
     # Set the new server list from the CliQr environment
-    dependent_addresses = os.environ["CliqrTier_" + my_dependent_tier + "_PUBLIC_IP"]
+    dependent_addresses = os.environ["CliqrTier_" + get_dependent_tier() + "_PUBLIC_IP"]
     print_log("Dependent Addresses: {}".format(dependent_addresses))
 
     return dependent_addresses.split(",")
@@ -58,16 +58,17 @@ try:
     if not app_hostname:
         app_hostname = os.getenv('parentJobName')
 
-    # Valid DNS names are lower-alphanumeric, digits and dashes. Nothing else.
-    app_hostname = "".join(a for a in app_hostname if (a.isalnum() or a == '-')).lower()
-    dependent_tier = "".join(a for a in get_dependent_tier() if (a.isalnum() or a == '-')).lower()
-
-    server_addresses = get_dependent_ips(dependent_tier)
+    server_addresses = get_dependent_ips()
 
     # Restructure server_addresses simple list of IPs into ResourceRecordSet dict.
     ip_address_rr = [{'Value': ip} for ip in server_addresses]
 
-    fqdn = "{}.{}.{}".format(dependent_tier, app_hostname, app_domain)
+    # Valid DNS names are lower-alphanumeric, digits and dashes. Nothing else.
+    fqdn = "{}.{}.{}".format(
+        "".join(a for a in get_dependent_tier() if (a.isalnum() or a == '-')).lower(),
+        "".join(a for a in app_hostname if (a.isalnum() or a == '-')).lower(),
+        app_domain
+    )
     print_log("FQDN: {}".format(fqdn))
 
     cmd = sys.argv[1]
