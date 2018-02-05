@@ -6,7 +6,9 @@
 # TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
-print_log "${parentJobName} ENV START\n$(env)\n${parentJobName} ENV END"
+print_log "${parentJobName} ENV START
+$(env)
+${parentJobName} ENV END"
 
 defaultGitTag="route53"
 if [ -n "$route53_gitTag" ]; then
