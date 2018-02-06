@@ -43,7 +43,6 @@ cmd=$1 # Controls which part of this script is executed based on command line ar
 
 case ${cmd} in
     start)
-
         ;;
     stop)
         ;;
