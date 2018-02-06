@@ -3,15 +3,14 @@
 
 # Required Service Parameters:
 # route53_gitTag - The tag or branch of code that you want to pull from github
-# TODO
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
 # Ues with:
 # sed -n '/718WPR53 ENV START/,/718WPR53 ENV END/p' /usr/local/cliqr/logs/gateway.log | \
 # head -n-1 | tail -n+2 | grep '=' | grep -v '\\n' > envfile
-print_log "${parentJobName} ENV START
-$(env)
-${parentJobName} ENV END"
+#print_log "${parentJobName} ENV START
+#$(env)
+#${parentJobName} ENV END"
 
 defaultGitTag="route53"
 if [ -n "$route53_gitTag" ]; then
