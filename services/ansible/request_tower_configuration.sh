@@ -13,7 +13,7 @@ retry_attempts=10
 attempt=0
 while [[ $attempt -lt $retry_attempts ]]
 do
-  status_code=`curl -s -i --data "host_config_key=$2" http://$1/api/v1/job_templates/$3/callback/ | head -n 1 | awk '{print $2}'`
+  status_code=`curl -s -i --data "host_config_key=$2" https://$1/api/v2/job_templates/$3/callback/ | head -n 1 | awk '{print $2}'`
   if [[ $status_code -ge 300 ]]
     then
     echo "${status_code} received, encountered problem, halting."
