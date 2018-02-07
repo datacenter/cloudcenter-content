@@ -28,22 +28,22 @@ print_log "Tag/branch for code pull set to ${tag}"
 #Install AWS CLI
 wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 unzip -o awscli-bundle.zip
-./awscli-bundle/install -b /root/bin/aws
+./awscli-bundle/install -b /usr/bin/aws
 
 #Configure AWS CLI
 mkdir -p /root/.aws
-echo "[default]" | sudo tee --append /root/.aws/config
-echo "region=us-west-1" | sudo tee --append /root/.aws/config
-echo "output=json" | sudo tee --append /root/.aws/config
-echo "[default]" | sudo tee --append /root/.aws/credentials
-echo "aws_access_key_id=${aws_access_key_id}" | sudo tee --append /root/.aws/credentials
-echo "aws_secret_access_key=${aws_secret_access_key}" | sudo tee --append /root/.aws/credentials
+echo "[default]" > /root/.aws/config
+echo "region=us-west-1" >> /root/.aws/config
+echo "output=json" >> /root/.aws/config
+echo "[default]" > /root/.aws/credentials
+echo "aws_access_key_id=${CliqrCloudAccountPwd}" >>/root/.aws/credentials
+echo "aws_secret_access_key=${CliqrCloud_AccessSecretKey}" >> /root/.aws/credentials
 
 cmd=$1 # Controls which part of this script is executed based on command line argument. Ex start, stop.
 
 case ${cmd} in
     start)
-        command="aws create-delivery-stream"
+        command="aws firehose create-delivery-stream --delivery-stream-name ${delivery-stream-name}"
         if [ -n "${delivery-stream-type}" ]; then
             command+=" --delivery-stream-type ${delivery-stream-type}"
         fi
