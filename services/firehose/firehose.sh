@@ -26,12 +26,12 @@ error () {
 print_log "Tag/branch for code pull set to ${tag}"
 
 #Install AWS CLI
-sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-sudo unzip -o awscli-bundle.zip
-sudo ./awscli-bundle/install -b /root/bin/aws
+wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
+unzip -o awscli-bundle.zip
+./awscli-bundle/install -b /root/bin/aws
 
 #Configure AWS CLI
-sudo mkdir -p /root/.aws
+mkdir -p /root/.aws
 echo "[default]" | sudo tee --append /root/.aws/config
 echo "region=us-west-1" | sudo tee --append /root/.aws/config
 echo "output=json" | sudo tee --append /root/.aws/config
@@ -43,6 +43,25 @@ cmd=$1 # Controls which part of this script is executed based on command line ar
 
 case ${cmd} in
     start)
+        command="aws create-delivery-stream"
+        if [ -n "${delivery-stream-type}" ]; then
+            command+=" --delivery-stream-type ${delivery-stream-type}"
+        fi
+        if [ -n "${kinesis-stream-source-configuration}" ]; then
+            command+=" --kinesis-stream-source-configuration ${kinesis-stream-source-configuration}"
+        fi
+        if [ -n "${extended-s3-destination-configuration}" ]; then
+            command+=" --extended-s3-destination-configuration ${extended-s3-destination-configuration}"
+        fi
+        if [ -n "${redshift-destination-configuration}" ]; then
+            command+=" --redshift-destination-configuration ${redshift-destination-configuration}"
+        fi
+        if [ -n "${elasticsearch-destination-configuration}" ]; then
+            command+=" --elasticsearch-destination-configuration ${elasticsearch-destination-configuration}"
+        fi
+        if [ -n "${splunk-destination-configuration}" ]; then
+            command+=" --splunk-destination-configuration ${splunk-destination-configuration}"
+        fi
         ;;
     stop)
         ;;

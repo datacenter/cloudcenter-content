@@ -269,7 +269,7 @@
     "servicePorts": [],
     "name": "firehose",
     "images": [],
-    "description": "Create DNS record for application",
+    "description": "Create Firehose Delivery Stream",
     "serviceType": "EXTERNAL",
     "externalBundleLocation": "",
     "costPerHour": 0.0,
