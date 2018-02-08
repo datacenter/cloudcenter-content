@@ -43,24 +43,34 @@ cmd=$1 # Controls which part of this script is executed based on command line ar
 
 case ${cmd} in
     start)
-        command="aws firehose create-delivery-stream --delivery-stream-name ${delivery-stream-name}"
-        if [ -n "${delivery-stream-type}" ]; then
-            command+=" --delivery-stream-type ${delivery-stream-type}"
+
+        # Put config into file
+
+        command="aws firehose create-delivery-stream
+        --delivery-stream-name ${delivery_stream_name}"
+        if [ -n "${delivery_stream_type}" ]; then
+            command+=" --delivery-stream-type ${delivery_stream_type}"
         fi
-        if [ -n "${kinesis-stream-source-configuration}" ]; then
-            command+=" --kinesis-stream-source-configuration ${kinesis-stream-source-configuration}"
+        if [ -n "${kinesis_stream_source_configuration}" ]; then
+            command+=" --kinesis-stream-source-configuration
+            ${kinesis_stream_source_configuration}"
         fi
-        if [ -n "${extended-s3-destination-configuration}" ]; then
-            command+=" --extended-s3-destination-configuration ${extended-s3-destination-configuration}"
+        if [ -n "${extended_s3_destination_configuration}" ]; then
+            command+=" --extended-s3-destination-configuration
+            ${extended_s3_destination_configuration}"
         fi
-        if [ -n "${redshift-destination-configuration}" ]; then
-            command+=" --redshift-destination-configuration ${redshift-destination-configuration}"
+        if [ -n "${redshift_destination_configuration}" ]; then
+            echo ${redshift_destination_configuration} > tempfile
+            command+=" --redshift-destination-configuration
+            file://tempfile"
         fi
-        if [ -n "${elasticsearch-destination-configuration}" ]; then
-            command+=" --elasticsearch-destination-configuration ${elasticsearch-destination-configuration}"
+        if [ -n "${elasticsearch_destination_configuration}" ]; then
+            command+=" --elasticsearch-destination-configuration
+            ${elasticsearch_destination_configuration}"
         fi
-        if [ -n "${splunk-destination-configuration}" ]; then
-            command+=" --splunk-destination-configuration ${splunk-destination-configuration}"
+        if [ -n "${splunk_destination_configuration}" ]; then
+            command+=" --splunk-destination-configuration
+            ${splunk_destination_configuration}"
         fi
         msg=$(${command} 2>&1) || \
             error "Failed to create delivery stream: ${msg}"
