@@ -62,7 +62,7 @@ case ${cmd} in
         if [ -n "${splunk-destination-configuration}" ]; then
             command+=" --splunk-destination-configuration ${splunk-destination-configuration}"
         fi
-        msg=$(${command} >2&1) || \
+        msg=$(${command} 2>&1) || \
             error "Failed to create delivery stream: ${msg}"
         ;;
     stop)

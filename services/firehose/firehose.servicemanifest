@@ -176,7 +176,7 @@
         },
         {
             "scope": null,
-            "type": "string",
+            "type": "textarea",
             "defaultValue": "",
             "collectionList": [],
             "userEditable": true,
