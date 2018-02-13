@@ -17,7 +17,7 @@ echo -e "\nserverHostName=${cliqrNodeHostname}" >> response.varfile
 
 sudo ./controller_linux.sh -q -varfile response.varfile
 
-# sudo curl -o /home/appduser/AppDynamics/Controller/license.lic
-# ${appd_license}
+sudo curl -o /home/appduser/AppDynamics/Controller/license.lic \
+${appd_license}
 
-# sudo ./controller.sh start-events-service
+sudo ./controller.sh start-events-service
