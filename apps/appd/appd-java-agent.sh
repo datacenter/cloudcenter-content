@@ -10,7 +10,7 @@ exec > >(tee -a /var/tmp/appd-java-agent_$$.log) 2>&1
 appd_controller_ip="172.16.204.34"
 appd_controller_http_port="8090"
 appd_access_key="281c9d49-f465-426f-ab92-ba1c983d434d"
-agentUrl="http://172.16.201.244:8081/artifactory/appd/download-file/sun-jvm/4.3.5.7/AppServerAgent-4.3.5.7.zip"
+agentUrl="http://10.36.60.58:8081/artifactory/appd/download-file/sun-jvm/4.3.8.4/AppServerAgent-4.3.8.4.zip"
 tomcat_user="cliqruser"
 homedir=`getent passwd ${tomcat_user} | cut -d: -f6`
 
@@ -45,7 +45,13 @@ echo "AGENT_HOME=${agent_home}" >> ${homedir}/.bash_profile
 echo 'export CATALINA_OPTS="${CATALINA_OPTS} -javaagent:${AGENT_HOME}/javaagent.jar"' >> ${homedir}/.bash_profile
 
 agentSendLogMessage "Attaching agent to running Tomcat process."
-java_pid=`ps aux | grep tomcat | head -n1 | awk '{print $2}'`
-java -Xbootclasspath/a:${JAVA_HOME}/lib/tools.jar -jar ${agent_home}/javaagent.jar ${java_pid}
+# java_pid=`ps aux | grep tomcat | head -n1 | awk '{print $2}'`
+ps aux | grep java | grep -v grep | grep -v appdynamics | \
+awk '{print $2}' | while read java_pid ; do
+    java -Xbootclasspath/a:${JAVA_HOME}/lib/tools.jar -jar \
+    ${agent_home}/javaagent.jar ${java_pid}
+done
+# java -Xbootclasspath/a:${JAVA_HOME}/lib/tools.jar -jar
+# ${agent_home}/javaagent.jar ${java_pid}
 
 sudo mv ~/cliqr.repo /etc/yum.repos.d/
