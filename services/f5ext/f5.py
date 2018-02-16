@@ -2,11 +2,9 @@
 import os
 import sys
 import requests
-import json
-import datetime
 import bigsuds
 
-requests.packages.urllib3.disable_warnings()
+# requests.packages.urllib3.disable_warnings()
 
 
 def print_ext_service_result():
@@ -37,20 +35,37 @@ POOL_NAME = "cliqr_" + os.environ['parentJobId'] + "_pool"
 username = os.environ['bigIPusername']
 password = os.environ['bigIPpassword']
 
-# If there are no dependency tiers, then there won't be anything in the pool, so just exit.
-if len(os.environ["CliqrDependencies"]) == 0:
+# Create list of dependent service tiers
+dependencies = os.environ["CliqrDependencies"].split(",")
+
+# If there are no dependency tiers, then there won't be anything in the
+# pool, so just exit.
+if len(dependencies) == 0:
     print("There aren't any depency tiers, so nothing to create. Check your app topology.")
     sys.exit(0)
 
-# Create list of dependent service tiers
-dependencies = os.environ["CliqrDependencies"].split(",")
+# If there are no dependency tiers, then there won't be anything in the
+# pool, so just exit.
+if len(dependencies) > 1:
+    print("This service only supports a single dependent tier, "
+          "but I see {}. Try adding one of these services in front of"
+          "each tier that requires a VIP in your app profile.".format(
+        len(dependencies))
+    )
+    sys.exit(0)
+
 
 # Set the new server list from the CliQr environment
 serverIps = os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
 
 pool = 'pool' + os.environ['parentJobId']
 vip = 'vip' + os.environ['parentJobId']
-b = bigsuds.BIGIP(hostname=BIGIP_ADDRESS, username=username, password=password)
+b = bigsuds.BIGIP(
+    hostname=BIGIP_ADDRESS,
+    username=username,
+    password=password,
+    port=8443
+)
 
 if cmd == "start":
     members = []
