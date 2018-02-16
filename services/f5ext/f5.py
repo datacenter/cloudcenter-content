@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 import os
 import sys
-import requests
 import bigsuds
 
-# requests.packages.urllib3.disable_warnings()
+def print_log(msg):
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_END")
 
 
-def print_ext_service_result():
-    # content="$@"
-    print "CLIQR_EXTERNAL_SERVICE_RESULT_START"
-    # print "$content"
-    print "{\"hostName\": \"test\", \"ipAddress\": \"192.168.1.8\"}"
-    print "CLIQR_EXTERNAL_SERVICE_RESULT_END"
+def print_error(msg):
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_ERR_MSG_END")
 
 
-def print_error():
-    # content="$@"
-    print "CLIQR_EXTERNAL_SERVICE_ERR_MSG_START"
-    # print "$content"
-    print "CLIQR_EXTERNAL_SERVICE_ERR_MSG_END"
+def print_ext_service_result(msg):
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_START")
+    print(msg)
+    print("CLIQR_EXTERNAL_SERVICE_RESULT_END")
 
 
 cmd = sys.argv[1]
@@ -41,7 +40,8 @@ dependencies = os.environ["CliqrDependencies"].split(",")
 # If there are no dependency tiers, then there won't be anything in the
 # pool, so just exit.
 if len(dependencies) == 0:
-    print("There aren't any depency tiers, so nothing to create. Check your app topology.")
+    print("There aren't any dependency tiers, so nothing to create."
+          "Check your app topology.")
     sys.exit(0)
 
 # If there are no dependency tiers, then there won't be anything in the
@@ -64,7 +64,7 @@ b = bigsuds.BIGIP(
     hostname=BIGIP_ADDRESS,
     username=username,
     password=password,
-    port=8443
+    port=8443  # TODO: Parametarize
 )
 
 if cmd == "start":
@@ -92,7 +92,8 @@ elif cmd == "reload":
     # Get all the members in the current pool from API
     r = b.LocalLB.Pool.get_member(['/Common/' + POOL_NAME])[0]
 
-    # addServers = [server for server in serverIps if server not in currPool.keys() ]
+    # addServers = [server for server in serverIps if server not in
+    # currPool.keys() ]
     addServers = []
     for ip in serverIps:
         if not any(x['address'] == ip for x in r):
@@ -106,9 +107,16 @@ elif cmd == "reload":
             removeServers.append(server)
 
     for member in addServers:
-        b.LocalLB.Pool.add_member_v2(['/Common/' + POOL_NAME], [[{'port': RS_PORT, 'address': member}]])
+        b.LocalLB.Pool.add_member_v2(
+            ['/Common/' + POOL_NAME],
+            [[{'port': RS_PORT,
+               'address': member}]]
+        )
 
-    b.LocalLB.Pool.remove_member(['/Common/' + POOL_NAME], [removeServers])
+    b.LocalLB.Pool.remove_member(
+        ['/Common/' + POOL_NAME],
+        [removeServers]
+    )
     for server in removeServers:
         b.LocalLB.NodeAddressV2.delete_node_address([server['address']])
 
