@@ -23,7 +23,7 @@ print_log "Installing prereqs: ${prereqs}"
 yum install -y ${prereqs}
 
 # Input env variables used by this service.
-image="${kube_image}"
+yaml_url="${kube_yaml}"
 # Public port on load balancer to access service
 public_port="${kube_public_port}"
 # Port exposed on containers/pods that LB points to
@@ -32,12 +32,15 @@ config="${kube_config}"
 reps="${kube_reps}"
 
 dep_name="dep${parentJobName}"
-namespace="ns${parentJobName}"
+# A valid namespace must consist only of LOWER CASE, digits and hyphens.
+# First use tr to delete everything buy alphanumeric and hyphens
+# then to change upper to lower.
+namespace=$(echo "ns${parentJobName}" | tr -dc '[:alnum:]-' | tr '[:upper:]' '[:lower:]')
 service_name="svc${parentJobName}"
 
 # Copied from https://kubernetes.io/docs/tasks/kubectl/install/
 print_log "Installing kubectl"
-msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl) || \
+msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl 2>&1) || \
             error "Failed to install kubectl: ${msg}"
 chmod +x kubectl
 mv kubectl /usr/local/bin/
@@ -50,75 +53,29 @@ echo "${config}" > ~/.kube/config
 
 case ${cmd} in
     start)
-
-        # Create namespace
-        msg=$(kubectl create namespace ${namespace}) || \
+        print_log "Creating namespace ${namespace}."
+        msg=$(kubectl create namespace ${namespace} 2>&1) || \
             error "Failed to create namespace: ${msg}"
         print_log "Namespace ${namespace} created"
 
-        # Create deployment
-        msg=$(kubectl run --namespace ${namespace} ${dep_name} --image ${image} --replicas=${reps}) || \
-            error "Failed to create the deployment: ${msg}"
-        print_log "Deployment created"
+        print_log "${yaml_url}"
+        yaml_file="file.yaml"
+        msg=$(curl --fail -o "${yaml_file}" "${yaml_url}" 2>&1) || \
+            error "Failed downloading yaml file: ${yaml_url}"
 
-        # Create service
-        msg=$(kubectl expose --namespace=${namespace} deployment ${dep_name} --port=${public_port} \
-        --target-port=${target_port} --type=LoadBalancer --name=${service_name}) || \
-            error "Failed to expose the deployment: ${msg}"
-        print_log "Deployment exposed on port ${public_port}"
+        print_log "Removing namespace from source yaml, if exists. Using namespace ${namespace} instead."
+        sed -i -e '/namespace:/d' ${yaml_file}
 
-        print_log "Waiting for service to start."
-        COUNT=0
-        MAX=50
-        SLEEP_TIME=5
-        ERR=0
+        msg=$(kubectl apply --namespace ${namespace} -f ${yaml_file} 2>&1) || \
+            error "Failed applying yaml file."
 
-        pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
-
-        while [ "${pub_ip}" = "<pending>" -o  "${pub_ip}" = "" ]; do
-          sleep ${SLEEP_TIME}
-          let "COUNT++"
-          echo ${COUNT}
-          if [ ${COUNT} -gt 50 ]; then
-            error "Never got IP address for service."
-            break
-          fi
-          pub_ip=`kubectl describe --namespace=${namespace} service ${service_name} | grep "LoadBalancer Ingress:" | awk '{print $3}'`
-        done
-
-        print_log "Load Balancer Service Endpoint: ${pub_ip}:${public_port}"
-
-#        # Failed trying to get this check working properly and reliably. nmap isn't able to determine whether
-#        # the port is actually open.
-#        print_log  "Waiting for service to start by checking for port ${public_port} open on ${pub_ip}."
-#        COUNT=0
-#        MAX=50
-#        SLEEP_TIME=5
-#        ERR=0
-#
-#        until $(nmap -p "${public_port}" "${pub_ip}" | grep "open" -q); do
-#          sleep ${SLEEP_TIME}
-#          let "COUNT++"
-#          echo ${COUNT}
-#          if [ ${COUNT} -gt 50 ]; then
-#            ERR=1
-#            break
-#          fi
-#        done
-#        if [ ${ERR} -eq 0 ]; then
-#            print_log "Service Started."
-#        else
-#            print_log "Timed out waiting for service to start after about 5min."
-#            exit 1
-#        fi
         print_log "Deployment finished, but it may still take a few minutes for the
         service to become available through the load balancer."
-
         ;;
     stop)
         print_log "Deleting namespace ${namespace} and all resources in it."
 
-        msg=$(kubectl delete namespace ${namespace}) || \
+        msg=$(kubectl delete namespace ${namespace} 2>&1) || \
             error "Failed to delete the resources: ${msg}"
 
         print_log "Waiting for namespace to terminate."
@@ -127,13 +84,12 @@ case ${cmd} in
         SLEEP_TIME=5
         ERR=0
 
-        #status=`kubectl get namespace | grep ${namespace} | awk '{print $2}'`
         while bash -c "kubectl get namespace | grep '${namespace}'"; do
           sleep ${SLEEP_TIME}
           let "COUNT++"
           echo ${COUNT}
           if [ ${COUNT} -gt 50 ]; then
-            error "Never got IP address for service."
+            error "Namespace still shows in list after waiting a long time. Exiting, but may be leaving residual stuff."
             break
           fi
         done
