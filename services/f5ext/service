@@ -7,6 +7,7 @@ print_log "$(env)"
 echo "${parentJobName} ENV END"
 
 cmd=$1
+print_log "cmd: ${cmd}"
 serviceStatus=""
 
 defGitTag="f5ext"
