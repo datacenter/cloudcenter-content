@@ -34,7 +34,7 @@
             "userVisible": true,
             "confirmValue": "",
             "optional": false,
-            "defaultValue": "f5ext",
+            "defaultValue": "f5ext1.2",
             "webserviceListParams": null,
             "helpText": "Tag or Branch you want to use code from.",
             "userEditable": true,
