@@ -33,6 +33,7 @@ VS_NAME = "cliqr_" + os.environ['parentJobId'] + "_vip"
 POOL_NAME = "cliqr_" + os.environ['parentJobId'] + "_pool"
 username = os.environ['bigIPusername']
 password = os.environ['bigIPpassword']
+iRules = os.getenv("f5ext_iRules", None)
 
 # Create list of dependent service tiers
 dependencies = os.environ["CliqrDependencies"].split(",")
@@ -78,6 +79,8 @@ if cmd == "start":
             'type': 'RESOURCE_TYPE_POOL',
             'default_pool_name': POOL_NAME
         }], [[{}]])
+    if iRules:
+        b.LocalLB.VirtualServer.add_rule([VS_NAME], [[iRules]])
 
 elif cmd == "reload":
     # Get all the members in the current pool from API
@@ -90,8 +93,8 @@ elif cmd == "reload":
         if not any(x['address'] == ip for x in r):
             addServers.append(ip)
 
-    # For each server in the currPool, add it to addServers if it's not in serverIps
-    # removeServers = [server for server in currPool.keys() if server not in serverIps ]
+    # For each server in the currPool, add it to addServers if it's
+    # not in serverIps.
     removeServers = []
     for server in r:
         if server['address'] not in serverIps:
