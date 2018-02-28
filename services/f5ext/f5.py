@@ -44,19 +44,10 @@ if len(dependencies) == 0:
           "Check your app topology.")
     sys.exit(0)
 
-# If there are no dependency tiers, then there won't be anything in the
-# pool, so just exit.
-if len(dependencies) > 1:
-    print("This service only supports a single dependent tier, "
-          "but I see {}. Try adding one of these services in front of"
-          "each tier that requires a VIP in your app profile.".format(
-        len(dependencies))
-    )
-    sys.exit(0)
-
-
 # Set the new server list from the CliQr environment
-serverIps = os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
+serverIps = []
+for dep in dependencies:
+    serverIps.extend(os.environ["CliqrTier_" + dep + "_IP"].split(","))
 
 pool = 'pool' + os.environ['parentJobId']
 vip = 'vip' + os.environ['parentJobId']
