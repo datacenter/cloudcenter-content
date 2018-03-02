@@ -4,8 +4,8 @@
 #For external-service
 . /utils.sh
 
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/netscaler2/netscaler.json
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/netscaler2/SetupNetScaler.py
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscaler_http/netscaler.json
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscaler_http/SetupNetScaler.py
 
 print_log "Got to before env print"
 print_log "$(env)"
