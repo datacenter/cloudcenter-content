@@ -1,0 +1,69 @@
+{
+    "visible": true,
+    "perms": [
+        "write",
+        "delete",
+        "administration",
+        "read"
+    ],
+    "name": "awsinstance",
+    "childServices": [],
+    "externalActions": [
+        {
+            "actionName": "STOP",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/awsinstance/service stop",
+            "actionType": "URL"
+        },
+        {
+            "actionName": "START",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/awsinstance/service start",
+            "actionType": "URL"
+        }
+    ],
+    "parentService": false,
+    "serviceParamSpecs": [
+        {
+            "systemParam": true,
+            "collectionList": [],
+            "displayName": "Git Tag",
+            "userVisible": true,
+            "confirmValue": "",
+            "optional": false,
+            "defaultValue": "awsinstance",
+            "webserviceListParams": null,
+            "helpText": "Tag or Branch you want to use code from.",
+            "userEditable": true,
+            "valueList": null,
+            "paramName": "gitTag",
+            "exampleValue": null,
+            "dataUnit": null,
+            "type": "string",
+            "scope": null,
+            "valueConstraint": {
+                "regex": null,
+                "sizeValue": 0,
+                "calloutWorkflowName": null,
+                "maxValue": 0,
+                "minValue": 0,
+                "allowSpaces": true,
+                "step": 0,
+                "maxLength": 255
+            }
+        },
+    ],
+    "serviceType": "EXTERNAL",
+    "parentServiceId": "36",
+    "displayName": "AWS Instance",
+    "images": [],
+    "systemService": false,
+    "serviceActions": [],
+    "bundleLocation": "",
+    "externalBundleLocation": "",
+    "externalService": false,
+    "servicePorts": [],
+    "description": "",
+    "defaultImageName": null,
+    "costPerHour": 0.15,
+    "repositories": [],
+    "egressRestrictions": []
+}
