@@ -115,6 +115,68 @@
             "systemParam": false, 
             "collectionList": [], 
             "deploymentParam": true, 
+            "displayName": "NetScaler VIP", 
+            "pathSuffixValue": "", 
+            "userVisible": true, 
+            "confirmValue": null, 
+            "optional": false, 
+            "defaultValue": "10.0.1.200", 
+            "multiselectSupported": false, 
+            "webserviceListParams": null, 
+            "helpText": "Virtual IP to be created", 
+            "userEditable": true, 
+            "valueList": null, 
+            "paramName": "ns_vip", 
+            "exampleValue": null, 
+            "dataUnit": null, 
+            "type": "string", 
+            "scope": null, 
+            "valueConstraint": {
+                "regex": null, 
+                "sizeValue": 0, 
+                "calloutWorkflowName": null, 
+                "maxValue": 0, 
+                "minValue": 0, 
+                "allowSpaces": true, 
+                "step": 0, 
+                "maxLength": 255
+            }
+        }, 
+        {
+            "systemParam": false, 
+            "collectionList": [], 
+            "deploymentParam": true, 
+            "displayName": "Port", 
+            "pathSuffixValue": "", 
+            "userVisible": true, 
+            "confirmValue": null, 
+            "optional": false, 
+            "defaultValue": "80", 
+            "multiselectSupported": false, 
+            "webserviceListParams": null, 
+            "helpText": "VIP Port", 
+            "userEditable": true, 
+            "valueList": "80,443", 
+            "paramName": "svc_type_port", 
+            "exampleValue": null, 
+            "dataUnit": null, 
+            "type": "list", 
+            "scope": null, 
+            "valueConstraint": {
+                "regex": null, 
+                "sizeValue": 0, 
+                "calloutWorkflowName": null, 
+                "maxValue": 0, 
+                "minValue": 0, 
+                "allowSpaces": true, 
+                "step": 0, 
+                "maxLength": 0
+            }
+        }, 
+        {
+            "systemParam": false, 
+            "collectionList": [], 
+            "deploymentParam": true, 
             "displayName": "NetScaler Interfaces", 
             "pathSuffixValue": "", 
             "userVisible": true, 
@@ -208,21 +270,21 @@
             "systemParam": false, 
             "collectionList": [], 
             "deploymentParam": true, 
-            "displayName": "NetScaler VIP", 
+            "displayName": "LoadBalancing Method", 
             "pathSuffixValue": "", 
             "userVisible": true, 
             "confirmValue": null, 
             "optional": false, 
-            "defaultValue": "10.0.1.200", 
+            "defaultValue": "ROUNDROBIN", 
             "multiselectSupported": false, 
             "webserviceListParams": null, 
-            "helpText": "Virtual IP to be created", 
+            "helpText": "Load Balancing Method", 
             "userEditable": true, 
-            "valueList": null, 
-            "paramName": "ns_vip", 
+            "valueList": "ROUNDROBIN,LEASTCONNECTION,LEASTRESPONSETIME,LEASTBANDWIDTH,LEASTPACKETS,CUSTOMLOAD,LRTM", 
+            "paramName": "lb_method", 
             "exampleValue": null, 
             "dataUnit": null, 
-            "type": "string", 
+            "type": "list", 
             "scope": null, 
             "valueConstraint": {
                 "regex": null, 
@@ -232,7 +294,7 @@
                 "minValue": 0, 
                 "allowSpaces": true, 
                 "step": 0, 
-                "maxLength": 255
+                "maxLength": 0
             }
         }
     ], 
@@ -246,6 +308,11 @@
     "serviceActions": [], 
     "externalActions": [
         {
+            "actionName": "STOP", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscalerext/service.sh stop", 
+            "actionType": "URL"
+        }, 
+        {
             "actionName": "START", 
             "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscalerext/service.sh start", 
             "actionType": "URL"
@@ -253,11 +320,6 @@
         {
             "actionName": "UPDATE", 
             "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscalerext/service.sh update", 
-            "actionType": "URL"
-        }, 
-        {
-            "actionName": "STOP", 
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscalerext/service.sh stop", 
             "actionType": "URL"
         }
     ]
