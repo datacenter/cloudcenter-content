@@ -33,6 +33,7 @@ def sendGet(url, headers, data):
     global get_response_text
     global response_data
 
+
     try:
         response = requests.get(url, headers=headers, data=json.dumps(data),verify=False, timeout=10)
         if response.status_code == 200 or response.status_code == 201:
@@ -91,6 +92,8 @@ def logOut():
     return
 
 PARENT_JOB_NAME = os.getenv('parentJobName')
+SVC_TYPE_PORT = os.getenv('svc_type_port')
+LB_METHOD = os.getenv('lb_method')
 
 ##Main begins here##
 if __name__ == "__main__":
@@ -136,9 +139,15 @@ if __name__ == "__main__":
             print("Finished adding IP address ")
 
         #Adding VIPs
+        if SVC_TYPE_PORT == "80":
+            svctypeval = "HTTP"
+            portval = "80"
+        elif SVC_TYPE_PORT == "443":
+            svctypeval = "SSL"
+            portval = "443"
         url = "https://"+resources['nsip']+"/nitro/v1/config/lbvserver"
         headers = {"Content-Type":"application/json", "Cookie":nitro_token}
-        data = {"lbvserver":{"name":PARENT_JOB_NAME, "servicetype":"HTTP", "ippattern":resources['lbvserver'], "ipmask":"255.255.255.255", "lbmethod":"ROUNDROBIN", "port":"80"}}
+        data = {"lbvserver":{"name":PARENT_JOB_NAME, "servicetype":svctypeval, "ippattern":resources['lbvserver'], "ipmask":"255.255.255.255", "lbmethod":LB_METHOD, "port":portval}}
         sendPost(url, headers, data)
         print("Finished adding LB Vserver")
 
@@ -147,7 +156,7 @@ if __name__ == "__main__":
             #Adding service
             url = "https://"+resources['nsip']+"/nitro/v1/config/service"
             headers = {"Content-Type":"application/json", "Cookie":nitro_token}
-            data = {"service":{"name":"S"+str(index), "ip":service, "servicetype":"HTTP", "port":"80"}}
+            data = {"service":{"name":"S"+str(index), "ip":service, "servicetype":svctypeval, "port":portval}}
             sendPost(url, headers, data)
             #Binding service to Vserver
             url = "https://"+resources['nsip']+"/nitro/v1/config/lbvserver_service_binding"
@@ -236,9 +245,15 @@ if __name__ == "__main__":
             addsvcnt = lbcount
             for index, service in enumerate(addServers):
                 #Adding services
+                if SVC_TYPE_PORT == "80":
+                    svctypeval = "HTTP"
+                    portval = "80"
+                elif SVC_TYPE_PORT == "443":
+                    svctypeval = "SSL"
+                    portval = "443"
                 url = "https://"+resources['nsip']+"/nitro/v1/config/service"
                 headers = {"Content-Type":"application/json", "Cookie":nitro_token}
-                data = {"service":{"name":"S"+str(addsvcnt), "ip":service, "servicetype":"HTTP", "port":"80"}}
+                data = {"service":{"name":"S"+str(addsvcnt), "ip":service, "servicetype":svctypeval, "port":portval}}
                 sendPost(url, headers, data)
                 #Binding service to Vserver
                 url = "https://"+resources['nsip']+"/nitro/v1/config/lbvserver_service_binding"
