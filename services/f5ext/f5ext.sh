@@ -32,7 +32,7 @@ pip install setuptools --upgrade
 pip install requests --upgrade
 pip install bigsuds --upgrade
 pip install six --upgrade
-pip install f5-sdk --upgrade
+# pip install f5-sdk --upgrade
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/services/f5ext/f5.py -O f5.py
 
 case ${cmd} in

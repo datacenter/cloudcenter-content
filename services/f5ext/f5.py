@@ -2,7 +2,7 @@
 import os
 import sys
 import bigsuds
-from f5.bigip import ManagementRoot
+# from f5.bigip import ManagementRoot
 
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
@@ -62,13 +62,8 @@ b = bigsuds.BIGIP(
 )
 
 # Connect using newer f5-sdk module instead of older bigsuds.
-mgmt = ManagementRoot(BIGIP_ADDRESS, username, password, port=8443)
+# mgmt = ManagementRoot(BIGIP_ADDRESS, username, password, port=8443)
 
-code = """
-when HTTP_REQUEST {
-    HTTP::redirect https://[HTTP::host][HTTP::uri]
-}
-"""
 if cmd == "start":
     members = []
     for member in serverIps:
@@ -94,18 +89,27 @@ if cmd == "start":
     if iRules:
         try:
             rule_name = 'rule' + os.environ['parentJobId']
-            r = mgmt.tm.ltm.rules.rule.create(
-                name=rule_name,
-                apiAnonymous=iRules,
-                partition=False
-            )
+            # r = mgmt.tm.ltm.rules.rule.create(
+            #     name=rule_name,
+            #     apiAnonymous=iRules,
+            #     partition=False
+            # )
+            r = b.LocalLB.Rule.create([{
+                'rule_name': rule_name,
+                'rule_definition': iRules
+
+            }])
             print_log("Created iRule {}: {}".format(rule_name, iRules))
         except Exception as err:
             print_log("Failed to create iRule {}: {}".format(rule_name, iRules))
         try:
-            vip = mgmt.tm.ltm.virtuals.virtual.load(name=VS_NAME)
-            vip.rules.append(rule_name)
-            vip.update()
+            # vip = mgmt.tm.ltm.virtuals.virtual.load(name=VS_NAME)
+            # vip.rules.append(rule_name)
+            # vip.update()
+            b.LocalLB.VirtualServer.add_rule([VS_NAME], [[{
+                'rule_name': rule_name,
+                'priority': 1
+            }]])
             print_log("Appended iRule {} to VIP {}".format(rule_name, VS_NAME))
         except Exception as Err:
             print_log("Failed to append iRule {} to VIP {}. "
