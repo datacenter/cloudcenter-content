@@ -278,6 +278,34 @@
             "optional": false,
             "systemParam": true,
             "paramName": "lbType"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "Put your iRules here.",
+            "type": "textarea",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": false,
+            "userEditable": false,
+            "defaultValue": "",
+            "displayName": "iRules",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "f5ext_iRules"
         }
     ],
     "serviceType": "EXTERNAL",
