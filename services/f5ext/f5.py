@@ -36,6 +36,7 @@ POOL_NAME = "cliqr_" + os.environ['parentJobId'] + "_pool"
 username = os.environ['bigIPusername']
 password = os.environ['bigIPpassword']
 iRules = os.getenv("f5ext_iRules", None)
+rule_name = 'rule' + os.environ['parentJobId']
 
 # Create list of dependent service tiers
 dependencies = os.environ["CliqrDependencies"].split(",")
@@ -88,7 +89,6 @@ if cmd == "start":
             'profile_context': 'PROFILE_CONTEXT_TYPE_ALL'}]])
     if iRules:
         try:
-            rule_name = 'rule' + os.environ['parentJobId']
             # r = mgmt.tm.ltm.rules.rule.create(
             #     name=rule_name,
             #     apiAnonymous=iRules,
@@ -158,3 +158,9 @@ elif cmd == "stop":
     b.LocalLB.VirtualServer.delete_virtual_server(['/Common/' + VS_NAME])
     b.LocalLB.Pool.delete_pool(['/Common/' + POOL_NAME])
     b.LocalLB.NodeAddressV2.delete_node_address(currIpsInPool)
+    if iRules:
+        try:
+            r = b.LocalLB.Rule.delete_rule([rule_name])
+            print_log("Deleted iRule {}: {}".format(rule_name, iRules))
+        except Exception as err:
+            print_log("Failed to delete iRule {}: {}".format(rule_name, iRules))
