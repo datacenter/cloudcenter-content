@@ -309,7 +309,7 @@
         },
         {
             "exampleValue": null,
-            "helpText": "Put your iRules here.",
+            "helpText": "Put your iRules here that you want to create and assign to the VIP.",
             "type": "textarea",
             "dataUnit": null,
             "valueConstraint": {
@@ -329,7 +329,7 @@
             "userVisible": true,
             "userEditable": true,
             "defaultValue": "",
-            "displayName": "iRules",
+            "displayName": "New iRules",
             "valueList": null,
             "optional": true,
             "systemParam": true,
