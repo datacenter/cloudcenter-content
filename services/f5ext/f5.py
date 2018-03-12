@@ -30,6 +30,7 @@ VS_PORT = os.environ['vsPort']
 RS_PORT = os.environ['rsPort']
 POOL_LB_METHOD = os.environ['lbMethod']
 BIGIP_ADDRESS = os.environ['bigIPAddress']
+bigip_api_port = os.environ['bigip_api_port']
 VS_NAME = "cliqr_" + os.environ['parentJobId'] + "_vip"
 POOL_NAME = "cliqr_" + os.environ['parentJobId'] + "_pool"
 username = os.environ['bigIPusername']
@@ -57,7 +58,7 @@ b = bigsuds.BIGIP(
     hostname=BIGIP_ADDRESS,
     username=username,
     password=password,
-    port=8443  # TODO: Parametarize
+    port=bigip_api_port
 )
 
 # Connect using newer f5-sdk module instead of older bigsuds.
