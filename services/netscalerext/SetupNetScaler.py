@@ -8,7 +8,9 @@ def sendPost(url, headers, data):
 
     try:
         response = requests.post(url, headers=headers, data=json.dumps(data),verify=False, timeout=10)
-        if response.status_code == 200 or response.status_code == 201 or response.status_code == 409 or response.status_code == 404:
+        if response.status_code == 200 or response.status_code == 201:
+        #if response.status_code == 200 or response.status_code == 201 or response.status_code == 409 or response.status_code == 404:
+
             #Setting NITRO Auth Token if it's not set already.
             if nitro_token is None:
                 nitro_token = "NITRO_AUTH_TOKEN="+response.cookies.values()[0]
