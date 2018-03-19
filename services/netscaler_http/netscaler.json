@@ -1,0 +1,10 @@
+{
+    "nsip": "%netscaler_ip%",
+    "nsuser": "%ns_user%",
+    "nspasswd": "%ns_pwd%",
+    "interfaces": ["%ns_interfaces%"],
+    "snips":[%ns_snips%],
+    "snipmask":"%ns_netmask%",
+    "lbvserver":"%ns_vip%",
+    "services":%ns_poolmembers%
+}

@@ -2,7 +2,7 @@
 
 . /utils.sh
 
-gitTag="resource"
+gitTag="tn1.1"
 
 # Setup a bunch of prerequisits
 print_log "Installing pip and requests"

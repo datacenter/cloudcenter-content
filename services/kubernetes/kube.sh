@@ -2,7 +2,7 @@
 . /utils.sh
 
 # Use for debugging only!
-# print_log "$(env)"
+print_log "$(env)"
 
 cmd=$1
 serviceStatus=""
@@ -18,62 +18,81 @@ error () {
     exit 1
 }
 
+prereqs="nmap"
+print_log "Installing prereqs: ${prereqs}"
+yum install -y ${prereqs}
+
 # Input env variables used by this service.
-dep_name="${parentJobName}"
-image="${kube_image}"
+yaml_url="${kube_yaml}"
+# Public port on load balancer to access service
 public_port="${kube_public_port}"
+# Port exposed on containers/pods that LB points to
+target_port="${kube_target_port}"
 config="${kube_config}"
 reps="${kube_reps}"
 
+dep_name="dep${parentJobName}"
+# A valid namespace must consist only of LOWER CASE, digits and hyphens.
+# First use tr to delete everything buy alphanumeric and hyphens
+# then to change upper to lower.
+namespace=$(echo "ns${parentJobName}" | tr -dc '[:alnum:]-' | tr '[:upper:]' '[:lower:]')
+service_name="svc${parentJobName}"
+
 # Copied from https://kubernetes.io/docs/tasks/kubectl/install/
 print_log "Installing kubectl"
-msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl) || \
+msg=$(curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl 2>&1) || \
             error "Failed to install kubectl: ${msg}"
 chmod +x kubectl
+mv kubectl /usr/local/bin/
 print_log "kubectl installed"
 
 mkdir -p ~/.kube
 echo "${config}" > ~/.kube/config
 
+# kubectl config set-context $(kubectl config current-context) --namespace=${namespace}
+
 case ${cmd} in
     start)
+        print_log "Creating namespace ${namespace}."
+        msg=$(kubectl create namespace ${namespace} 2>&1) || \
+            error "Failed to create namespace: ${msg}"
+        print_log "Namespace ${namespace} created"
 
-        msg=$(./kubectl run ${dep_name} --image ${image} --replicas=${reps}) || \
-            error "Failed to create the deployment: ${msg}"
-        print_log "Deployment created"
-        msg=$(./kubectl expose deployments ${dep_name} --port=${public_port} --type=LoadBalancer) || \
-            error "Failed to expose the deployment: ${msg}"
-        print_log "Deployment exposed on port "
+        print_log "${yaml_url}"
+        yaml_file="file.yaml"
+        msg=$(curl --fail -o "${yaml_file}" "${yaml_url}" 2>&1) || \
+            error "Failed downloading yaml file: ${yaml_url}"
 
-        print_log "Waiting for service to start."
+        print_log "Removing namespace from source yaml, if exists. Using namespace ${namespace} instead."
+        sed -i -e '/namespace:/d' ${yaml_file}
+
+        msg=$(kubectl apply --namespace ${namespace} -f ${yaml_file} 2>&1) || \
+            error "Failed applying yaml file."
+
+        print_log "Deployment finished, but it may still take a few minutes for the
+        service to become available through the load balancer."
+        ;;
+    stop)
+        print_log "Deleting namespace ${namespace} and all resources in it."
+
+        msg=$(kubectl delete namespace ${namespace} 2>&1) || \
+            error "Failed to delete the resources: ${msg}"
+
+        print_log "Waiting for namespace to terminate."
         COUNT=0
         MAX=50
         SLEEP_TIME=5
         ERR=0
 
-        pub_ip=`./kubectl get service ${dep_name} | sed -n 2p | awk {'print $3'}`
-
-        while [ ${pub_ip} == "<pending>" ]; do
+        while bash -c "kubectl get namespace | grep '${namespace}'"; do
           sleep ${SLEEP_TIME}
           let "COUNT++"
           echo ${COUNT}
           if [ ${COUNT} -gt 50 ]; then
-            error "Never got IP address for service."
+            error "Namespace still shows in list after waiting a long time. Exiting, but may be leaving residual stuff."
             break
           fi
-          pub_ip=`./kubectl get service ${dep_name} | sed -n 2p | awk {'print $3'}`
         done
-
-        print_log "URL: http://${pub_ip}:${public_port}"
-        print_log "Service Started."
-
-        ;;
-    stop)
-
-        msg=$(./kubectl delete service ${dep_name}) || \
-            error "Failed to delete the service: ${msg}"
-        msg=$(./kubectl delete deployment ${dep_name}) || \
-            error "Failed to delete the deployment: ${msg}"
         print_log "Service Stopped."
         ;;
     update)

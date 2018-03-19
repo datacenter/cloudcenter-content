@@ -32,7 +32,7 @@
         {
             "scope": null,
             "type": "string",
-            "defaultValue": "route53_0.1",
+            "defaultValue": "route53-1.0",
             "collectionList": [],
             "userEditable": true,
             "pathSuffixValue": "",

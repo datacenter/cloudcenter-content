@@ -6,12 +6,12 @@ exec > >(tee -a /var/tmp/aws-setup_$$.log) 2>&1
 . /usr/local/osmosix/service/utils/cfgutil.sh
 cd ~
 
- #Install S3
+#Install AWS CLI
 sudo wget -N "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 sudo unzip -o awscli-bundle.zip
 sudo ./awscli-bundle/install -b /root/bin/aws
 
-#Configure S3
+#Configure AWS CLI
 sudo mkdir -p /root/.aws
 echo "[default]" | sudo tee --append /root/.aws/config
 echo "region=us-west-1" | sudo tee --append /root/.aws/config

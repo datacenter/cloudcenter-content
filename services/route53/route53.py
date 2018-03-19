@@ -30,7 +30,7 @@ def get_hosted_zone_id(domain):
     for hosted_zone in response_hz['HostedZones']:
         if hosted_zone['Name'] in [domain, domain+'.']:
             return hosted_zone['Id']
-    raise Exception("Unable to find hosted zone {domain} in this AWS account.".format(domain))
+    raise Exception("Unable to find hosted zone {domain} in this AWS account.".format(domain=domain))
 
 
 def get_dependent_tier():
@@ -44,26 +44,31 @@ def get_dependent_tier():
     return dependencies[0]
 
 
-def get_dependent_ips(dependent_tier):
+def get_dependent_ips():
     # Set the new server list from the CliQr environment
-    dependent_addresses = os.environ["CliqrTier_" + dependent_tier + "_PUBLIC_IP"]
+    dependent_addresses = os.environ["CliqrTier_" + get_dependent_tier() + "_PUBLIC_IP"]
     print_log("Dependent Addresses: {}".format(dependent_addresses))
 
     return dependent_addresses.split(",")
+
 
 try:
     app_domain = os.getenv("route53_appDomain")
     app_hostname = os.getenv("route53_appHostname", None)
     if not app_hostname:
         app_hostname = os.getenv('parentJobName')
-    dependent_tier = get_dependent_tier()
 
-    server_addresses = get_dependent_ips(dependent_tier)
+    server_addresses = get_dependent_ips()
 
     # Restructure server_addresses simple list of IPs into ResourceRecordSet dict.
     ip_address_rr = [{'Value': ip} for ip in server_addresses]
 
-    fqdn = "{}.{}.{}".format(dependent_tier, app_hostname, app_domain)
+    # Valid DNS names are lower-alphanumeric, digits and dashes. Nothing else.
+    fqdn = "{}.{}.{}".format(
+        "".join(a for a in get_dependent_tier() if (a.isalnum() or a == '-')).lower(),
+        "".join(a for a in app_hostname if (a.isalnum() or a == '-')).lower(),
+        app_domain
+    )
     print_log("FQDN: {}".format(fqdn))
 
     cmd = sys.argv[1]
@@ -95,8 +100,11 @@ try:
             ChangeBatch=change_batch
         )
     except Exception as err:
-        print_log("Error while trying to update the record set: {}".format(err))
-        exit(1)
+        print_log("Error  {}".format(err))
+        template = "An exception of type {0} occurred while trying to update the record set. Arguments:\n{1!r}"
+        message = template.format(type(err).__name__, err.args)
+        print_log(message)
+        raise
 
     result = {
         'hostName': fqdn,
@@ -106,6 +114,7 @@ try:
     }
     print_ext_service_result(json.dumps(result))
 except Exception as err:
-    print_log("Something went wrong: {}".format(err))
-    exit(1)
-
+    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+    message = template.format(type(err).__name__, err.args)
+    print_log(message)
+    raise

@@ -15,9 +15,7 @@ use_dhcp = False
 windows_cust_spec = None
 linux_cust_spec = None
 
-# OpenStack Specific
-
-# VMWare Specific
+# OS Specific Properties, Windows or Linux
 if os_type == "Windows":
     if windows_cust_spec:
         print("custSpec=" + windows_cust_spec)
@@ -36,7 +34,7 @@ if os_type == "Windows":
         print("setAdminPassword=p@ssw0rd")
         # print("dynamicPropertyName=")
         # print("dynamicPropertyValue=")
-        # print("changeSid=true")
+        print("changeSid=true")
         print("deleteAccounts=false")
         print("timeZoneId=004")
         print("fullName=Michael Davis")
@@ -48,22 +46,18 @@ elif os_type == "Linux":
         print("domainName=mdavis.local")
         print("hwClockUTC=true")
         print("timeZone=America/Los_Angeles")
-        print("osHostname=asdf")
 else:
     print("Unrecognized OS Type")
     exit(1)
 
-
+# General Properties
+print("osHostname=asdf")
 print("DnsServerList=192.100.0.84")  # Optional
 print("DnsSuffixList=mdavis.local")  # Optional
 print("nicCount=" + str(nic_count))  # Required
 
 # For IP settings, this script will be run for each NIC.
 # Always use _0 as output for the output of nic-specific settings.
-
-# Maybe set network and subnet programatically. Not sure.
-# print("networkId_{}=".format(i))
-# print("subnetId_{}=".format(i))
 
 print("nicUseDhcp_0={}".format(use_dhcp))
 if not use_dhcp:
