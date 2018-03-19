@@ -2,6 +2,7 @@
 import os
 import sys
 import bigsuds
+# from f5.bigip import ManagementRoot
 
 def print_log(msg):
     print("CLIQR_EXTERNAL_SERVICE_LOG_MSG_START")
@@ -29,10 +30,13 @@ VS_PORT = os.environ['vsPort']
 RS_PORT = os.environ['rsPort']
 POOL_LB_METHOD = os.environ['lbMethod']
 BIGIP_ADDRESS = os.environ['bigIPAddress']
+bigip_api_port = os.environ['bigip_api_port']
 VS_NAME = "cliqr_" + os.environ['parentJobId'] + "_vip"
 POOL_NAME = "cliqr_" + os.environ['parentJobId'] + "_pool"
 username = os.environ['bigIPusername']
 password = os.environ['bigIPpassword']
+iRules = os.getenv("f5ext_iRules", None)
+rule_name = 'rule' + os.environ['parentJobId']
 
 # Create list of dependent service tiers
 dependencies = os.environ["CliqrDependencies"].split(",")
@@ -44,19 +48,10 @@ if len(dependencies) == 0:
           "Check your app topology.")
     sys.exit(0)
 
-# If there are no dependency tiers, then there won't be anything in the
-# pool, so just exit.
-if len(dependencies) > 1:
-    print("This service only supports a single dependent tier, "
-          "but I see {}. Try adding one of these services in front of"
-          "each tier that requires a VIP in your app profile.".format(
-        len(dependencies))
-    )
-    sys.exit(0)
-
-
 # Set the new server list from the CliQr environment
-serverIps = os.environ["CliqrTier_" + dependencies[0] + "_IP"].split(",")
+serverIps = []
+for dep in dependencies:
+    serverIps.extend(os.environ["CliqrTier_" + dep + "_IP"].split(","))
 
 pool = 'pool' + os.environ['parentJobId']
 vip = 'vip' + os.environ['parentJobId']
@@ -64,8 +59,11 @@ b = bigsuds.BIGIP(
     hostname=BIGIP_ADDRESS,
     username=username,
     password=password,
-    port=8443  # TODO: Parametarize
+    port=bigip_api_port
 )
+
+# Connect using newer f5-sdk module instead of older bigsuds.
+# mgmt = ManagementRoot(BIGIP_ADDRESS, username, password, port=8443)
 
 if cmd == "start":
     members = []
@@ -86,7 +84,38 @@ if cmd == "start":
         [{
             'type': 'RESOURCE_TYPE_POOL',
             'default_pool_name': POOL_NAME
-        }], [[{}]])
+        }], [[{
+            'profile_name': 'http',
+            'profile_context': 'PROFILE_CONTEXT_TYPE_ALL'}]])
+    if iRules:
+        try:
+            # r = mgmt.tm.ltm.rules.rule.create(
+            #     name=rule_name,
+            #     apiAnonymous=iRules,
+            #     partition=False
+            # )
+            r = b.LocalLB.Rule.create([{
+                'rule_name': rule_name,
+                'rule_definition': iRules
+
+            }])
+            print_log("Created iRule {}: {}".format(rule_name, iRules))
+        except Exception as err:
+            print_log("Failed to create iRule {}: {}".format(rule_name, iRules))
+        try:
+            # vip = mgmt.tm.ltm.virtuals.virtual.load(name=VS_NAME)
+            # vip.rules.append(rule_name)
+            # vip.update()
+            b.LocalLB.VirtualServer.add_rule([VS_NAME], [[{
+                'rule_name': rule_name,
+                'priority': 1
+            }]])
+            print_log("Appended iRule {} to VIP {}".format(rule_name, VS_NAME))
+        except Exception as Err:
+            print_log("Failed to append iRule {} to VIP {}. "
+                      "Continuing the deployment.".format(rule_name,
+                                                     VS_NAME))
+
 
 elif cmd == "reload":
     # Get all the members in the current pool from API
@@ -99,8 +128,8 @@ elif cmd == "reload":
         if not any(x['address'] == ip for x in r):
             addServers.append(ip)
 
-    # For each server in the currPool, add it to addServers if it's not in serverIps
-    # removeServers = [server for server in currPool.keys() if server not in serverIps ]
+    # For each server in the currPool, add it to addServers if it's
+    # not in serverIps.
     removeServers = []
     for server in r:
         if server['address'] not in serverIps:
@@ -129,3 +158,9 @@ elif cmd == "stop":
     b.LocalLB.VirtualServer.delete_virtual_server(['/Common/' + VS_NAME])
     b.LocalLB.Pool.delete_pool(['/Common/' + POOL_NAME])
     b.LocalLB.NodeAddressV2.delete_node_address(currIpsInPool)
+    if iRules:
+        try:
+            r = b.LocalLB.Rule.delete_rule([rule_name])
+            print_log("Deleted iRule {}: {}".format(rule_name, iRules))
+        except Exception as err:
+            print_log("Failed to delete iRule {}: {}".format(rule_name, iRules))

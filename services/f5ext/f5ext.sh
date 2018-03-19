@@ -2,6 +2,11 @@
 #F5 External Service Script
 . /utils.sh
 
+# Print the env to the CCM UI for debugging. Remove this line for production.
+# Ues with:
+# sed -n '/718WPR53 ENV START/,/718WPR53 ENV END/p' /usr/local/cliqr/logs/gateway.log | \
+# head -n-1 | tail -n+2 | grep '=' | grep -v '\\n' > envfile
+
 echo "${parentJobName} ENV START"
 print_log "$(env)"
 echo "${parentJobName} ENV END"
@@ -27,6 +32,7 @@ pip install setuptools --upgrade
 pip install requests --upgrade
 pip install bigsuds --upgrade
 pip install six --upgrade
+# pip install f5-sdk --upgrade
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/${gitTag}/services/f5ext/f5.py -O f5.py
 
 case ${cmd} in
