@@ -14,26 +14,42 @@ script from CloudCenter. Check the logs for details.
 Gateway - This is the gateway that you use for the network.
 """
 
+import argparse
+import logging
 import requests
 import os
 import json
 import sys
 import netaddr
-import logging
+parser = argparse.ArgumentParser()
+log_choices = {
+    'critical': logging.CRITICAL,
+    'error': logging.ERROR,
+    'warning': logging.WARNING,
+    'info': logging.INFO,
+    'debug': logging.DEBUG
+}
+parser.add_argument("-l", "--level", help="Set logging level.",
+                    choices=log_choices, default='info')
 
+args = parser.parse_args()
+parser.parse_args()
+
+log_file = '/usr/local/cliqr/callout/callout.log'
 logging.basicConfig(
-    filename='/usr/local/cliqr/callout/callout.log',
+    filename=log_file,
     format="IPAM:%(levelname)s:{job_name}:{vmname}:%(message)s".format(
         job_name=os.getenv('eNV_parentJobName'),
         vmname=os.getenv('vmName')
     ),
-    level=logging.INFO
+    level=log_choices[args.level]
 )
+print("Log file at: {}".format(log_file))
 
 """ Infoblox Settings"""
+# Version of Infolbox WAPI to use. Must be >= 1.3.
 wapi_version = "2.6"
 ib_hostname = "172.16.201.201"
-ib_api_endpoint = "https://{}/wapi/v{}".format(ib_hostname, wapi_version)
 ib_user = "admin"
 ib_pass = "infoblox"
 
@@ -41,7 +57,7 @@ ib_pass = "infoblox"
 # Exclude these networks from ipam. Must match the networkId
 # env var passed in.
 exclude_from_ipam = []  # Ex: ['apps-201', 'apps-202']
-# Version of Infolbox WAPI to use. Must be >= 1.3.
+
 domain = "my.domain.com"  # Must match domain configured in Infoblox DNS
 dns_server_list = "172.16.1.90,172.16.1.91"
 dns_suffix_list = "auslab.cisco.com"
@@ -54,6 +70,7 @@ win2012_cust_spec = None
 win2016_cust_spec = None
 
 """ End Settings """
+
 
 # Pulling in information from env vars
 os_type = os.getenv("eNV_osName")
@@ -75,7 +92,11 @@ if image_name == "Windows Server 2016":
     windows_cust_spec = win2016_cust_spec
 elif image_name == "Windows Server 2012":
     windows_cust_spec = win2012_cust_spec
-logging.info("Windows Customization Spec: {}".format(windows_cust_spec))
+
+if os_type == "Windows" and not windows_cust_spec:
+    logging.error("A customization spec is required for Windows"
+                  "deployments.")
+    exit(1)
 
 if network_id in exclude_from_ipam:
     use_dhcp = True
@@ -86,6 +107,7 @@ logging.info("use_dhcp: {}".format(use_dhcp))
 
 s = requests.Session()
 
+ib_api_endpoint = "https://{}/wapi/v{}".format(ib_hostname, wapi_version)
 
 def get_ip_addr(ref):
     url = "{}/{}".format(ib_api_endpoint, ref)
@@ -110,9 +132,16 @@ def allocate_ip():
     headers = {}
     response = s.request("GET", url, headers=headers, params=querystring, verify=False,
                          auth=(ib_user, ib_pass))
+    if len(response.json()) != 1:
+        logging.error("Must have exactly one network in Infoblox with "
+                      "extensible attribute networkId matching network "
+                      "{}. Found {} instead.".format(
+                        network_id, len(response.json())
+                        ))
+        exit(1)
     gateway = response.json()[0]['extattrs']['Gateway']['value']
-    subnet = response.json()[0]['network']  # CIDR format
-    netmask = str(netaddr.IPNetwork(subnet).netmask)  # Convert CIDR to netmask
+    subnet = response.json()[0]['network']
+    netmask = str(netaddr.IPNetwork(subnet).netmask)
 
     # Create Host Record
     url = "{}/record:host".format(ib_api_endpoint)
@@ -163,17 +192,11 @@ if not use_dhcp:
     print("nicGateway_0={}".format(ip['gateway']))
     print("nicDnsServerList_0={}".format(dns_server_list))  # Optional
 
-
 # VMWare Specific
 if os_type == "Windows":
-    if windows_cust_spec:
-        logging.info("Using Customization Spec: {}".
-                     format(windows_cust_spec))
-        print("custSpec=" + windows_cust_spec)
-    else:
-        logging.error("A customization spec is required for Windows"
-                      "deployments.")
-        exit(1)
+    logging.info("Using Customization Spec: {}".
+                 format(windows_cust_spec))
+    print("custSpec=" + windows_cust_spec)
 elif os_type == "Linux":
     if linux_cust_spec:
         print("custSpec=" + linux_cust_spec)
