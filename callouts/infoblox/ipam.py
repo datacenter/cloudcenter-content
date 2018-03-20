@@ -1,5 +1,4 @@
 #!/home/cliqruser/callouts/bin/python
-# More verbose
 
 """
 This script is designed for use with CloudCenter callouts.
