@@ -43,6 +43,7 @@ logging.basicConfig(
     ),
     level=log_choices[args.level]
 )
+logging.captureWarnings(True)
 print("Log file at: {}".format(log_file))
 
 """ Infoblox Settings"""
