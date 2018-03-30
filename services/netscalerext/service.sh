@@ -4,7 +4,6 @@
 #For external-service
 . /utils.sh
 
-wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscalerext/netscaler.json
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/netscalerext/SetupNetScaler.py
 
 print_log "$(env)"
@@ -38,20 +37,8 @@ function getMembers() {
     do
       memberIPs=$memberIPs"\"$ip\","
     done
-    memberIPs=`echo $memberIPs |sed s'/.$//'`
+    export memberIPs=`echo $memberIPs |sed s'/.$//'`
   done
-}
-function createNetscalerParams() {
-
- sed -i "s/%netscaler_ip%/$netscaler_ip/g" netscaler.json
- sed -i "s/%ns_user%/$ns_user/g" netscaler.json
- sed -i "s/%ns_pwd%/$ns_pwd/g" netscaler.json
-# sed -i "s/%ns_interfaces%/$ns_interfaces/g" netscaler.json
- sed -i "s/%ns_interfaces%/1\/2/g" netscaler.json
- sed -i "s/%ns_snips%/$ns_snips/g" netscaler.json
- sed -i "s/%ns_netmask%/$ns_netmask/g" netscaler.json
- sed -i "s/%ns_vip%/$ns_vip/g" netscaler.json
- sed -i "s/%ns_poolmembers%/$memberIPs/g" netscaler.json
 }
 
 function executionStatus() {
@@ -63,25 +50,15 @@ if grep -q "Error" "$FILE"; then
    exit 1
 fi
 
- #if [ -f $FILE ];
- #then
- #   status=`cat $FILE`
- #   print_log "Configuration Failure"
- #   print_log "$status"
- #   exit 127
- # else
- #   FILE="SUCCESS"
- #   status="Configuration Successful"
- #   print_log "$status"
- #fi
 }
 
 print_log "Installing pre requisites.."
 setup_prereqs
 print_log "Retrieving Members.."
 getMembers
+echo $memberIPs
 print_log "Creating Netscaler Parameters"
-createNetscalerParams
+#createNetscalerParams
 
 case $cmd in
 	start)
