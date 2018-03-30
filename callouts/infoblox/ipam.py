@@ -114,9 +114,9 @@ def get_ip_addr(ref):
     logging.debug(url)
     try:
         response = s.request("GET", url, verify=False, auth=(ib_user, ib_pass))
-        print("Response: {}".format(response.text))
+        logging.debug("Response: {}".format(response.text))
     except Exception as err:
-        print("Couldn't create host record: {0}.".format(err))
+        logging.error("Couldn't create host record: {0}.".format(err))
         sys.exit(1)
 
     return response.json()['ipv4addrs'][0]['ipv4addr']
