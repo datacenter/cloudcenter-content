@@ -187,27 +187,27 @@
     "externalActions": [
         {
             "actionName": "START", 
-            "actionValue": "https://raw.githubusercontent.com/grimmtheory/c3/master/s3/s3-utils-ext-svc.sh start", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/s3/s3-utils-ext-svc.sh start", 
             "actionType": "URL"
         }, 
         {
             "actionName": "STOP", 
-            "actionValue": "https://raw.githubusercontent.com/grimmtheory/c3/master/s3/s3-utils-ext-svc.sh stop", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/s3/s3-utils-ext-svc.sh stop", 
             "actionType": "URL"
         }, 
         {
             "actionName": "UPDATE", 
-            "actionValue": "https://raw.githubusercontent.com/grimmtheory/c3/master/s3/s3-utils-ext-svc.sh update", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/s3/s3-utils-ext-svc.sh update", 
             "actionType": "URL"
         }, 
         {
             "actionName": "RESUME", 
-            "actionValue": "https://raw.githubusercontent.com/grimmtheory/c3/master/s3/s3-utils-ext-svc.sh resume", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/s3/s3-utils-ext-svc.sh resume", 
             "actionType": "URL"
         }, 
         {
             "actionName": "SUSPEND", 
-            "actionValue": "https://raw.githubusercontent.com/grimmtheory/c3/master/s3/s3-utils-ext-svc.sh suspend", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/s3/s3-utils-ext-svc.sh suspend", 
             "actionType": "URL"
         }
     ]
