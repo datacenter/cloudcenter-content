@@ -1,5 +1,5 @@
 ## Tools and services written for Cisco CloudCenter
 
-- [tools](https://github.com/grimmtheory/c3/tree/master/tools) - Scripts, helpers, etc.
+- [vm-init tools](https://github.com/datacenter/cloudcenter-content/tree/master/other/vm-init) - Scripts, helpers, etc.
 
-    + [vm-init.sh](https://github.com/grimmtheory/c3/blob/master/tools/vm-init.sh) - Inject user and keys to VMs at deploy time.
+    + [vm-init-add-user-and-key-on-boot.sh](https://github.com/datacenter/cloudcenter-content/tree/master/other/vm-init/vm-init-add-user-and-key-on-boot.sh) - Inject user and keys to VMs at deploy time.
