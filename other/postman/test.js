@@ -54,12 +54,9 @@ var waitForDone = function () {
     return new Promise(checkDone);
 };
 var terminateJob = function () {
-    console.log("terminate");
     // resolve("test2");
     return new Promise(function(resolve, reject) {
         pm.sendRequest(deleteJob, function(err, res) {
-            console.log(res.json());
-            console.log("term2");
             resolve("terminating job");
         });
     });
@@ -77,6 +74,9 @@ var testStatus  = function (status) {
             if (jobStatus == status) {
                 resolve(jobStatus);
             } else {
+                console.log("Job Status was unexpected, skipping " +
+                    "cleanup: " + jobStatus
+                );
                 reject(jobStatus);
             }
         });
