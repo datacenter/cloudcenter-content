@@ -1,8 +1,17 @@
 pm.test("Successful status code 2XX", function () {
     pm.response.to.be.success;
 });
-
-resUrl = pm.response.json().resource;
+pm.test("Valid JSON response", function () {
+    pm.response.to.be.json;
+});
+var resUrl = pm.response.json().resource;
+pm.test("Valid Resource URL", function () {
+    resUrl != null;
+});
+if(!resUrl) {
+    var err = pm.response.json().errors[0].message;
+    throw new Error("Unable to get Resource URL. " + err);
+}
 
 const getJobDetails = {
   url: resUrl,
@@ -23,6 +32,8 @@ const deleteJob = {
 
 var waitForDone = function () {
     var checkDone = function(resolve, reject) {
+        //console.log(resUrl);
+        //if (resUrl) {reject();}
         pm.sendRequest(getJobDetails, function(err, res) {
             let jobStatus = res.json().deploymentEntity.attributes.status;
             let validStates = [
@@ -54,11 +65,22 @@ var waitForDone = function () {
     return new Promise(checkDone);
 };
 var terminateJob = function () {
-    // resolve("test2");
     return new Promise(function(resolve, reject) {
         pm.sendRequest(deleteJob, function(err, res) {
             resolve("terminating job");
         });
+    });
+};
+
+var validResource = function () {
+    return new Promise(function(resolve, reject) {
+        //console.log(resUrl);
+        if (resUrl) {
+            resolve(resUrl);
+        } else {
+            console.log("Resouce URL not found.");
+            reject(resUrl);
+        }
     });
 };
 
@@ -91,11 +113,16 @@ var testStatus  = function (status) {
 // https://community.getpostman.com/t/using-native-javascript-promises-in-postman/636
 var interval = setTimeout(function() {}, 1800000);
 
-waitForDone()
+validResource()
+    .then(waitForDone)
+//waitForDone()
     .then((result) => testStatus("Deployed"))
     .then(terminateJob)
     .then(waitForDone)
     .then((result) => testStatus("Terminated"))
     .then((v) => {clearTimeout(interval);})
-    .catch((v) => {clearTimeout(interval);})
+    .catch((v) => {
+        console.log("Something went wrong");
+        clearTimeout(interval);
+    })
     ;
