@@ -47,8 +47,11 @@ gcloud config set compute/zone $compute_zone
 #gcloud config set compute/zone us-central1-a
 
 #Set Auth Credentials
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/service/CloudCenterTSA-3d1b0e624918.json
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/projcred.zip
+unzip -P $cred_password projcred.zip
+#wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/CloudCenterTSA-3d1b0e624918.json
 gcloud auth activate-service-account --key-file CloudCenterTSA-3d1b0e624918.json
 
 #Delete Kubernetes Engine cluster
 gcloud container clusters delete --quiet $cluster_name
+

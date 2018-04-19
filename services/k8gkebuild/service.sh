@@ -4,9 +4,9 @@
 #For external-service
 . /utils.sh
 
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/service/k8gkebuild.sh
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/k8gkebuild.sh
 chmod u+x k8gkebuild.sh
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/service/k8gkedelete.sh
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/k8gkedelete.sh
 chmod u+x k8gkedelete.sh
 
 print_log "$(env)"
