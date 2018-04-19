@@ -70,17 +70,17 @@ kubectl config set-cluster $cluster_name
 #gcloud auth application-default login
 
 #Create Standard and Gold Storage Classes
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/ssd-storageclass.yaml
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/pdstandard-storageclass.yaml
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/ssd-storageclass.yaml
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/pdstandard-storageclass.yaml
 kubectl apply -f ssd-storageclass.yaml
 kubectl apply -f pdstandard-storageclass.yaml
 
 #Create Name Space
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/namespacecreate.json
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/namespacecreate.json
 kubectl create -f namespacecreate.json
 
 #Create Secret
-wget http://cliqrdemo-repo.s3.amazonaws.com/joey/k8gkebuild/secret.yaml
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/secret.yaml
 kubectl create -f secret.yaml --namespace=$name_space
 
 
