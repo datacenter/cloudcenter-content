@@ -49,7 +49,7 @@ gcloud config set compute/zone $compute_zone
 
 #Set Auth Credentials
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/projcred.zip
-unzip -P $cred_password projcred.zip
+unzip -P '$cred_password' projcred.zip
 #wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/CloudCenterTSA-3d1b0e624918.json
 gcloud auth activate-service-account --key-file CloudCenterTSA-3d1b0e624918.json
 
