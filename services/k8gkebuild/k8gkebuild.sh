@@ -54,6 +54,7 @@ echo "unzip -P password projcred.zip" > string.txt
 sed -i 's/password/'$cred_password'/g' string.txt
 i=`cat string.txt`
 eval "$i"
+print_log "$i"
 #wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/CloudCenterTSA-3d1b0e624918.json
 gcloud auth activate-service-account --key-file CloudCenterTSA-3d1b0e624918.json
 
