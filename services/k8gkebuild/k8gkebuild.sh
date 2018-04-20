@@ -51,7 +51,7 @@ gcloud config set compute/zone $compute_zone
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/projcred.zip
 #unzip -P $cred_password projcred.zip
 echo "unzip -P password projcred.zip" > string.txt
-sed -i 's/password/'$cred_password'/g' string.txt
+sed -i 's/password/'$proj_cred'/g' string.txt
 i=`cat string.txt`
 eval "$i"
 print_log "$i"
