@@ -80,11 +80,15 @@ wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/ser
 kubectl apply -f ssd-storageclass.yaml
 kubectl apply -f pdstandard-storageclass.yaml
 
+#Create Secret for default namespace
+wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/secret.yaml
+kubectl create -f secret.yaml --namespace="default"
+
 #Create Name Space
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/namespacecreate.json
 kubectl create -f namespacecreate.json
 
-#Create Secret
+#Create Secret for chosen namespace
 wget https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/services/k8gkebuild/secret.yaml
 kubectl create -f secret.yaml --namespace=$name_space
 
@@ -92,8 +96,8 @@ kubectl create -f secret.yaml --namespace=$name_space
 #Create service account in default namespace
 kubectl create serviceaccount $service_account_name -n "default"
 #Create service account in chosen namespace
-kubectl create serviceaccount $service_account_name -n $name_space
-export CLUSTER_ROLE_BINDING_NAME=$admin_cluster_role
+#kubectl create serviceaccount $service_account_name -n $name_space
+#export CLUSTER_ROLE_BINDING_NAME=$admin_cluster_role
 
 #Create cluster role finding for default namespace
 kubectl create clusterrolebinding "admin_cluster_role_0" --clusterrole=cluster-admin --serviceaccount="default":$service_account_name
