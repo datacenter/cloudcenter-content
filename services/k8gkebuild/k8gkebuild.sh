@@ -92,8 +92,8 @@ kubectl create -f secret.yaml --namespace=$name_space
 #Create service account in default namespace
 kubectl create serviceaccount $service_account_name -n "default"
 #Create service account in chosen namespace
-#kubectl create serviceaccount $service_account_name -n $name_space
-#export CLUSTER_ROLE_BINDING_NAME=$admin_cluster_role
+kubectl create serviceaccount $service_account_name -n $name_space
+export CLUSTER_ROLE_BINDING_NAME=$admin_cluster_role
 
 #Create cluster role finding for default namespace
 kubectl create clusterrolebinding "admin_cluster_role_0" --clusterrole=cluster-admin --serviceaccount="default":$service_account_name
@@ -102,11 +102,6 @@ kubectl create clusterrolebinding $CLUSTER_ROLE_BINDING_NAME --clusterrole=clust
 
 export SECRET_NAME=$(kubectl get serviceaccount $service_account_name -n "default" -o 'jsonpath={.secrets[0].name}' 2>/dev/null)
 
-#kubectl get secret $SECRET_NAME -n "default" -o "jsonpath={.data.token}" | openssl enc -d -base64 -A
-
 print_log "Service Account Name: $service_account_name"
-
-#print_log "Service Account Token, required for Container Cloud Account"
-#print_log "$(kubectl get secret $SECRET_NAME -n "default" -o "jsonpath={.data.token}" | openssl enc -d -base64 -A)"
 
 print_log "Service Account Token, required for Container Cloud Account: $(kubectl get secret $SECRET_NAME -n "default" -o "jsonpath={.data.token}" | openssl enc -d -base64 -A)"
