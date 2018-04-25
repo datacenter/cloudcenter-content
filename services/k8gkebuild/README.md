@@ -20,9 +20,9 @@ Usage;
     3) Deploy the k8gkebuild application profile to any cloud having an orchestrator which can reach API endspoints at GCE.
     4) During deployment you will need to input a service account name and a cluster name.  The remaining deployment parameters can remain default.
     5) Once deployed access the GCE console, navigate to Google Kubernetes Engine and review the cluster created.
-        -You should see a cluster with the given name, 2 storage classes (standard, gold), multiple "mysql" secrets (if you chose a namespace other             then default).
-    6) You need to gather the cluster IP for configuration of the CloudCenter cloud region.  Navigate to the "Cluster" link, then click into the                cluster name.  From here you will see the cluster IP. Copy this for future use.
-    7) Navigate to the deployment details of your k8gkebuild deployment.  Expand the single node to get to the node details.  Here in the task                  details, toward the top you will see the service account and the "Token" information.  Copy both to a holding area.  Be very careful to             get all of the Token as it is easy to leave off the last line during the copy process.
+        -You should see a cluster with the given name, 2 storage classes (standard, gold), multiple "mysql" secrets (if you chose a namespace other then default).
+    6) You need to gather the cluster IP for configuration of the CloudCenter cloud region.  Navigate to the "Cluster" link, then click into the cluster name.  From here you will see the cluster IP. Copy this for future use.
+    7) Navigate to the deployment details of your k8gkebuild deployment.  Expand the single node to get to the node details.  Here in the task details, toward the top you will see the service account and the "Token" information.  Copy both to a holding area.  Be very careful to get all of the Token as it is easy to leave off the last line during the copy process.
     8) In CloudCenter, navigate to Clouds, Add a cloud.  Select cloud type of Kubernetes.
     9) Select "Add Cloud Account" link.  Use the service account name, for both the name and the "Service Account Name" fields.  Paste the token into       the "Service Account Token" field (no need to remove any newline characters, paste as is).
     10 Select "Configure Cloud".  On the details tab configure "Kubernetes Settings".  Paste the IP of the GKE cluster.
