@@ -4,7 +4,7 @@
 # Author	: jasgrimm
 # Date		: 2018-04-16
 # Version	: 0.9
-# Usage		: bash vm-init.sh - create global paramaters in app profile for username and public key input
+# Usage		: bash vm-init.sh - create global paramaters in app profile launch (green field) for username and public key input (or as a life cycle action - brown field)
 # External Vars	: Read in at run time via global paramater - $MY_USER, $MY_KEY
 # Internal Vars	: Initialized within srcipt - $CLIQR_HOME
 
