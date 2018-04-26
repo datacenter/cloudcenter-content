@@ -32,6 +32,13 @@ else
 	sudo chown $MY_USER:$MY_USER /home/$MY_USER/.ssh/authorized_keys
 	sudo chmod 600 /home/$MY_USER/.ssh/authorized_keys
 	sudo agentSendLogMessage "New user $MY_USER created."
+
+	sudo mkdir /root/.ssh
+	sudo chown root:root /root/.ssh
+	sudo chmod 700 /root/.ssh
+	sudo touch /root/.ssh/authorized_keys
+	sudo chown root:root /root/.ssh/authorized_keys
+	sudo chmod 600 /root/.ssh/authorized_keys
 fi
 }
 
@@ -42,11 +49,15 @@ sudo usermod -aG wheel $MY_USER
 sudo -i bash -c "echo \"$MY_USER  ALL= NOPASSWD: ALL\" >> /etc/sudoers"
 }
 
-## Insert keys for new user
+## Insert keys for new user and root
 insertKeys() {
 sudo agentSendLogMessage "Adding a new key to $MY_USER authorized_keys..."
+
 sudo bash -c "echo \"## Dynamically inserted key ##\" >> /home/$MY_USER/.ssh/authorized_keys"
 sudo bash -c "echo $MY_KEY >> /home/$MY_USER/.ssh/authorized_keys"
+
+sudo bash -c "echo \"## Dynamically inserted key ##\" >> /root/.ssh/authorized_keys"
+sudo bash -c "echo $MY_KEY >> /root/.ssh/authorized_keys"
 }
 
 # Main
