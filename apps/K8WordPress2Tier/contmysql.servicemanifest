@@ -1,0 +1,94 @@
+{
+    "childServices": [], 
+    "perms": [
+        "read", 
+        "delete", 
+        "administration", 
+        "write"
+    ], 
+    "repositories": [], 
+    "egressRestrictions": [], 
+    "externalBundleLocation": "", 
+    "visible": true, 
+    "costPerHour": 0.0, 
+    "logoPath": "/custom/assets/img/serviceLogo/8748a6b1-f2db-457a-a854-78878ee5890a.png", 
+    "systemService": false, 
+    "isBundleRequired": false, 
+    "servicePorts": [], 
+    "parentServiceId": "40", 
+    "containerImages": [
+        {
+            "url": "mysql", 
+            "default": true, 
+            "id": 10
+        }, 
+        {
+            "url": "mysql:5.7", 
+            "default": false, 
+            "id": 12
+        }, 
+        {
+            "url": "mysql:5.6", 
+            "default": false, 
+            "id": 13
+        }
+    ], 
+    "serviceType": "CONTAINER", 
+    "description": "", 
+    "serviceParamSpecs": [
+        {
+            "systemParam": false, 
+            "collectionList": [], 
+            "deploymentParam": true, 
+            "displayName": "Root Password", 
+            "pathSuffixValue": "", 
+            "userVisible": true, 
+            "confirmValue": null, 
+            "optional": false, 
+            "defaultValue": "", 
+            "multiselectSupported": false, 
+            "webserviceListParams": null, 
+            "secret": {
+                "name": "mysql", 
+                "value": "password"
+            }, 
+            "helpText": "", 
+            "userEditable": true, 
+            "valueList": null, 
+            "paramName": "MYSQL_ROOT_PASSWORD", 
+            "exampleValue": null, 
+            "dataUnit": null, 
+            "type": "secret", 
+            "scope": null, 
+            "valueConstraint": {
+                "regex": null, 
+                "sizeValue": 0, 
+                "calloutWorkflowName": null, 
+                "maxValue": 0, 
+                "minValue": 0, 
+                "allowSpaces": true, 
+                "step": 0, 
+                "maxLength": 0
+            }
+        }
+    ], 
+    "images": [], 
+    "parentService": false, 
+    "containerPorts": [
+        {
+            "port": 3306, 
+            "protocol": "TCP", 
+            "id": 24, 
+            "name": "mysql"
+        }
+    ], 
+    "isExternalBundleRequired": false, 
+    "bundleLocation": "", 
+    "defaultImageName": null, 
+    "displayName": "Container MySQL", 
+    "name": "contmysql", 
+    "externalService": false, 
+    "serviceActions": [], 
+    "externalActions": [], 
+    "costPerHourPreferredCurrency": 0.0
+}
