@@ -58,7 +58,7 @@ eval "$i"
 gcloud auth activate-service-account --key-file CloudCenterTSA-3d1b0e624918.json
 
 #create a Kubernetes Engine cluster
-gcloud container clusters create $cluster_name --zone $compute_zone --num-nodes 3 --cluster-version=$cluster_version --node-version=$node_version
+gcloud container clusters create $cluster_name --zone $compute_zone --num-nodes 1 --cluster-version=$cluster_version --node-version=$node_version
 
 
 #Get authentication credentials for the cluster
