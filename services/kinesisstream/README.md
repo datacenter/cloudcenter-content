@@ -1,4 +1,4 @@
-# Kinesis Analytics
+# Kinesis Streams
 
 https://aws.amazon.com/kinesis/data-streams
 
