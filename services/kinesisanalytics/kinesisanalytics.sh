@@ -46,31 +46,24 @@ case ${cmd} in
 
         # Put config into file
 
-        command="aws kinesisanalytics create-application
-        --application-name ${application-name}"
-        if [ -n "${delivery_stream_type}" ]; then
-            command+=" --delivery-stream-type ${delivery_stream_type}"
+        command="aws kinesisanalytics create-application --application-name ${applicationName}"
+        if [ -n "${applicationDescription}" ]; then
+            command+=" --application-description ${applicationDescription}"
         fi
-        if [ -n "${kinesis_stream_source_configuration}" ]; then
-            command+=" --kinesis-stream-source-configuration
-            ${kinesis_stream_source_configuration}"
+        if [ -n "${inputs}" ]; then
+            echo ${inputs} > tempfile
+            command+=" --inputs file://tempfile"
         fi
-        if [ -n "${extended_s3_destination_configuration}" ]; then
-            command+=" --extended-s3-destination-configuration
-            ${extended_s3_destination_configuration}"
+        if [ -n "${outputs}" ]; then
+            echo ${outputs} > tempfile
+            command+=" --outputs file://tempfile"
         fi
-        if [ -n "${redshift_destination_configuration}" ]; then
-            echo ${redshift_destination_configuration} > tempfile
-            command+=" --redshift-destination-configuration
-            file://tempfile"
+        if [ -n "${cloudWatchLoggingOptions}" ]; then
+            echo ${cloudWatchLoggingOptions} > tempfile
+            command+=" --cloud-watch-logging-options file://tempfile"
         fi
-        if [ -n "${elasticsearch_destination_configuration}" ]; then
-            command+=" --elasticsearch-destination-configuration
-            ${elasticsearch_destination_configuration}"
-        fi
-        if [ -n "${splunk_destination_configuration}" ]; then
-            command+=" --splunk-destination-configuration
-            ${splunk_destination_configuration}"
+        if [ -n "${applicationCode}" ]; then
+            command+=" --application-code ${applicationCode}"
         fi
         msg=$(${command} 2>&1) || \
             error "Failed to create delivery stream: ${msg}"

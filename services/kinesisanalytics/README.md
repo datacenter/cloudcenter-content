@@ -1,5 +1,7 @@
 # Kinesis Analytics
-https://aws.amazon.com/kinesis//
+
+https://aws.amazon.com/kinesis/
+
 https://docs.aws.amazon.com/cli/latest/reference/kinesisanalytics/create-application.html
 
 # Installation
