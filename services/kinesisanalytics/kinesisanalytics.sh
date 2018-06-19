@@ -117,7 +117,7 @@ configureAWSCli(){
 
 createApplication(){
 
-    command="aws kinesisanalytics create-application --application-name ${applicationName}"
+    command="aws kinesisanalytics create-application --application-name \"${applicationName}\""
     if [ -n "${applicationDescription}" ]; then
         command+=" --application-description \"${applicationDescription}\""
     fi
