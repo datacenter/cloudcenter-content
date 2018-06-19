@@ -6,6 +6,8 @@ exec > >(tee -a /usr/local/osmosix/logs/service.log) 2>&1
 
 . /utils.sh
 
+print_log "${env}"
+
 # Print the env to the CCM UI for debugging. Remove this line for production.
 # Ues with:
 # sed -n '/718WPR53 ENV START/,/718WPR53 ENV END/p' /usr/local/cliqr/logs/gateway.log | \
