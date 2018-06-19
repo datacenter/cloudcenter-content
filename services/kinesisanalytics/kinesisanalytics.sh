@@ -122,19 +122,20 @@ createApplication(){
         command+=" --application-description ${applicationDescription}"
     fi
     if [ -n "${inputs}" ]; then
-            echo ${inputs} > tempfile
-            command+=" --inputs file://tempfile"
+            echo ${inputs} > inputfile
+            command+=" --inputs file://inputfile"
     fi
     if [ -n "${outputs}" ]; then
-            echo ${outputs} > tempfile
-            command+=" --outputs file://tempfile"
+            echo ${outputs} > outputfile
+            command+=" --outputs file://outputfile"
     fi
     if [ -n "${cloudWatchLoggingOptions}" ]; then
-            echo ${cloudWatchLoggingOptions} > tempfile
-            command+=" --cloud-watch-logging-options file://tempfile"
+            echo ${cloudWatchLoggingOptions} > cloudwatchfile
+            command+=" --cloud-watch-logging-options file://cloudwatchfile"
     fi
     if [ -n "${applicationCode}" ]; then
-            command+=" --application-code ${applicationCode}"
+            echo ${applicationCode} > appcodefile
+            command+=" --application-code file://appcodefile"
     fi
 
     print_log $command
