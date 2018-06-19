@@ -122,10 +122,12 @@ createApplication(){
         command+=" --application-description \"${applicationDescription}\""
     fi
     if [ -n "${inputs}" ]; then
+            print_log $inputs
             echo ${inputs} > inputfile
             command+=" --inputs file://inputfile"
     fi
     if [ -n "${outputs}" ]; then
+            print_log $outputs
             echo ${outputs} > outputfile
             command+=" --outputs file://outputfile"
     fi
@@ -134,6 +136,7 @@ createApplication(){
             command+=" --cloud-watch-logging-options file://cloudwatchfile"
     fi
     if [ -n "${applicationCode}" ]; then
+            print_log $applicationCode
             echo ${applicationCode} > appcodefile
             command+=" --application-code file://appcodefile"
     fi
