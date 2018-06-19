@@ -6,7 +6,7 @@ exec > >(tee -a /usr/local/osmosix/logs/service.log) 2>&1
 
 . /utils.sh
 
-print_log "${env}"
+print_log "$(env)"
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
 # Ues with:
