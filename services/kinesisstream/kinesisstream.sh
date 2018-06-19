@@ -41,6 +41,8 @@ error () {
 if [ -z "$streamName" ];
 then
 	error "Stream Name missing"
+else
+    streamName="$streamName$parentJobId"
 fi
 
 if [ -z "$shardCount" ];
