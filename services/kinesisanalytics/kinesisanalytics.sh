@@ -119,7 +119,7 @@ createApplication(){
 
     command="aws kinesisanalytics create-application --application-name ${applicationName}"
     if [ -n "${applicationDescription}" ]; then
-        command+=" --application-description ${applicationDescription}"
+        command+=" --application-description \"${applicationDescription}\""
     fi
     if [ -n "${inputs}" ]; then
             echo ${inputs} > inputfile
