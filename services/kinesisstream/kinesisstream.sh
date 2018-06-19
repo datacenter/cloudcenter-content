@@ -46,8 +46,10 @@ then
 	error "Shard count missing"
 fi
 
-if [ ! -z "$region" ];
+if [ -n "$kinesis_region" ];
 then
+    region="$kinesis_region"
+else
 	region="us-east-1";
 fi
 
