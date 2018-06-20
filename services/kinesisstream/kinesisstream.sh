@@ -42,7 +42,7 @@ if [ -z "$streamName" ];
 then
 	error "Stream Name missing"
 else
-    streamName="$streamName$parentJobName"
+    streamName="$streamName-$parentJobName"
 fi
 
 if [ -z "$shardCount" ];
