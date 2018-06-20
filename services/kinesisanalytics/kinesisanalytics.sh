@@ -122,12 +122,10 @@ createApplication(){
         command+=" --application-description \"${applicationDescription}\""
     fi
     if [ -n "${inputs}" ]; then
-            print_log $inputs
             echo ${inputs} > inputfile
             command+=" --inputs file://inputfile"
     fi
     if [ -n "${outputs}" ]; then
-            print_log $outputs
             echo ${outputs} > outputfile
             command+=" --outputs file://outputfile"
     fi
@@ -136,7 +134,6 @@ createApplication(){
             command+=" --cloud-watch-logging-options file://cloudwatchfile"
     fi
     if [ -n "${applicationCode}" ]; then
-            print_log $applicationCode
             echo ${applicationCode} > appcodefile
             command+=" --application-code file://appcodefile"
     fi
@@ -158,7 +155,7 @@ createApplication(){
 
         # get current application version id
         # hardcoding it in as it should always be the same TODO - use the describe-application CLI to get this
-        currentVersionId=2
+        currentVersionId=1
         command+=" --current-application-version-id ${currentVersionId}"
 
         print_log $command
