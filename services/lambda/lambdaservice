@@ -2,7 +2,7 @@
 
 # lambda service script
 
-# exec > >(tee -a /usr/local/osmosix/logs/service.log) 2>&1
+exec > >(tee -a /usr/local/osmosix/logs/service.log) 2>&1
 
 . /utils.sh
 
@@ -10,8 +10,12 @@ cmd=$1
 SVCNAME="lambda1"
 export INSTALL_DIR="/usr/local/aws"
 
+error () {
+    print_log "${1}"
+    exit 1
+}
 
-# the following should be parameters from the service
+# the following are required parameters from the service
 
 if [ -z "$lambdaFunctionName" ];
 then
@@ -20,32 +24,27 @@ fi
 
 if [ -z "$lambdaRuntime" ];
 then
-	print_error "Runtime missing for Lambda function"
-	exit 119
+	error "Runtime missing for Lambda function"
 fi
 
 if [ -z "$lambdaHandler" ];
 then
-	print_error "Handler missing for Lambda function"
-	exit 118
+	error "Handler missing for Lambda function"
 fi
 
 if [ -z "$lambdaRole" ];
 then
-	print_error "Role missing for Lambda function"
-	exit 117
+	error "Role missing for Lambda function"
 fi
 
-if [ -z "$lambdaCodeS3Bucket" ];
+if [ -z "$lambdaCodeS3Bucket" ] && [ -n "$lambdaCodeS3Key" ];
 then
-	print_error "S3 Bucket containing function code missing"
-	exit 116
+	error "S3 Bucket containing function code missing"
 fi
 
-if [ -z "$lambdaCodeS3Key" ];
+if [ -z "$lambdaCodeS3Key" ] && [ -n "$lambdaCodeS3Bucket" ];
 then
-	print_error "S3 Key containing function code missing"
-	exit 115
+	error "S3 Key containing function code missing"
 fi
 
 if [ ! -z "$lambdaRegion" ];
@@ -53,7 +52,7 @@ then
 	export region=$lambdaRegion;
 fi
 
-if [ ! -z "$region" ];
+if [ -z "$region" ];
 then
 	export region="us-east-1";
 fi
@@ -87,10 +86,10 @@ configureAWSCli(){
 	export EC2_REGION="$region"
 	export PATH=$PATH:$INSTALL_DIR/bin
 
-	if [ ! -z "$lambdaAWSkey" ] && [ ! -z "$lambdaAWSsecretkey" ];
+	if [ ! -z "$AWSkey" ] && [ ! -z "$AWSsecretkey" ];
 	then
-		export AWS_ACCESS_KEY_ID="$lambdaAWSkey"
-		export AWS_SECRET_ACCESS_KEY="$lambdaAWSsecretkey"
+		export AWS_ACCESS_KEY_ID="$AWSkey"
+		export AWS_SECRET_ACCESS_KEY="$AWSsecretkey"
 
 	elif [ -z $CliqrCloudAccountPwd ] || [ -z $CliqrCloud_AccessSecretKey ];
 	then
@@ -124,31 +123,45 @@ configureAWSCli(){
 
 createLambdaFunction(){
 
-	print_log "$(env)"
-	result=`which aws`
-	print_log "aws path is $result"
-	print_log "--no-verify-ssl lambda create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole --code S3Bucket=$lambdaCodeS3Bucket,S3Key=$lambdaCodeS3Key"
+    command="aws --no-verify-ssl lambd create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole"
 
-    result=`aws --no-verify-ssl lambda create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole --code S3Bucket=$lambdaCodeS3Bucket,S3Key=$lambdaCodeS3Key 2>&1`
-
-    if [ $? -eq 0 ];
-    then
-        print_log "Successfully created the Lambda function $lambdaFunctionName"
-    else
-        print_error "Error in creating Lambda function $lambdaFunctionName"
-	print_error "result is $result"
-        exit 120
+    if [ -n "${lambdaTimeout}" ]; then
+        command+=" --timeout ${lambdaTimeout}"
     fi
+    if [ -n "${lambdaMemorySize}" ]; then
+            command+=" --memory-size ${lambdaMemorySize}"
+    fi
+    if [ -n "${lambdaZipfile}" ]; then
+            command+=" --zip \"${lambdaZipfile}\""
+    fi
+    if [ "${lambdaPublish}" = "yes" ]; then
+            command+=" --publish"
+    elif [ "${lambdaPublish}" = "no" ]; then
+            command+=" --no-publish"
+    fi
+    if [ -n "${lambdaCodeS3Bucket}" ]; then
+            command+=" --code S3Bucket=$lambdaCodeS3Bucket,S3Key=$lambdaCodeS3Key"
+    fi
+
+    print_log $command
+
+    msg=$(${command} 2>&1) || \
+        error "Failed to create Lambda Function: ${msg}"
+
+    print_log "Successfully created the Lambda function $lambdaFunctionName"
 
 }
 
 deleteLambdaFunction(){
 
-    result=`aws lambda delete-function --function-name $lambdaFunctionName`
-    if [ $? -eq 0 ];
-    then
-        print_log "Lambda function $LambdaFunctionName deleted successfully"
-    fi
+    command="aws lambda delete-function --function-name $lambdaFunctionName"
+
+    print_log $command
+
+    msg=$(${command} 2>&1) || \
+        error "Failed to delete Lambda Function: ${msg}"
+
+    print_log "Successfully deleted the Lambda function $LambdaFunctionName"
 
 }
 
