@@ -123,7 +123,7 @@ configureAWSCli(){
 
 createLambdaFunction(){
 
-    command="aws --no-verify-ssl lambda create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole"
+    command="aws --no-verify-ssl lambd create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole"
 
     if [ -n "${lambdaTimeout}" ]; then
         command+=" --timeout ${lambdaTimeout}"
@@ -149,23 +149,6 @@ createLambdaFunction(){
         error "Failed to create Lambda Function: ${msg}"
 
     print_log "Successfully created the Lambda function $lambdaFunctionName"
-
-        # Add an optional event source mapping if specified in the parameters
-    if [ ${createEventSourceMapping} = "true" ]; then
-
-        command="aws lambda create-event-source-mapping --event-source-arn $lambdaEventSourceARN --function-name $lambdaFunctionName"
-        command+=" --enabled --batch-size 200 --starting-position \"TRIM_HORIZON\""
-
-        print_log $command
-
-        msg=$(${command} 2>&1) || \
-            error "Failed to add event source mapping: ${msg}"
-
-        print_log "Successfully added the event source mapping to $lambdaFunctionName"
-
-    fi
-
-
 
 }
 
