@@ -123,7 +123,7 @@ configureAWSCli(){
 
 createLambdaFunction(){
 
-    command="aws --no-verify-ssl lambd create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole"
+    command="aws --no-verify-ssl lambda create-function --function-name $lambdaFunctionName --runtime $lambdaRuntime --handler $lambdaHandler --role $lambdaRole"
 
     if [ -n "${lambdaTimeout}" ]; then
         command+=" --timeout ${lambdaTimeout}"
