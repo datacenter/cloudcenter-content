@@ -6,7 +6,7 @@ exec > >(tee -a /usr/local/osmosix/logs/service.log) 2>&1
 
 . /utils.sh
 
-print_log "$(env)"
+#print_log "$(env)"
 
 # Print the env to the CCM UI for debugging. Remove this line for production.
 # Ues with:
@@ -172,14 +172,15 @@ createApplication(){
 
 deleteApplication(){
 
-    ### need to use describe-application CLI to get the timestamp
-    command="aws kinesisanalytics describe-application --stream-name ${applicationName}"
-    msg=$(${command} 2>&1) || \
-        error "Failed to delete Kinesis application: ${msg}"
+    # need to get create timestamp before being able to delete application
+    command="aws kinesisanalytics describe-application --application-name ${applicationName} | grep CreateTimestamp | awk '{print $2}' | sed s/,//g"
 
-    createTimestamp="123"
+    print_log $command
 
-    command="aws kinesisanalytics delete-application --stream-name ${applicationName} --create-timestamp ${createTimestamp}"
+    createTimestamp=$(${command} 2>&1) || \
+        error "Failed to get create timestamp for Kinesis application: ${createTimestamp}"
+
+    command="aws kinesisanalytics delete-application --application-name ${applicationName} --create-timestamp ${createTimestamp}"
 
     print_log $command
 
