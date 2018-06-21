@@ -173,12 +173,14 @@ createApplication(){
 deleteApplication(){
 
     # need to get create timestamp before being able to delete application
-    command="aws kinesisanalytics describe-application --application-name ${applicationName} | grep CreateTimestamp | awk '{print $2}' | sed s/,//g"
+    command="aws kinesisanalytics describe-application --application-name ${applicationName}"
 
     print_log $command
 
-    createTimestamp=$(${command} 2>&1) || \
-        error "Failed to get create timestamp for Kinesis application: ${createTimestamp}"
+    msg=$(${command} 2>&1) || \
+        error "Failed to get create timestamp for Kinesis application: ${msg}"
+
+    createTimestamp=`echo msg | sed 's/.*CreateTimestamp": \([0-9]*\.[0-9]\).*/\1/'`
 
     command="aws kinesisanalytics delete-application --application-name ${applicationName} --create-timestamp ${createTimestamp}"
 
