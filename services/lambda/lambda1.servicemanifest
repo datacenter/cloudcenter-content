@@ -378,15 +378,15 @@
             "deploymentParam": false, 
             "displayName": "gitTag", 
             "pathSuffixValue": "", 
-            "userVisible": false, 
+            "userVisible": true, 
             "confirmValue": null, 
             "optional": false, 
-            "defaultValue": "kinesis", 
+            "defaultValue": "master", 
             "multiselectSupported": false, 
             "webserviceListParams": null, 
             "secret": null, 
             "helpText": "", 
-            "userEditable": false, 
+            "userEditable": true, 
             "valueList": null, 
             "paramName": "gitTag", 
             "exampleValue": null, 
@@ -545,13 +545,8 @@
     "serviceActions": [], 
     "externalActions": [
         {
-            "actionName": "STOP", 
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/lambda/lambdaservice stop", 
-            "actionType": "URL"
-        }, 
-        {
-            "actionName": "START", 
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/lambda/lambdaservice start", 
+            "actionName": "SUSPEND", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/lambda/lambdaservice suspend", 
             "actionType": "URL"
         }, 
         {
@@ -560,8 +555,13 @@
             "actionType": "URL"
         }, 
         {
-            "actionName": "SUSPEND", 
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/lambda/lambdaservice suspend", 
+            "actionName": "START", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/lambda/lambdaservice start", 
+            "actionType": "URL"
+        }, 
+        {
+            "actionName": "STOP", 
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/lambda/lambdaservice stop", 
             "actionType": "URL"
         }
     ], 
