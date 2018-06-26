@@ -1,0 +1,48 @@
+{
+    "childServices": [], 
+    "perms": [
+        "read", 
+        "delete", 
+        "administration", 
+        "write"
+    ], 
+    "repositories": [], 
+    "egressRestrictions": [], 
+    "externalBundleLocation": "", 
+    "visible": true, 
+    "costPerHour": 0.0, 
+    "logoPath": "/custom/assets/img/serviceLogo/bfe88703-2bf9-4123-ab55-b97ccf220d7c.png", 
+    "systemService": false, 
+    "isBundleRequired": false, 
+    "servicePorts": [], 
+    "parentServiceId": "48", 
+    "containerImages": [
+        {
+            "url": "launcher.gcr.io/google/nginx1:latest", 
+            "default": true, 
+            "id": 9
+        }
+    ], 
+    "serviceType": "CONTAINER", 
+    "description": "", 
+    "serviceParamSpecs": [], 
+    "images": [], 
+    "parentService": false, 
+    "containerPorts": [
+        {
+            "port": 80, 
+            "protocol": "TCP", 
+            "id": 16, 
+            "name": "http"
+        }
+    ], 
+    "isExternalBundleRequired": false, 
+    "bundleLocation": "", 
+    "defaultImageName": null, 
+    "displayName": "Container NGINX", 
+    "name": "conttnginx", 
+    "externalService": false, 
+    "serviceActions": [], 
+    "externalActions": [], 
+    "costPerHourPreferredCurrency": 0.0
+}

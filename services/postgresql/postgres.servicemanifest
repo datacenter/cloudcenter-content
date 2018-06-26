@@ -16,7 +16,7 @@
   "bundleLocation": "",
   "externalBundleLocation": "",
   "costPerHour": 0,
-  "defaultImageId": 21,
+  "defaultImageName": null,
   "serviceType": "VM_AGENT",
   "ownerUserId": "20170",
   "serviceActions": [

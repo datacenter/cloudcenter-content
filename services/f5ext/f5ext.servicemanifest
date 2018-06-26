@@ -11,17 +11,17 @@
     "externalActions": [
         {
             "actionName": "UPDATE",
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/service update",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/f5ext.sh update",
             "actionType": "URL"
         },
         {
             "actionName": "STOP",
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/service stop",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/f5ext.sh stop",
             "actionType": "URL"
         },
         {
             "actionName": "START",
-            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/service start",
+            "actionValue": "https://raw.githubusercontent.com/datacenter/cloudcenter-content/%gitTag%/services/f5ext/f5ext.sh start",
             "actionType": "URL"
         }
     ],
@@ -34,7 +34,7 @@
             "userVisible": true,
             "confirmValue": "",
             "optional": false,
-            "defaultValue": "f5ext",
+            "defaultValue": "f5ext1.4",
             "webserviceListParams": null,
             "helpText": "Tag or Branch you want to use code from.",
             "userEditable": true,
@@ -82,6 +82,34 @@
             "optional": false,
             "systemParam": true,
             "paramName": "bigIPAddress"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "BigIP Port used for API calls to iControl.",
+            "type": "string",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "8443",
+            "displayName": "BigIP Port",
+            "valueList": null,
+            "optional": false,
+            "systemParam": true,
+            "paramName": "bigip_api_port"
         },
         {
             "exampleValue": null,
@@ -278,6 +306,34 @@
             "optional": false,
             "systemParam": true,
             "paramName": "lbType"
+        },
+        {
+            "exampleValue": null,
+            "helpText": "Put your iRules here that you want to create and assign to the VIP.",
+            "type": "textarea",
+            "dataUnit": null,
+            "valueConstraint": {
+                "regex": null,
+                "minValue": 0,
+                "maxValue": 0,
+                "step": 0,
+                "calloutWorkflowName": null,
+                "sizeValue": 0,
+                "maxLength": 255,
+                "allowSpaces": true
+            },
+            "confirmValue": "",
+            "scope": null,
+            "collectionList": [],
+            "webserviceListParams": null,
+            "userVisible": true,
+            "userEditable": true,
+            "defaultValue": "",
+            "displayName": "New iRules",
+            "valueList": null,
+            "optional": true,
+            "systemParam": true,
+            "paramName": "f5ext_iRules"
         }
     ],
     "serviceType": "EXTERNAL",
