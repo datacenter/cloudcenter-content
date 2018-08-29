@@ -1,0 +1,48 @@
+{
+    "childServices": [], 
+    "perms": [
+        "read", 
+        "delete", 
+        "administration", 
+        "write"
+    ], 
+    "repositories": [], 
+    "egressRestrictions": [], 
+    "externalBundleLocation": "", 
+    "visible": true, 
+    "costPerHour": 0.0, 
+    "logoPath": "/custom/assets/img/serviceLogo/55ebf78d-d870-4602-a6db-572461faf732.png", 
+    "systemService": false, 
+    "isBundleRequired": false, 
+    "servicePorts": [], 
+    "parentServiceId": "37", 
+    "containerImages": [
+        {
+            "url": "wordpress", 
+            "default": true, 
+            "id": 11
+        }
+    ], 
+    "serviceType": "CONTAINER", 
+    "description": "", 
+    "serviceParamSpecs": [], 
+    "images": [], 
+    "parentService": false, 
+    "containerPorts": [
+        {
+            "port": 80, 
+            "protocol": "TCP", 
+            "id": 23, 
+            "name": "http"
+        }
+    ], 
+    "isExternalBundleRequired": false, 
+    "bundleLocation": "", 
+    "defaultImageName": null, 
+    "displayName": "Container WordPress", 
+    "name": "contwordpress", 
+    "externalService": false, 
+    "serviceActions": [], 
+    "externalActions": [], 
+    "costPerHourPreferredCurrency": 0.0
+}
