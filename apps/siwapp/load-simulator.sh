@@ -14,7 +14,7 @@ sudo yum install -y python-pip
 sudo pip install pip --upgrade
 sudo pip install requests lxml pyping
 
-sudo curl -o /usr/share/systemd/siwapp-load-generator.py https://raw.githubusercontent.com/datacenter/cloudcenter-content/${siwapp_git_tag}/apps/siwapp/siwapp-load-generator-cliqr.py
+sudo curl -o /usr/share/systemd/siwapp-load-generator.py https://raw.githubusercontent.com/datacenter/cloudcenter-content/master/apps/siwapp/siwapp-load-generator-cliqr.py
 
 sudo su -c "echo $'
 [Unit]
